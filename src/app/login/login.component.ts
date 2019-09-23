@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Empleado, EmpleadoService, AutenticarRsType, StatusType } from '../rest';
-
+import { Empleado, EmpleadoService, AutenticarRsType, StatusType } from '../_restLogin';
+import { AuthService } from '../auth.service';
 @Component({
   selector: 'LoginComponent',
   templateUrl: './login.component.html',
@@ -12,12 +12,13 @@ export class LoginComponent implements OnInit {
   title = 'OMS-kallsonys';
   loading = false;
   submitted = false;
-  returnUrl: string;
+
   respuesta: Boolean;
   angForm: FormGroup;
   autenticarRsType: AutenticarRsType;
   constructor(
 
+    private auth: AuthService,
     private empleadoApi: EmpleadoService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -46,8 +47,6 @@ export class LoginComponent implements OnInit {
     empleado.estado = 'ACTIVO';
     empleado.usuario = 'mag';
 
-
-
     this.empleadoApi.registrarEmpleado('1', '1', empleado).subscribe(
       value => {
         console.log('value:' + value.idEmpleadoCreado);
@@ -61,8 +60,11 @@ export class LoginComponent implements OnInit {
   validarAutenticacion(pValue: AutenticarRsType): void {
     console.log(pValue);
     if (pValue.autenticacion) {
-      this.router.navigate(["/secure/home"]);
+      this.auth.setLoggedIn(true);
+      this.router.navigate(["home"]);
+      console.log("mensaje de session:"+this.auth.isLoggedIn);
     } else {
+      this.auth.setLoggedIn(false);
       console.log('usuario Invalido');
     }
   }
@@ -81,7 +83,7 @@ export class LoginComponent implements OnInit {
       error => console.error(JSON.stringify(error)),
       () => console.log('done')
     );
-    //setTimeout(() => this.validarAutenticacion(), 200);
+
 
 
   }
