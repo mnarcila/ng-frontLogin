@@ -22,6 +22,8 @@ import { HttpModule,Http } from '@angular/http';
 import { HttpClientModule ,HttpHeaders} from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Empleado, EmpleadoService, AutenticarRsType } from './_restLogin';
+import { Producto, ProductoService, ProductoRsType } from './_restProducto';
+
 import { BrowserModule } from '@angular/platform-browser';
 //componentes de seguridad 
 import { AuthService } from './auth.service'
@@ -38,6 +40,7 @@ import {
   AgmCoreModule
 } from '@agm/core';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
+import { ProductosComponent } from './productos/productos.component';
 
 
 @NgModule({
@@ -73,12 +76,14 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
     IconsComponent,
     MapsComponent,
     NotificationsComponent,
+    ProductosComponent,
 
   ],
   providers: [
     AuthService,
     FormBuilder,
     EmpleadoService,
+    ProductoService,
     Http,
     HttpModule,
     HttpClientModule

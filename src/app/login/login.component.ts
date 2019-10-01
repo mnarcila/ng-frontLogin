@@ -9,7 +9,8 @@ import { AuthService } from '../auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  title = 'OMS-kallsonys';
+   
+  
   loading = false;
   submitted = false;
 
