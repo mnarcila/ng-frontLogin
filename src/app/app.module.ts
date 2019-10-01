@@ -38,6 +38,7 @@ import {
   AgmCoreModule
 } from '@agm/core';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
+import { OrdenesComponent } from './ordenes/ordenes.component';
 
 
 @NgModule({
@@ -73,6 +74,7 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
     IconsComponent,
     MapsComponent,
     NotificationsComponent,
+    OrdenesComponent,
 
   ],
   providers: [
