@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from "./login/login.component";
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
-
+import { ProductosComponent } from "./productos/productos.component";
 //items del menu
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
@@ -19,6 +19,7 @@ const menuRoutes: Routes = [
 
   { path: 'dashboard', component: DashboardComponent },
   { path: 'user-profile', component: UserProfileComponent },
+  { path: 'productos', component: ProductosComponent },
   { path: 'table-list', component: TableListComponent },
   { path: 'typography', component: TypographyComponent },
   { path: 'icons', component: IconsComponent },
@@ -38,6 +39,8 @@ const routes: Routes = [
 
   { path: 'dashboard', component: DashboardComponent },
   { path: 'user-profile', component: UserProfileComponent },
+
+  { path: 'productos', component: ProductosComponent },
   { path: 'table-list', component: TableListComponent },
   { path: 'typography', component: TypographyComponent },
   { path: 'icons', component: IconsComponent },
