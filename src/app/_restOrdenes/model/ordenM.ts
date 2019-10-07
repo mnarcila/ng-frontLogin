@@ -14,7 +14,7 @@
 /**
  * Ordenes de la plataforma Kallsonys
  */
-export interface Orden { 
+export interface OrdenM { 
     idOrden?: number;
     idCliente?: number;
     idDireccion?: number;

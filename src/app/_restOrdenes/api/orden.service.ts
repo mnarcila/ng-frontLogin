@@ -18,7 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs/Observable';
 
-import { Orden } from '../model/orden';
+import { OrdenM } from '../model/ordenM';
 import { OrdenRsType } from '../model/ordenRsType';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -28,7 +28,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class OrdenService {
 
-    protected basePath = 'http://localhost/OMS/Ordenes/v1';
+    protected basePath = 'http://localhost:8096/OMS/Ordenes/v1';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -67,10 +67,10 @@ export class OrdenService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public actualizarOrdenPorId(headerRq: string, serviceID: string, idOrden: number, orden: Orden, observe?: 'body', reportProgress?: boolean): Observable<OrdenRsType>;
-    public actualizarOrdenPorId(headerRq: string, serviceID: string, idOrden: number, orden: Orden, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OrdenRsType>>;
-    public actualizarOrdenPorId(headerRq: string, serviceID: string, idOrden: number, orden: Orden, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OrdenRsType>>;
-    public actualizarOrdenPorId(headerRq: string, serviceID: string, idOrden: number, orden: Orden, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public actualizarOrdenPorId(headerRq: string, serviceID: string, idOrden: number, orden: OrdenM, observe?: 'body', reportProgress?: boolean): Observable<OrdenRsType>;
+    public actualizarOrdenPorId(headerRq: string, serviceID: string, idOrden: number, orden: OrdenM, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OrdenRsType>>;
+    public actualizarOrdenPorId(headerRq: string, serviceID: string, idOrden: number, orden: OrdenM, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OrdenRsType>>;
+    public actualizarOrdenPorId(headerRq: string, serviceID: string, idOrden: number, orden: OrdenM, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (headerRq === null || headerRq === undefined) {
             throw new Error('Required parameter headerRq was null or undefined when calling actualizarOrdenPorId.');
@@ -368,10 +368,10 @@ export class OrdenService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public registrarOrden(headerRq: string, serviceID: string, orden: Orden, observe?: 'body', reportProgress?: boolean): Observable<OrdenRsType>;
-    public registrarOrden(headerRq: string, serviceID: string, orden: Orden, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OrdenRsType>>;
-    public registrarOrden(headerRq: string, serviceID: string, orden: Orden, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OrdenRsType>>;
-    public registrarOrden(headerRq: string, serviceID: string, orden: Orden, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public registrarOrden(headerRq: string, serviceID: string, orden: OrdenM, observe?: 'body', reportProgress?: boolean): Observable<OrdenRsType>;
+    public registrarOrden(headerRq: string, serviceID: string, orden: OrdenM, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OrdenRsType>>;
+    public registrarOrden(headerRq: string, serviceID: string, orden: OrdenM, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OrdenRsType>>;
+    public registrarOrden(headerRq: string, serviceID: string, orden: OrdenM, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (headerRq === null || headerRq === undefined) {
             throw new Error('Required parameter headerRq was null or undefined when calling registrarOrden.');

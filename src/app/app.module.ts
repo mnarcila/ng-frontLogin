@@ -23,6 +23,7 @@ import { HttpClientModule ,HttpHeaders} from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Empleado, EmpleadoService, AutenticarRsType } from './_restLogin';
 import { Producto, ProductoService, ProductoRsType } from './_restProducto';
+import {OrdenM, DetalleOrden, OrdenService,DetalleOrdenService,OrdenRsType} from './_restOrdenes';
 
 import { BrowserModule } from '@angular/platform-browser';
 //componentes de seguridad 
@@ -89,7 +90,9 @@ import { ProductosComponent } from './productos/productos.component';
     ProductoService,
     Http,
     HttpModule,
-    HttpClientModule
+    HttpClientModule,
+    OrdenService,
+    DetalleOrdenService,
 
   ],
   bootstrap: [AppComponent]

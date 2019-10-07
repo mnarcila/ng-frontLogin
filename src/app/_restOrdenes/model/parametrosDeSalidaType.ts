@@ -10,13 +10,13 @@
  * Do not edit the class manually.
  */
 import { DetalleOrden } from './detalleOrden';
-import { Orden } from './orden';
+import { OrdenM } from './ordenM';
 
 
 /**
  * información de devuelta.
  */
 export interface ParametrosDeSalidaType { 
-    ordenes?: Array<Orden>;
+    ordenes?: Array<OrdenM>;
     detalles?: Array<DetalleOrden>;
 }
