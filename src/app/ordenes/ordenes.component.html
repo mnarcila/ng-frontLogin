@@ -9,12 +9,29 @@
                             <p class="card-category"> Últimas Ordenes Activas</p>
                         </div>
                         <div class="card-body">
-                                <div class="row">
-                                        <button class="btn btn-primary" (click)="colsultarOrdenXid()">
-                                            Consultar
-                                        </button>
-                                        <input type="text" formControlName="consultaId" class="form-control"  placeholder="Id de la orden" />
-                                </div>
+                            <div class="row">
+                                    <button class="btn btn-primary" (click)="colsultarOrdenXid()">
+                                        Consultar X ID Orden
+                                    </button>
+                                    <input type="text" formControlName="consultaId" class="form-control"  placeholder="Id de la orden" />
+                            </div>
+                            <div class="row">
+                                <button class="btn btn-primary" (click)="colsultarOrdenActivas">
+                                    Consultar Ordenes Activas
+                                </button>
+                            </div>
+                            <div class="row">
+                                <button class="btn btn-primary" (click)="colsultarOrdenXCliente()">
+                                    Consultar X cliente
+                                </button>
+                                <input type="text" formControlName="cliente" class="form-control"  placeholder="Nombre del cliente" />
+                            </div>
+                            <div class="row">
+                                <button class="btn btn-primary" (click)="colsultarOrdenXProducto()">
+                                    Consultar X Producto
+                                </button>
+                                <input type="text" formControlName="producto" class="form-control"  placeholder="Nombre del cliente" />
+                            </div>
                             <div class="table-responsive" *ngIf="tablaOrdenes">
                                 <table class="table">
                                     <thead class=" text-primary">

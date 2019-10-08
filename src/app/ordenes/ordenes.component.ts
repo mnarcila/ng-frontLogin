@@ -42,7 +42,9 @@ export class OrdenesComponent implements OnInit {
 
   createForm() {
     this.angForm = this.formBuilder.group({
-      consultaId: ['', Validators.required]
+      consultaId: ['', Validators.required],
+      cliente: ['',Validators.required],
+      producto: ['', Validators.required]
     });
   }
 
@@ -63,9 +65,53 @@ export class OrdenesComponent implements OnInit {
    * @param ordenId id de la orden a consultar
    */
   colsultarOrdenXid():void {
+    this.listOrdenes = [];
     if (this.angForm.controls.consultaId.value != '' && this.angForm.controls.consultaId.value != null) {
       this.tablaOrdenes = true;
       this.ordenesApi.conultarOrdenPorId('1', '1', this.angForm.controls.consultaId.value).subscribe(
+        value => setTimeout(() => {
+          const prd = value;
+          this.procesarResponse(value);
+        }, 200),
+        error => console.error(JSON.stringify(error)),
+        () => console.log('done')
+      );
+    }
+  }
+
+  colsultarOrdenActivas(): void{
+    this.listOrdenes = [];
+    this.tablaOrdenes = true;
+      this.ordenesApi.conultarOrdenesActivas('1', '1').subscribe(
+        value => setTimeout(() => {
+          const prd = value;
+          this.procesarResponse(value);
+        }, 200),
+        error => console.error(JSON.stringify(error)),
+        () => console.log('done')
+      );
+  }
+
+  colsultarOrdenXCliente(): void{
+    this.listOrdenes = [];
+    if (this.angForm.controls.cliente.value != '' && this.angForm.controls.cliente.value != null) {
+      this.tablaOrdenes = true;
+        this.ordenesApi.conultarOrdenPorCliente('1', '1',this.angForm.controls.cliente.value).subscribe(
+          value => setTimeout(() => {
+            const prd = value;
+            this.procesarResponse(value);
+          }, 200),
+          error => console.error(JSON.stringify(error)),
+          () => console.log('done')
+        );
+    }
+  }
+
+  colsultarOrdenXProducto(): void{
+    this.listOrdenes = [];
+    if (this.angForm.controls.producto.value != '' && this.angForm.controls.producto.value != null) {
+    this.tablaOrdenes = true;
+      this.ordenesApi.conultarOrdenesPorIdProducto('1', '1',this.angForm.controls.producto.value).subscribe(
         value => setTimeout(() => {
           const prd = value;
           this.procesarResponse(value);
