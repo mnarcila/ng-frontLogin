@@ -35,7 +35,8 @@ import {
   MatRippleModule,
   MatFormFieldModule,
   MatTooltipModule,
-  MatSelectModule
+  MatSelectModule,
+  MatRadioModule 
 } from '@angular/material';
 import {
   AgmCoreModule
@@ -62,6 +63,7 @@ import { ProductosComponent } from './productos/productos.component';
     MatInputModule,
     MatSelectModule,
     MatTooltipModule, 
+    MatRadioModule,
     AgmCoreModule.forRoot({
       apiKey: 'YOUR_GOOGLE_MAPS_API_KEY'
     })

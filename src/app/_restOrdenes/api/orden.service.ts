@@ -1,6 +1,6 @@
 /**
  * Servicio Ordenes Kallsonys
- * Servicio para la gestión de ordenes en  OMS Kallsonys
+ * Servicio para la gestiÃ³n de ordenes en  OMS Kallsonys
  *
  * OpenAPI spec version: 1.0.0
  * 
@@ -60,7 +60,7 @@ export class OrdenService {
     /**
      * Actualizar Inactivar Orden por ID
      * Actualizar un orden
-     * @param headerRq Cabecera estándar
+     * @param headerRq Cabecera estÃ¡ndar
      * @param serviceID servKall4
      * @param idOrden Id del orden a inactivar
      * @param orden 
@@ -127,7 +127,7 @@ export class OrdenService {
     /**
      * Consultar Orden por Cliente
      * Retorna un orden
-     * @param headerRq Cabecera estándar
+     * @param headerRq Cabecera estÃ¡ndar
      * @param serviceID servKall4
      * @param idCliente idCliente
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -190,7 +190,7 @@ export class OrdenService {
     /**
      * Consultar Orden por ID
      * Retorna un orden
-     * @param headerRq Cabecera estándar
+     * @param headerRq Cabecera estÃ¡ndar
      * @param serviceID servKall4
      * @param idOrden Id del orden a consultar
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -245,24 +245,34 @@ export class OrdenService {
     }
 
     /**
-     * Consultar Ordenes Activas
-     * Retorna ordenes activas
-     * @param headerRq Cabecera estándar
+     * Consultar Ordenes por estado
+     * Retorna ordenes por estado
+     * @param headerRq Cabecera estÃ¡ndar
      * @param serviceID servKall4
+     * @param idEstado idEstado
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public conultarOrdenesActivas(headerRq: string, serviceID: string, observe?: 'body', reportProgress?: boolean): Observable<OrdenRsType>;
-    public conultarOrdenesActivas(headerRq: string, serviceID: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OrdenRsType>>;
-    public conultarOrdenesActivas(headerRq: string, serviceID: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OrdenRsType>>;
-    public conultarOrdenesActivas(headerRq: string, serviceID: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public conultarOrdenesPorEstado(headerRq: string, serviceID: string, idEstado: number, observe?: 'body', reportProgress?: boolean): Observable<OrdenRsType>;
+    public conultarOrdenesPorEstado(headerRq: string, serviceID: string, idEstado: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OrdenRsType>>;
+    public conultarOrdenesPorEstado(headerRq: string, serviceID: string, idEstado: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OrdenRsType>>;
+    public conultarOrdenesPorEstado(headerRq: string, serviceID: string, idEstado: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (headerRq === null || headerRq === undefined) {
-            throw new Error('Required parameter headerRq was null or undefined when calling conultarOrdenesActivas.');
+            throw new Error('Required parameter headerRq was null or undefined when calling conultarOrdenesPorEstado.');
         }
 
         if (serviceID === null || serviceID === undefined) {
-            throw new Error('Required parameter serviceID was null or undefined when calling conultarOrdenesActivas.');
+            throw new Error('Required parameter serviceID was null or undefined when calling conultarOrdenesPorEstado.');
+        }
+
+        if (idEstado === null || idEstado === undefined) {
+            throw new Error('Required parameter idEstado was null or undefined when calling conultarOrdenesPorEstado.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (idEstado !== undefined && idEstado !== null) {
+            queryParameters = queryParameters.set('idEstado', <any>idEstado);
         }
 
         let headers = this.defaultHeaders;
@@ -286,8 +296,9 @@ export class OrdenService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<OrdenRsType>(`${this.basePath}/orden/consultarActivas`,
+        return this.httpClient.get<OrdenRsType>(`${this.basePath}/orden/consultarPorEstado`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -299,7 +310,7 @@ export class OrdenService {
     /**
      * Consultar Detalle por IdProducto
      * Retorna una orden por producto
-     * @param headerRq Cabecera estándar
+     * @param headerRq Cabecera estÃ¡ndar
      * @param serviceID servKall4
      * @param idProducto Id del producto para listar las ordenes que lo contienen
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -362,7 +373,7 @@ export class OrdenService {
     /**
      * Registrar una Orden
      * 
-     * @param headerRq Cabecera estándar
+     * @param headerRq Cabecera estÃ¡ndar
      * @param serviceID servKall4
      * @param orden Orden a registrar
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.

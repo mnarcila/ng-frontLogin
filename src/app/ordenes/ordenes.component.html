@@ -3,13 +3,44 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
+                        <div class="col-md-8">
+                                <div class="card">
+                                    <div class="card-header card-header-danger">
+                                        <h4 class="card-title">Filtar Ordenes</h4>
+                                        <p class="card-category">Seleccione uno de los siguientes filtros</p>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <mat-radio-group aria-label="Seleccione una opción"  formControlName="tipoConsulta">
+                                                <table>
+                                                    <td>
+                                                    <tr><mat-radio-button value=1>Estado</mat-radio-button></tr>
+                                                    <tr><mat-radio-button value=2>Por cliente</mat-radio-button></tr>
+                                                    <!-- <tr><mat-radio-button value=3>Activas por cliente</mat-radio-button></tr> -->
+                                                    <tr><mat-radio-button value=4>Por Producto</mat-radio-button></tr>
+                                                    <tr><mat-radio-button value=5>Número de orden</mat-radio-button></tr>
+                                                    </td>
+                                                </table>
+                                            </mat-radio-group>
+                                        </div>
+                                        <div class="row">
+                                                <input type="text" formControlName="paramConsulta" class="form-control"  placeholder="Ingrese valor" />
+                                        </div>
+                                        <div class="row">
+                                            <button class="btn btn-primary" (click)="consultaGenerica()">
+                                                    Consultar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                     <div class="card">
                         <div class="card-header card-header-danger">
                             <h4 class="card-title ">Ordenes</h4>
                             <p class="card-category"> Últimas Ordenes Activas</p>
                         </div>
                         <div class="card-body">
-                            <div class="row">
+                            <!-- <div class="row">
                                     <button class="btn btn-primary" (click)="colsultarOrdenXid()">
                                         Consultar X ID Orden
                                     </button>
@@ -31,9 +62,9 @@
                                     Consultar X Producto
                                 </button>
                                 <input type="text" formControlName="producto" class="form-control"  placeholder="Nombre del cliente" />
-                            </div>
-                            <div class="table-responsive" *ngIf="tablaOrdenes">
-                                <table class="table">
+                            </div> -->
+                            <div class="table-responsive" >
+                                <table class="table" *ngIf="tablaOrdenes">
                                     <thead class=" text-primary">
                                         <th>
                                             ID Orden
