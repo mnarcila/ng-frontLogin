@@ -19,6 +19,7 @@ export class OrdenesComponent implements OnInit {
   tablaOrdenes: boolean = false;
   listOrdenes: OrdenM[] = [];
   consultaTip: String;
+  habilitaCrear: boolean;
 
   constructor(
     private ordenesApi: OrdenService,
@@ -47,7 +48,15 @@ export class OrdenesComponent implements OnInit {
       cliente: ['', Validators.required],
       producto: ['', Validators.required],
       paramConsulta: ['', Validators.required],
-      tipoConsulta: ['', Validators.required]
+      tipoConsulta: ['', Validators.required],
+      clienteID: ['', Validators.required],
+      direccionID: ['', Validators.required],
+      valTotal: ['', Validators.required],
+      cantProductos: ['', Validators.required],
+      fechaSol: ['', Validators.required],
+      fechaAprob: ['', Validators.required],
+      fechaCierre: ['', Validators.required]
+
     });
   }
 
@@ -162,5 +171,35 @@ export class OrdenesComponent implements OnInit {
       }
     }
 
+  }
+
+  crearOrdPanel(): void {
+    if(this.habilitaCrear){
+      this.habilitaCrear = false;
+    }else {
+      this.habilitaCrear = true;
+    }
+  }
+
+  crearOrden(): void {
+    let orden: OrdenM = {};
+    orden.idCliente = this.angForm.controls.clienteID.value;
+    orden.idDireccion = this.angForm.controls.direccionID.value;
+    orden.valorTotal = this.angForm.controls.valTotal.value;
+    orden.cantidadProductos = this.angForm.controls.cantProductos.value;
+    orden.fechaSolicitud = this.angForm.controls.fechaSol.value;
+    orden.fechaAprobacion = this.angForm.controls.fechaAprob.value;
+    orden.fechaCierre = this.angForm.controls.fechaCierre.value;
+    orden.estado = 1;
+    console.log(orden);
+    this.ordenesApi.registrarOrden('1', '1', orden).subscribe(
+      value => setTimeout(() => {
+        const prd = value;
+        //this.consultaEspecifica(value.productos[0].idProducto);
+        console.log(value);
+      }, 200),
+      error => console.error(JSON.stringify(error)),
+      () => console.log('done')
+    );
   }
 }
