@@ -3,7 +3,7 @@ import { AuthService } from '../auth.service';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProductosInner, Producto, ProductoService, ProductoRsType, StatusType } from "../_restProducto";
 import { Router, ActivatedRoute } from '@angular/router';
-import {MatDividerModule} from '@angular/material/divider';
+ 
 export interface Estados {
   value: string;
   viewValue: string;
@@ -35,8 +35,7 @@ export class ProductosComponent implements OnInit {
   renderConsulta: boolean = false;
   renderEditar: boolean = false;
   
-
-  title = 'OMS-kallsonys';
+ 
   loading = false;
   submitted = false;
   angForm: FormGroup;
@@ -166,10 +165,6 @@ export class ProductosComponent implements OnInit {
     this.renderEditar =  true;
   }
  
-
- 
-
-
 
   /**
    * Consulta especifica por item 
