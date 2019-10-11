@@ -3,7 +3,29 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header card-header-danger">
+                            <table class="table-responsive">
+                                <tr>
+                                    <td>
+                                        <div class="example-full-width"><button class="btn btn-primary"
+                                                (click)="mostrarPanelConsulta()">
+                                                Consultar Ordenes
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="example-full-width"><button class="btn btn-primary"
+                                                (click)="mostrarPanelCrear()">
+                                                Crear Orden
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-8" *ngIf="panelConsultar">
                         <div class="card">
                             <div class="card-header card-header-danger">
                                 <h4 class="card-title">Filtar Ordenes</h4>
@@ -39,111 +61,82 @@
                                     <button class="btn btn-primary" (click)="consultaGenerica()">
                                         Consultar
                                     </button>
-                                    <button class="btn btn-primary" (click)="crearOrdPanel()">
-                                        Crear Orden
-                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-8" *ngIf="habilitaCrear">
-                        <div class="card">
-                            <div class="card-header card-header-danger">
-                                <h4 class="card-title">Agregar Orden</h4>
-                                <p class="card-category">Complete la siguiente información</p>
+                    <div class="card" *ngIf="panelCrear">
+                        <div class="card-header card-header-danger">
+                            <h4 class="card-title ">Crear Orden</h4>
+                            <p class="card-category">Complete la siguiente información</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Cliente" type="text">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Dirección" type="text">
+                                    </mat-form-field>
+                                </div>
                             </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <mat-form-field class="example-full-width">
-                                            <input matInput placeholder="Cliente" 
-                                                formControlName="clienteID" type="text">
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <mat-form-field class="example-full-width">
-                                            <input matInput placeholder="Direccion" 
-                                                formControlName="direccionID" type="text">
-                                        </mat-form-field>
-                                    </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="valorTotal" type="text">
+                                    </mat-form-field>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <mat-form-field class="example-full-width">
-                                            <input matInput placeholder="Valor Total" formControlName="valTotal"
-                                                type="text">
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <mat-form-field class="example-full-width">
-                                            <input matInput placeholder="Cantidad Productos" formControlName="cantProductos"
-                                                type="text">
-                                        </mat-form-field>
-                                    </div>
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="cantidadProductos" type="text">
+                                    </mat-form-field>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <mat-form-field class="example-full-width">
-                                            <input matInput placeholder="Fecha Solicitud" formControlName="fechaSol"
-                                                type="text">
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <mat-form-field class="example-full-width">
-                                            <input matInput placeholder="Fecha Aprobacion" formControlName="fechaAprob"
-                                                type="text">
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <mat-form-field class="example-full-width">
-                                            <input matInput placeholder="Fecha Cierre" formControlName="fechaCierre"
-                                                type="text">
-                                        </mat-form-field>
-                                    </div>
-                                </div>
-                                <button mat-raised-button (click)="crearOrden()"
-                                    class="btn btn-danger pull-right">Crear
-                                    Producto</button>
-                                <div class="clearfix"></div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="fecha Solicitud" type="text">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="fecha Aprobacion" type="text">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="fecha Cierre" type="text">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <button mat-raised-button (click)="crearOrden()" class="btn btn-danger pull-right">Crear
+                                Producto</button>
+                            <div class="clearfix"></div>
                         </div>
                     </div>
-                    <div class="card">
+                    <div class="card" *ngIf="tablaOrdenes">
                         <div class="card-header card-header-danger">
                             <h4 class="card-title ">Ordenes</h4>
                             <p class="card-category"> Últimas Ordenes Activas</p>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table" *ngIf="tablaOrdenes">
+                                <table class="table">
                                     <thead class=" text-primary">
-                                        <th>
-                                            ID Orden
-                                        </th>
-                                        <th>
-                                            Cliente
-                                        </th>
-                                        <th>
-                                            Dirección
-                                        </th>
-                                        <th>
-                                            Valor Total
-                                        </th>
-                                        <th>
-                                            Cantidad Productos
-                                        </th>
-                                        <th>
-                                            Fecha Solicitud
-                                        </th>
-                                        <th>
-                                            Fecha Aprobación
-                                        </th>
-                                        <th>
-                                            Fecha Cierre
-                                        </th>
-                                        <th>
-                                            Estado
-                                        </th>
+                                        <th>ID Orden</th>
+                                        <th>Cliente</th>
+                                        <th>Dirección</th>
+                                        <th>Valor Total</th>
+                                        <th>Cantidad Productos</th>
+                                        <th>Fecha Solicitud</th>
+                                        <th>Fecha Aprobación</th>
+                                        <th>Fecha Cierre</th>
+                                        <th>Estado</th>
+                                        <th>Ver Detalle</th>
+                                        <th>Editar Orden</th>
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let ord of listOrdenes">
@@ -156,6 +149,106 @@
                                             <td>{{ord.fechaAprobacion}}</td>
                                             <td>{{ord.fechaCierre}}</td>
                                             <td>{{ord.estado}}</td>
+                                            <td><i class="material-icons" style="cursor: pointer;"
+                                                    (click)="$event.stopPropagation();verDetalle(ord)">Ver</i>
+                                            <td><i class="material-icons" style="cursor: pointer;"
+                                                    (click)="$event.stopPropagation();editarOrden(ord)">Editar</i>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" *ngIf="panelActualizar">
+                        <div class="card-header card-header-danger">
+                            <h4 class="card-title ">Editar Orden</h4>
+                            <p class="card-category">Complete la siguiente información</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="ID Orden" formControlName="eIdOrden" type="text" readonly="true">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Cliente" formControlName="eCliente" type="text">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Dirección" formControlName="eDireccion" type="text" >
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Valor Total" formControlName="eValTotal"
+                                            type="text" >
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Cantidad Productos" formControlName="eCantidad"
+                                            type="text" >
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Estado" formControlName="eEstado" type="text" >
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Fecha Solicitud" formControlName="eFechaSol"
+                                            type="text" >
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Fecha Aprobación" formControlName="eFechaAprob"
+                                            type="text" >
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Fecha Cierre" formControlName="eFechaCierre"
+                                            type="text" >
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <button mat-raised-button (click)="ActualizarOrden()"
+                                class="btn btn-danger pull-right">Editar Producto</button>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <div class="card" *ngIf="panelDetOrden">
+                        <div class="card-header card-header-danger">
+                            <h4 class="card-title ">Detalle de Orden</h4>
+                            <p class="card-category"> Detalle de productos de una orden</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class=" text-primary">
+                                        <th>Producto</th>
+                                        <th>Cantidad</th>
+                                        <th>Valor Unidad</th>
+                                        <th>Proveedor</th>
+                                        <th>Estado</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let det of listaDetalle">
+                                            <td>{{det.idProducto}}</td>
+                                            <td>{{det.cantidad}}</td>
+                                            <td>{{det.valorUnidad}}</td>
+                                            <td>{{det.idProveedor}}</td>
+                                            <td>{{det.estado}}</td>
                                         </tr>
                                     </tbody>
                                 </table>

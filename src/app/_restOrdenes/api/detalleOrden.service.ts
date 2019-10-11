@@ -27,7 +27,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class DetalleOrdenService {
 
-    protected basePath = 'http://localhost/OMS/Ordenes/v1';
+    protected basePath = 'http://localhost:8096/OMS/Ordenes/v1';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

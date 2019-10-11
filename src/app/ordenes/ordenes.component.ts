@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Orden } from '../ordenes/Orden';
 import { OrdenRsType, OrdenService, StatusType, DetalleOrdenService, OrdenM, DetalleOrden } from '../_restOrdenes';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -11,18 +10,22 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./ordenes.component.scss']
 })
 export class OrdenesComponent implements OnInit {
-  ordenes: Orden[] = [
-    { id: 1, nombre: 'Susana', direccion: "Mercolan", valorT: "Mujer", cantidad: 10, fechaSol: "2019-09-30", fechaApro: "2019-09-30", fechaCierre: "2019-09-30", estado: "activo" },
-    { id: 2, nombre: 'cesar', direccion: "Mercolan", valorT: "Mujer", cantidad: 10, fechaSol: "2019-09-30", fechaApro: "2019-09-30", fechaCierre: "2019-09-30", estado: "activo" }
-  ];
+
   angForm: FormGroup;
   tablaOrdenes: boolean = false;
   listOrdenes: OrdenM[] = [];
+  listaDetalle: DetalleOrden[] = [];
   consultaTip: String;
   habilitaCrear: boolean;
+  panelConsultar: boolean = false;
+  panelCrear: boolean = false;
+  panelActualizar:boolean = false;
+  panelDetOrden:boolean = false;
+  //panelEditarOrden:boolean = false;
 
   constructor(
     private ordenesApi: OrdenService,
+    private detalleApi: DetalleOrdenService,
     private auth: AuthService,
     private router: Router,
     private formBuilder: FormBuilder,
@@ -55,9 +58,47 @@ export class OrdenesComponent implements OnInit {
       cantProductos: ['', Validators.required],
       fechaSol: ['', Validators.required],
       fechaAprob: ['', Validators.required],
-      fechaCierre: ['', Validators.required]
+      fechaCierre: ['', Validators.required],
+      eIdOrden: ['',Validators.required],
+      eCliente: ['', Validators.required],
+      eDireccion: ['', Validators.required],
+      eValTotal: ['', Validators.required],
+      eCantidad: ['', Validators.required],
+      eFechaSol: ['', Validators.required],
+      eFechaAprob: ['', Validators.required],
+      eFechaCierre: ['', Validators.required],
+      eEstado: ['', Validators.required]
 
     });
+  }
+
+  mostrarPanelConsulta(): void {
+    if(!this.panelConsultar){
+      this.panelConsultar = true;
+      this.panelActualizar = false;
+      this.panelCrear = false;
+      //this.panelEditarOrden = false;
+    }
+  }
+
+  mostrarPanelActualizar(): void {
+    if(!this.panelActualizar){
+      this.panelConsultar = false;
+      this.panelActualizar = true;
+      this.panelCrear = false;
+      this.tablaOrdenes = false;
+      //this.panelEditarOrden = false;
+    }
+  }
+
+  mostrarPanelCrear(): void {
+    if(!this.panelCrear){
+      this.panelConsultar = false;
+      this.panelActualizar = false;
+      this.panelCrear = true;
+      this.tablaOrdenes = false;
+      //this.panelEditarOrden = false;
+    }
   }
 
   procesarResponse(pValue: OrdenRsType) {
@@ -201,5 +242,63 @@ export class OrdenesComponent implements OnInit {
       error => console.error(JSON.stringify(error)),
       () => console.log('done')
     );
+  }
+
+  verDetalle(orden: OrdenM):void{
+    console.log("entre al detalle");
+    this.panelDetOrden = true;
+    this.listaDetalle = [];
+    this.detalleApi.conultarDetalleOrdenPorIdOrden('1', '1', orden.idOrden).subscribe(
+      value => setTimeout(() => {
+        const prd = value;
+        this.procesarResponseDetalle(value);
+      }, 200),
+      error => console.error(JSON.stringify(error)),
+      () => console.log('done')
+    );
+    
+  }
+
+  procesarResponseDetalle(object: OrdenRsType) {
+    console.log(object);
+    this.listaDetalle.push(...object.datosBasicos.detalles);
+  }
+
+  editarOrden(orden:OrdenM):void{
+    this.panelActualizar = true;
+    this.panelDetOrden = false;
+    this.angForm.controls.eIdOrden.setValue(orden.idOrden);
+    this.angForm.controls.eCliente.setValue(orden.idCliente);
+    this.angForm.controls.eDireccion.setValue(orden.idDireccion);
+    this.angForm.controls.eValTotal.setValue(orden.valorTotal);
+    this.angForm.controls.eCantidad.setValue(orden.cantidadProductos);
+    this.angForm.controls.eFechaSol.setValue(orden.fechaSolicitud);
+    this.angForm.controls.eFechaAprob.setValue(orden.fechaAprobacion);
+    this.angForm.controls.eFechaCierre.setValue(orden.fechaCierre);
+    this.angForm.controls.eEstado.setValue(orden.estado);
+  }
+
+  ActualizarOrden():void{
+    let orden:OrdenM ={};
+    orden.idOrden = this.angForm.controls.eIdOrden.value;
+    console.log("eIdOrden: " + orden.idOrden);
+    orden.idCliente = this.angForm.controls.eCliente.value;
+    console.log(orden);
+    orden.idDireccion = this.angForm.controls.eDireccion.value;
+    orden.valorTotal = this.angForm.controls.eValTotal.value;
+    orden.cantidadProductos = this.angForm.controls.eCantidad.value;
+    orden.fechaSolicitud = this.angForm.controls.eFechaSol.value;
+    orden.fechaAprobacion = this.angForm.controls.eFechaAprob.value;
+    orden.fechaCierre = this.angForm.controls.eFechaCierre.value;
+    orden.estado = this.angForm.controls.eEstado.value;
+    this.ordenesApi.actualizarOrdenPorId('1', '1', orden.idOrden, orden).subscribe(
+      value => setTimeout(() => {
+        const prd = value;
+        this.procesarResponseDetalle(value);
+      }, 200),
+      error => console.error(JSON.stringify(error)),
+      () => console.log('done')
+    );
+    this.panelActualizar = false;
   }
 }
