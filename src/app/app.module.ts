@@ -7,7 +7,7 @@ import { AppRoutingModule } from './app.routing';
 
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
-import { TableListComponent } from './table-list/table-list.component';
+ 
 import { TypographyComponent } from './typography/typography.component';
 import { IconsComponent } from './icons/icons.component';
 import { MapsComponent } from './maps/maps.component';
@@ -24,7 +24,7 @@ import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } 
 import { Empleado, EmpleadoService, AutenticarRsType } from './_restLogin';
 import { Producto, ProductoService, ProductoRsType } from './_restProducto';
 import {OrdenM, DetalleOrden, OrdenService,DetalleOrdenService,OrdenRsType} from './_restOrdenes';
-
+import { Cliente, ClienteService, ClientesRsType } from './_restClientes';
 import { BrowserModule } from '@angular/platform-browser';
 //componentes de seguridad 
 import { AuthService } from './auth.service'
@@ -44,6 +44,7 @@ import {
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { OrdenesComponent } from './ordenes/ordenes.component';
 import { ProductosComponent } from './productos/productos.component';
+import { ClientesComponent } from './clientes/clientes.component';
 
 
 @NgModule({
@@ -74,14 +75,14 @@ import { ProductosComponent } from './productos/productos.component';
     AdminLayoutComponent,
     LoginComponent, 
     DashboardComponent,
-    UserProfileComponent,
-    TableListComponent,
+    UserProfileComponent, 
     TypographyComponent,
     IconsComponent,
     MapsComponent,
     NotificationsComponent,
     OrdenesComponent,
     ProductosComponent,
+    ClientesComponent,
 
 
   ],
@@ -90,12 +91,13 @@ import { ProductosComponent } from './productos/productos.component';
     FormBuilder,
     EmpleadoService,
     ProductoService,
+    ClienteService,
     Http,
     HttpModule,
     HttpClientModule,
     OrdenService,
     DetalleOrdenService,
-
+    ClienteService,
   ],
   bootstrap: [AppComponent]
 })

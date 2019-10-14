@@ -8,19 +8,19 @@ import { ProductosComponent } from "./productos/productos.component";
 //items del menu
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
-import { TableListComponent } from './table-list/table-list.component';
+ 
 import { TypographyComponent } from './typography/typography.component';
 import { IconsComponent } from './icons/icons.component';
 import { MapsComponent } from './maps/maps.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { OrdenesComponent } from './ordenes/ordenes.component';
-
+import {ClientesComponent} from './clientes/clientes.component';
 const menuRoutes: Routes = [
 
   { path: 'dashboard', component: DashboardComponent },
   { path: 'user-profile', component: UserProfileComponent },
   { path: 'productos', component: ProductosComponent },
-  { path: 'table-list', component: TableListComponent },
+  { path: 'clientes', component: ClientesComponent },
   { path: 'typography', component: TypographyComponent },
   { path: 'icons', component: IconsComponent },
   { path: 'maps', component: MapsComponent },
@@ -41,7 +41,8 @@ const routes: Routes = [
   { path: 'user-profile', component: UserProfileComponent },
 
   { path: 'productos', component: ProductosComponent },
-  { path: 'table-list', component: TableListComponent },
+  { path: 'clientes', component: ClientesComponent },
+  
   { path: 'typography', component: TypographyComponent },
   { path: 'icons', component: IconsComponent },
   { path: 'maps', component: MapsComponent },

@@ -2,34 +2,34 @@
     <form [formGroup]="angForm">
         <div class="container-fluid">
             <div class="card">
-                <div class="card-header card-header-danger">
+                <div class="card-header card-header">
                     <h4 class="card-title">Producto</h4>
                     <p class="card-category"></p>
                 </div>
                 <div class="card-body">
                     <div class="form-group">
-                        <button [disabled]="loading" class="btn btn-primary" (click)="onClick()">
+                        <button mat-raised-button class="btn btn-rose pull " (click)="onClick()">
                             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                             consultar
                         </button>
-                        <button [disabled]="loading" class="btn btn-primary" (click)="renderCrearDiv()">
+                        <button mat-raised-button class="btn btn-rose pull " (click)="renderCrearDiv()">
                             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                             Crear Producto
                         </button>
-                        <input type="text" formControlName="product" class="form-control"  placeholder="Id de Producto" />
+                        <input type="text" formControlName="product" class="form-control"
+                            placeholder="Id de Producto" />
                     </div>
+
+
                     <div class="container-fluid" *ngIf="renderCrear">
                         <div class="row">
-
                             <div class="col-md-8">
                                 <div class="card">
-                                    <div class="card-header card-header-danger">
+                                    <div class="card-header card-header-rose">
                                         <h4 class="card-title">Agregar Producto</h4>
                                         <p class="card-category">Complete la siguiente información</p>
                                     </div>
                                     <div class="card-body">
-
-
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <mat-form-field class="example-full-width">
@@ -54,10 +54,12 @@
                                                 </mat-form-field>
                                             </div>
                                             <div class="col-md-4">
-                                                <mat-form-field class="example-full-width">
-                                                    <input matInput placeholder="Categoria"
-                                                        formControlName="cateProduct" type="text">
-                                                </mat-form-field>
+                                                <mat-label>Categoria</mat-label>
+                                                <mat-select formControlName="cateProduct">
+                                                    <mat-option *ngFor="let cat of categorias" [value]="cat.value">
+                                                        {{cat.viewValue}}
+                                                    </mat-option>
+                                                </mat-select>
                                             </div>
                                             <div class="col-md-4">
                                                 <mat-form-field>
@@ -72,7 +74,7 @@
                                         </div>
 
                                         <button mat-raised-button (click)="crearProducto()"
-                                            class="btn btn-danger pull-right">Crear
+                                            class="btn btn-rose pull-right">Crear
                                             Producto</button>
                                         <div class="clearfix"></div>
 
@@ -82,19 +84,94 @@
 
                         </div>
                     </div>
-                    <div class="container-fluid"  *ngIf="renderConsulta">
+
+                    <!-- DIV DE EDICION -->
+                    <div class="container-fluid" *ngIf="renderEditar">
+                        <div class="row">
+
+                            <div class="col-md-8">
+                                <div class="card">
+                                    <div class="card-header card-header-rose">
+                                        <h4 class="card-title">Editar Producto</h4>
+                                        <p class="card-category">Complete la siguiente información</p>
+                                    </div>
+                                    <div class="card-body">
+
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <mat-form-field class="example-full-width">
+                                                    <input matInput placeholder="id Producto"
+                                                        formControlName="eidproducto" type="text" readonly="true">
+                                                </mat-form-field>
+                                                <mat-form-field class="example-full-width">
+                                                    <input matInput placeholder="Nombre del producto"
+                                                        formControlName="enameProduct" type="text">
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <mat-form-field class="example-full-width">
+                                                    <input matInput placeholder="Descripción"
+                                                        formControlName="edescProduct" type="text">
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <mat-form-field class="example-full-width">
+                                                    <input matInput placeholder="Valor base"
+                                                        formControlName="evalorProduct" type="text">
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-label>Categoría</mat-label>
+                                                <mat-select formControlName="ecateProduct">
+                                                    <mat-option *ngFor="let cat of categorias" [value]="cat.value">
+                                                        {{cat.viewValue}}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <mat-form-field>
+                                                    <mat-label>Estado</mat-label>
+                                                    <mat-select formControlName="eestadoProduct">
+                                                        <mat-option *ngFor="let est of estados" [value]="est.value">
+                                                            {{est.viewValue}}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+
+                                        <button mat-raised-button (click)="editarProducto()"
+                                            class="btn btn-rose pull-right">Editar
+                                            Producto</button>
+                                        <div class="clearfix"></div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- DIV DE CONSULTA -->
+
+                    <div class="container-fluid" *ngIf="renderConsulta">
 
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card">
-                                    <div class="card-header card-header-danger">
+                                    <div class="card-header card-header-rose">
                                         <h4 class="card-title mt-0"> PRODUCTOS </h4>
                                         <p class="card-category">Productos registrados en el sistema</p>
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <strong *ngIf="tablaProductos.length == 0">Cargando..</strong>
-                                            <table *ngIf="tablaProductos.length > 0">
+                                            <table *ngIf="tablaProductos.length > 0" class="table table-hover">
                                                 <thead class="">
                                                     <th>ID Producto</th>
                                                     <th>Nombre</th>
@@ -102,6 +179,7 @@
                                                     <th>Valor base</th>
                                                     <th>Categoria</th>
                                                     <th>Estado</th>
+                                                    <th>Editar</th>
                                                 </thead>
                                                 <tbody>
                                                     <tr *ngFor="let productoz of tablaProductos">
@@ -109,8 +187,11 @@
                                                         <td>{{ productoz.nombre }}</td>
                                                         <td>{{ productoz.descripcion }}</td>
                                                         <td>{{ productoz.valorBase }}</td>
-                                                        <td>Category</td>
+                                                        <td>{{ consultarCategoria(productoz.idCategoria) }}</td>
                                                         <td>{{ productoz.estado }}</td>
+                                                        <td><i class="material-icons" style="cursor: pointer;"
+                                                                (click)="$event.stopPropagation();editar(productoz)">edit</i>
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
