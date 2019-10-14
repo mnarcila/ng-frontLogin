@@ -1,10 +1,8 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core'; 
 import { RouterModule } from '@angular/router';
-
-
+import {MatRadioModule} from '@angular/material/radio';
 import { AppRoutingModule } from './app.routing';
-
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
  
@@ -12,6 +10,7 @@ import { TypographyComponent } from './typography/typography.component';
 import { IconsComponent } from './icons/icons.component';
 import { MapsComponent } from './maps/maps.component';
 import { NotificationsComponent } from './notifications/notifications.component';
+ 
 //componentes de pantalla 
 import { ComponentsModule } from './components/components.module';
 import { LoginComponent } from './login/login.component';
@@ -25,6 +24,7 @@ import { Empleado, EmpleadoService, AutenticarRsType } from './_restLogin';
 import { Producto, ProductoService, ProductoRsType } from './_restProducto';
 import {OrdenM, DetalleOrden, OrdenService,DetalleOrdenService,OrdenRsType} from './_restOrdenes';
 import { Cliente, ClienteService, ClientesRsType } from './_restClientes';
+import { ReqCategoria, CategoriaService, CategoriaRsType } from './_restCategoria';
 import { BrowserModule } from '@angular/platform-browser';
 //componentes de seguridad 
 import { AuthService } from './auth.service'
@@ -53,6 +53,7 @@ import { ClientesComponent } from './clientes/clientes.component';
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
+    MatRadioModule,
     ReactiveFormsModule,
     HttpModule,
     ComponentsModule,
@@ -92,6 +93,7 @@ import { ClientesComponent } from './clientes/clientes.component';
     EmpleadoService,
     ProductoService,
     ClienteService,
+    CategoriaService,
     Http,
     HttpModule,
     HttpClientModule,

@@ -26,8 +26,9 @@ import { Configuration }                                     from '../configurat
 
 @Injectable()
 export class RolService {
-
-    protected basePath = 'http://localhost/OMS/Empleados/v1';
+    // http://10.39.1.149:8280
+    // http://localhost/OMS/Empleados/v1
+    protected basePath = 'http://10.39.1.149:8280/OMS/Empleados/v1';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

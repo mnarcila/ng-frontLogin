@@ -27,7 +27,10 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class EmpleadosService {
 
-    protected basePath = 'http://localhost/OMS/Empleados/v1';
+    //http://10.39.1.149:8280
+    //http://localhost/OMS/Empleados/v1
+    // http://10.39.1.156:8210/esb-skynet
+    protected basePath = 'http://10.39.1.156:8210/esb-skynet';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
