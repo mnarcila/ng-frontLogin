@@ -65,58 +65,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card" *ngIf="panelCrear">
-                        <div class="card-header card-header-danger">
-                            <h4 class="card-title ">Crear Orden</h4>
-                            <p class="card-category">Complete la siguiente información</p>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="Cliente" formControlName="cCliente" type="text">
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-md-6">
-                                    <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="Dirección" formControlName="cDireccion" type="text">
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="Valor Total" formControlName="cValTotal" type="text">
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-md-6">
-                                    <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="Cantidad Productos" formControlName="cCantidad" type="text">
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="fecha Solicitud" formControlName="cFechaSol" type="text">
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-md-4">
-                                    <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="fecha Aprobacion" formControlName="cFechaAprob" type="text">
-                                    </mat-form-field>
-                                </div>
-                                <div class="col-md-4">
-                                    <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="fecha Cierre" formControlName="cFechaCierre" type="text">
-                                    </mat-form-field>
-                                </div>
-                            </div>
-                            <button mat-raised-button (click)="crearOrden()" class="btn btn-danger pull-right">Crear
-                                Producto</button>
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
                     <div class="card" *ngIf="tablaOrdenes">
                         <div class="card-header card-header-danger">
                             <h4 class="card-title ">Ordenes</h4>
@@ -258,6 +206,35 @@
                                     </tbody>
                                 </table>
                             </div>
+                        </div>
+                    </div>
+                    <div class="card" *ngIf="panelCrear">
+                        <div class="card-header card-header-danger">
+                            <h4 class="card-title ">Crear Orden</h4>
+                            <p class="card-category">Complete la siguiente información</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{tablaOrdenes}}
+                                </div>
+                                <div class="col-md-6">
+                                    {{tablaOrdenes}}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button mat-raised-button (click)="crearOrden()" class="btn btn-danger pull-left">Crear
+                                        Consultar Cliente</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button mat-raised-button (click)="crearOrden()" class="btn btn-danger pull-left">Crear
+                                        Consultar Dirección</button>
+                                </div> 
+                            </div>
+                            <button mat-raised-button (click)="crearOrden()" class="btn btn-danger pull-right">Crear
+                                Producto</button>
+                            <div class="clearfix"></div>
                         </div>
                     </div>
                 </div>
