@@ -8,6 +8,7 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group">
+
                         <button mat-raised-button class="btn btn-rose pull " (click)="onClick()">
                             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                             consultar
@@ -16,8 +17,23 @@
                             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                             Crear Producto
                         </button>
+
+                        <mat-radio-group formControlName="busquedaC">
+                            <mat-radio-button class="example-radio-button" [value]="1">
+                                Busqueda Por ID
+                            </mat-radio-button>
+                            <mat-radio-button class="example-radio-button" [value]="2">
+                                Busqueda Nombre
+                            </mat-radio-button>
+                            <mat-radio-button class="example-radio-button" [value]="3">
+                                Busqueda Descripcion
+                            </mat-radio-button>
+                        </mat-radio-group>
+
+
+
                         <input type="text" formControlName="product" class="form-control"
-                            placeholder="Id de Producto" />
+                            placeholder="Busqueda Producto" />
                     </div>
 
 
@@ -56,7 +72,7 @@
                                             <div class="col-md-4">
                                                 <mat-label>Categoria</mat-label>
                                                 <mat-select formControlName="cateProduct">
-                                                    <mat-option *ngFor="let cat of categorias" [value]="cat.value">
+                                                    <mat-option *ngFor="let cat of categoriasArray" [value]="cat.value">
                                                         {{cat.viewValue}}
                                                     </mat-option>
                                                 </mat-select>
@@ -128,7 +144,7 @@
                                             <div class="col-md-4">
                                                 <mat-label>Categoría</mat-label>
                                                 <mat-select formControlName="ecateProduct">
-                                                    <mat-option *ngFor="let cat of categorias" [value]="cat.value">
+                                                    <mat-option *ngFor="let cat of categoriasArray" [value]="cat.value">
                                                         {{cat.viewValue}}
                                                     </mat-option>
                                                 </mat-select>
@@ -170,7 +186,7 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <strong *ngIf="tablaProductos.length == 0">Cargando..</strong>
+                                            <strong *ngIf="tablaProductos.length == 0">Sin datos..</strong>
                                             <table *ngIf="tablaProductos.length > 0" class="table table-hover">
                                                 <thead class="">
                                                     <th>ID Producto</th>

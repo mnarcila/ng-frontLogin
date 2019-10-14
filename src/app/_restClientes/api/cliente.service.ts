@@ -34,10 +34,10 @@ import { Configuration } from '../configuration';
 
 @Injectable()
 export class ClienteService {
-    // http://localhost:8095/OMS/Productos/v1 //localhost
+    //http://localhost:8280/OMS/Clientes/v1
     // http://10.39.1.149:8280/OMS/Clientes/v1'; // endpoint
     //http://10.39.1.156:8210/esb-skynet ; // bus 
-    protected basePath = 'http://10.39.1.149:8280/OMS/Clientes/v1';
+    protected basePath = ' http://10.39.1.149:8280/OMS/Clientes/v1';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -50,7 +50,7 @@ export class ClienteService {
             this.basePath = basePath || configuration.basePath || this.basePath;
         }
 
-       
+
     }
 
     /**
@@ -266,6 +266,69 @@ export class ClienteService {
     }
 
     /**
+      * Consultar Cliente por ID
+      * Retorna un Cliente
+      * @param headerRq Cabecera estándar
+      * @param serviceID servKallcli
+      * @param idCliente Id del cliente a consultar
+      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+      * @param reportProgress flag to report request and response progress.
+      */
+    public consultarClientePorIdentificacion(headerRq: string, serviceID: string, tipoidentificacion: String, numidentificacion: String, observe?: 'body', reportProgress?: boolean): Observable<ClienteRsType>;
+    public consultarClientePorIdentificacion(headerRq: string, serviceID: string, tipoidentificacion: String, numidentificacion: String, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ClienteRsType>>;
+    public consultarClientePorIdentificacion(headerRq: string, serviceID: string, tipoidentificacion: String, numidentificacion: String, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ClienteRsType>>;
+    public consultarClientePorIdentificacion(headerRq: string, serviceID: string, tipoidentificacion: String, numidentificacion: String, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
+
+        if (headerRq === null || headerRq === undefined) {
+            throw new Error('Required parameter headerRq was null or undefined when calling consultarClientePorId.');
+        }
+
+        if (serviceID === null || serviceID === undefined) {
+            throw new Error('Required parameter serviceID was null or undefined when calling consultarClientePorId.');
+        }
+
+        if (tipoidentificacion === null || tipoidentificacion === undefined) {
+            throw new Error('Required parameter tipoidentificacion was null or undefined when calling consultarClientePorId.');
+        }
+
+        if (numidentificacion === null || numidentificacion === undefined) {
+            throw new Error('Required parameter numidentificacion was null or undefined when calling consultarClientePorId.');
+        }
+
+        let headers = this.defaultHeaders;
+        if (headerRq !== undefined && headerRq !== null) {
+            headers = headers.set('headerRq', String(headerRq));
+        }
+        if (serviceID !== undefined && serviceID !== null) {
+            headers = headers.set('serviceID', String(serviceID));
+        }
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+            
+        return this.httpClient.get<ClienteRsType>(`${this.basePath}/cliente/${encodeURIComponent(String(tipoidentificacion))}/${encodeURIComponent(String(numidentificacion))}`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+
+
+    /**
      * Consultar Cliente por ID
      * Retorna un Cliente
      * @param headerRq Cabecera estándar
@@ -412,7 +475,7 @@ export class ClienteService {
         // // headers =headers.set('Access-Control-Request-Headers', 'access-control-allow-methods,access-control-allow-origin,authorization,content-type');
         // headers =headers.set('Access-Control-Allow-Headers', 'access-control-allow-methods,access-control-allow-origin,authorization,content-type');
         // headers =headers.set('Access-Control-Allow-Methods',  'GET, DELETE, POST, OPTIONS, PUT');
- 
+
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
             'application/json'

@@ -25,4 +25,6 @@ export interface Cliente {
     estado?: string;
     idCategoria?: number;
     origen?: string;
+    tipoidentificacion?: string;
+    numidentificacion?: string;
 }

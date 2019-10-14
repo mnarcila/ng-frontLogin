@@ -20,13 +20,13 @@ declare var $: any;
   styleUrls: ['./clientes.component.scss']
 })
 export class ClientesComponent implements OnInit {
-  
+
   estados: Estados[] = [
     { value: 'ACTIVO', viewValue: 'ACTIVO' },
     { value: 'INACTIVO', viewValue: 'INACTIVO' }
   ];
 
-  categoriasMap: Map<number,String>  ;
+  categoriasMap: Map<number, String>;
   categorias: Categorias[] = [
     { value: '1', viewValue: 'Dorado' },
     { value: '2', viewValue: 'Platino' },
@@ -54,6 +54,7 @@ export class ClientesComponent implements OnInit {
   createForm() {
     this.angForm = this.formBuilder.group({
       bsc_cliente: ['', Validators.required],
+      busquedaC: ['', Validators.required],
       iusuario: ['', Validators.required],
       ipassword: ['', Validators.required],
       inombre: ['', Validators.required],
@@ -88,11 +89,11 @@ export class ClientesComponent implements OnInit {
     this.createForm();
 
     //cargar mapa 
-    this.categoriasMap = new  Map<number, String>();
-    this.categoriasMap.set(1,'Dorado');
-    this.categoriasMap.set(2,'Platino');    
-    this.categoriasMap.set(3,'Plateado');
-  
+    this.categoriasMap = new Map<number, String>();
+    this.categoriasMap.set(1, 'Dorado');
+    this.categoriasMap.set(2, 'Platino');
+    this.categoriasMap.set(3, 'Plateado');
+
   }
 
 
@@ -102,14 +103,14 @@ export class ClientesComponent implements OnInit {
     this.renderEditar = false;
   }
 
-  consultarCategoria(idCategoria : number): String {
-    console.log(idCategoria);
+  consultarCategoria(idCategoria: number): String {
+
 
     return this.categoriasMap.get(idCategoria);
   }
 
 
-  editarCliente(): void { 
+  editarCliente(): void {
     let cliente: Cliente = {};
 
     cliente.idCliente = this.angForm.controls.eclienteId.value;
@@ -122,36 +123,36 @@ export class ClientesComponent implements OnInit {
     cliente.idCategoria = this.angForm.controls.ecateProduct.value;
     cliente.estado = this.angForm.controls.eestadoProduct.value;
     // cliente.origen = 'OMS';
-    
-      this.clienteApi.actualizarClientePorId('1', '1',cliente).subscribe(
-        value => setTimeout(() => {
-          const prd = value;
-          this.consultarPorId( cliente.idCliente );
-          this.mostrarNotificacion('Actualización de Producto','se actualizo con exito','success');
-        }, 200),
-        error => {
-          this.mostrarNotificacion('Actualización de Producto','se presento un error, por favor notifique al administrador','danger');
-          console.error(JSON.stringify(error))
-        },
-        () => console.log('done')
-      );
-      this.renderCrear= false;
-      this.renderConsulta = true; 
-      this.renderEditar = false; 
-        
+
+    this.clienteApi.actualizarClientePorId('1', '1', cliente).subscribe(
+      value => setTimeout(() => {
+        const prd = value;
+        this.consultarPorId(cliente.idCliente);
+        this.mostrarNotificacion('Actualización de Producto', 'se actualizo con exito', 'success');
+      }, 200),
+      error => {
+        this.mostrarNotificacion('Actualización de Producto', 'se presento un error, por favor notifique al administrador', 'danger');
+        console.error(JSON.stringify(error))
+      },
+      () => console.log('done')
+    );
+    this.renderCrear = false;
+    this.renderConsulta = true;
+    this.renderEditar = false;
+
   }
 
   procesarResponseRsType(cliente: ClienteRsType): void {
-    console.log('procesarResponse procesarResponse');
+
     this.clienteTabla.push(cliente.cliente);
   }
 
   procesarResponseTabla(cliente: ClientesRsType): void {
     console.log('procesarResponse procesarResponse');
     this.clienteTabla.push(...cliente.clientes);
-    console.log(cliente);
-  }
 
+  }
+  
 
   consultarPorId(clienteId: number) {
     this.clienteTabla = [];
@@ -159,33 +160,58 @@ export class ClientesComponent implements OnInit {
       value => setTimeout(() => {
         console.log(value);
         this.procesarResponseRsType(value);
+        if (value.cliente != null && value.cliente != undefined) {
+          this.renderConsulta = true;
+        }
 
       }, 200),
-      error => console.error(JSON.stringify(error)),
+      error => {
+        this.mostrarNotificacion('consultarPorId ', 'se presento un error, por favor notifique al administrador', 'danger');
+        console.error(JSON.stringify(error))
+      },
       () => console.log('done')
     );
+
+
   }
 
   onClick(): void {
-    this.renderConsulta = true;
+    this.renderConsulta = false;
     this.renderCrear = false;
     this.renderEditar = false;
     this.clienteTabla = [];
 
     console.log(this.angForm.controls.bsc_cliente.value);
+    var itemBusqueda = this.angForm.controls.bsc_cliente.value;
+    var tipoBusqueda = this.angForm.controls.busquedaC.value;
 
-    if (this.angForm.controls.bsc_cliente.value != '' && this.angForm.controls.bsc_cliente.value != null) {
-      this.consultarPorId(this.angForm.controls.bsc_cliente.value);
+
+    if (itemBusqueda != '' && itemBusqueda != null) {
+
+      if (tipoBusqueda == 1) {
+        this.consultarPorId(itemBusqueda);
+      } else if (tipoBusqueda == 2) {
+        this.clienteTabla = [];
+        this.clienteApi.consultarClientePorIdentificacion('1', '1', 'CC', itemBusqueda).subscribe(
+          value => setTimeout(() => {
+            console.log(value);
+            this.procesarResponseRsType(value);
+            if (value.cliente != null && value.cliente != undefined) {
+              this.renderConsulta = true;
+            }
+          }, 200),
+          error => {
+            this.mostrarNotificacion('consultarPorId ', 'se presento un error, por favor notifique al administrador', 'danger');
+            console.error(JSON.stringify(error))
+          },
+          () => console.log('done')
+        );
+      }
 
     } else {
-      this.clienteApi.consultarClientes('1', '1').subscribe(
-        value => setTimeout(() => {
-          this.procesarResponseTabla(value);
-        }, 200),
-        error => console.error(JSON.stringify(error)),
-        () => console.log('done')
-      );
+      this.mostrarNotificacion('consulta', 'Ingrese un concepto de busqueda', 'warning');
     }
+
   }
 
 
@@ -193,7 +219,7 @@ export class ClientesComponent implements OnInit {
 
     let cliente: Cliente = {};
 
-    
+
     cliente.nombre = this.angForm.controls.inombre.value;
     cliente.apellido = this.angForm.controls.iapellido.value;
     cliente.usuario = this.angForm.controls.iusuario.value;
@@ -203,7 +229,7 @@ export class ClientesComponent implements OnInit {
     cliente.idCategoria = this.angForm.controls.cateProduct.value;
     cliente.estado = this.angForm.controls.estadoProduct.value;
     cliente.origen = 'OMS';
-    console.log(cliente);
+
     this.clienteApi.registrarCliente('1', '1', cliente).subscribe(
       value => setTimeout(() => {
         const prd = value;
@@ -221,9 +247,14 @@ export class ClientesComponent implements OnInit {
     this.renderEditar = false;
   }
 
-  editar(cliente: Cliente): void {
-    console.log(cliente); 
+  direccion(){
     
+  }
+
+
+  editar(cliente: Cliente): void {
+
+
     this.angForm.controls.eclienteId.setValue(cliente.idCliente);
     this.angForm.controls.eiusuario.setValue(cliente.usuario);
     this.angForm.controls.eipassword.setValue(cliente.password);
@@ -234,12 +265,12 @@ export class ClientesComponent implements OnInit {
 
     this.angForm.controls.ecateProduct.setValue(cliente.idCategoria);
     this.angForm.controls.eestadoProduct.setValue(cliente.estado);
-  
+
     this.renderCrear = false;
     this.renderConsulta = false;
     this.renderEditar = true;
   }
-  
+
 
 
   mostrarNotificacion(pTitulo: String, pTexto: String, pTipo: String) {
@@ -250,7 +281,7 @@ export class ClientesComponent implements OnInit {
 
     $.notify({
       icon: "notifications",
-      message: "Welcome to <b>Material Dashboard</b> - a beautiful freebie for every web developer."
+      message: " "
 
     }, {
       type: pTipo,

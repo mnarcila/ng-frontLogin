@@ -16,8 +16,19 @@
                             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
                             Crear Clientes
                         </button>
+
+                        <mat-radio-group formControlName="busquedaC">
+                            <mat-radio-button class="example-radio-button" [value]="1">
+                                Busqueda Por ID
+                            </mat-radio-button>
+                            <mat-radio-button class="example-radio-button" [value]="2">
+                                Busqueda Identificación
+                            </mat-radio-button>
+
+                        </mat-radio-group>
+
                         <input type="text" formControlName="bsc_cliente" class="form-control"
-                            placeholder="Id de Cliente" />
+                            placeholder="Busqueda cliente" />
                     </div>
                 </div>
 
@@ -33,10 +44,10 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-md-4">
-                                                <mat-form-field class="example-full-width">
-                                                        <input matInput placeholder="id Cliente" formControlName="eclienteId"
-                                                            type="text" readonly = "true">
-                                                    </mat-form-field>
+                                            <mat-form-field class="example-full-width">
+                                                <input matInput placeholder="id Cliente" formControlName="eclienteId"
+                                                    type="text" readonly="true">
+                                            </mat-form-field>
 
                                             <mat-form-field class="example-full-width">
                                                 <input matInput placeholder="Usuario" formControlName="eiusuario"
@@ -82,7 +93,7 @@
                                     <div class="row">
                                         <div class="col-md-4">
                                             <mat-label>Categoria</mat-label>
-                                            <mat-select formControlName="ecateProduct" >
+                                            <mat-select formControlName="ecateProduct">
                                                 <mat-option *ngFor="let cat of categorias" [value]="cat.value">
                                                     {{cat.viewValue}}
                                                 </mat-option>
@@ -183,7 +194,7 @@
                                     </div>
                                     <button mat-raised-button (click)="crearCliente()"
                                         class="btn btn-rose pull-right">Crear
-                                        Producto</button>
+                                        Cliente</button>
                                     <div class="clearfix"></div>
 
                                 </div>
@@ -210,6 +221,8 @@
                                                 <th>Nombre</th>
                                                 <th>Apellido</th>
                                                 <th>Usuario </th>
+                                                <th>tipo Identificación</th>
+                                                <th>num. Identificación</th>
                                                 <th>Categoria</th>
                                                 <th>Telefono</th>
                                                 <th>Email</th>
@@ -222,14 +235,20 @@
                                                     <td>{{ cliente.nombre }}</td>
                                                     <td>{{ cliente.apellido }}</td>
                                                     <td>{{ cliente.usuario }}</td>
+                                                    <td>{{ cliente.tipoidentificacion }}</td>
+                                                    <td>{{ cliente.numidentificacion }}</td>
                                                     <td>{{ consultarCategoria(cliente.idCategoria) }}</td>
                                                     <td>{{ cliente.telefono }}</td>
                                                     <td>{{ cliente.email }}</td>
                                                     <td>{{ cliente.estado }}</td>
                                                     <td>{{ cliente.origen }}</td>
-                                                    <td><i class="material-icons" style="cursor: pointer;"
+                                                    <td><i alt="Editar datos" class="material-icons" style="cursor: pointer;"
                                                             (click)="$event.stopPropagation();editar(cliente)">edit</i>
                                                     </td>
+                                                  
+                                                    <td><i alt="Agregar direccion" class="material-icons" style="cursor: pointer;"
+                                                        (click)="$event.stopPropagation();direccion(cliente)">home</i>
+                                                </td>
                                                 </tr>
                                             </tbody>
                                         </table>
