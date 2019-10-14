@@ -74,41 +74,41 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="Cliente" type="text">
+                                        <input matInput placeholder="Cliente" formControlName="cCliente" type="text">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-6">
                                     <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="Dirección" type="text">
+                                        <input matInput placeholder="Dirección" formControlName="cDireccion" type="text">
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="valorTotal" type="text">
+                                        <input matInput placeholder="Valor Total" formControlName="cValTotal" type="text">
                                     </mat-form-field>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="cantidadProductos" type="text">
+                                        <input matInput placeholder="Cantidad Productos" formControlName="cCantidad" type="text">
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-4">
                                     <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="fecha Solicitud" type="text">
+                                        <input matInput placeholder="fecha Solicitud" formControlName="cFechaSol" type="text">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-4">
                                     <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="fecha Aprobacion" type="text">
+                                        <input matInput placeholder="fecha Aprobacion" formControlName="cFechaAprob" type="text">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-4">
                                     <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="fecha Cierre" type="text">
+                                        <input matInput placeholder="fecha Cierre" formControlName="cFechaCierre" type="text">
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -173,12 +173,12 @@
                                 </div>
                                 <div class="col-md-4">
                                     <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="Cliente" formControlName="eCliente" type="text">
+                                        <input matInput placeholder="Cliente" formControlName="eCliente" type="text" readonly="true">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-4">
                                     <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="Dirección" formControlName="eDireccion" type="text" >
+                                        <input matInput placeholder="Dirección" formControlName="eDireccion" type="text" readonly="true">
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -186,18 +186,23 @@
                                 <div class="col-md-4">
                                     <mat-form-field class="example-full-width">
                                         <input matInput placeholder="Valor Total" formControlName="eValTotal"
-                                            type="text" >
+                                            type="text" readonly="true">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-4">
                                     <mat-form-field class="example-full-width">
                                         <input matInput placeholder="Cantidad Productos" formControlName="eCantidad"
-                                            type="text" >
+                                            type="text" readonly="true">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-4">
-                                    <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="Estado" formControlName="eEstado" type="text" >
+                                    <mat-form-field>
+                                        <mat-label>Estado</mat-label>
+                                        <mat-select formControlName="eEstado" >
+                                            <mat-option *ngFor="let est of listaEstados2" [value]="est.value" >
+                                                {{est.viewValue}}
+                                            </mat-option>
+                                        </mat-select>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -205,25 +210,25 @@
                                 <div class="col-md-4">
                                     <mat-form-field class="example-full-width">
                                         <input matInput placeholder="Fecha Solicitud" formControlName="eFechaSol"
-                                            type="text" >
+                                            type="text" readonly="true">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-4">
                                     <mat-form-field class="example-full-width">
                                         <input matInput placeholder="Fecha Aprobación" formControlName="eFechaAprob"
-                                            type="text" >
+                                            type="text" readonly="true">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-4">
                                     <mat-form-field class="example-full-width">
                                         <input matInput placeholder="Fecha Cierre" formControlName="eFechaCierre"
-                                            type="text" >
+                                            type="text" readonly="true">
                                     </mat-form-field>
                                 </div>
                             </div>
 
                             <button mat-raised-button (click)="ActualizarOrden()"
-                                class="btn btn-danger pull-right">Editar Producto</button>
+                                class="btn btn-danger pull-right">Editar Orden</button>
                             <div class="clearfix"></div>
                         </div>
                     </div>

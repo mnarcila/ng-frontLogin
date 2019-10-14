@@ -84,7 +84,8 @@ export class LoginComponent implements OnInit {
       error => console.error(JSON.stringify(error)),
       () => console.log('done')
     );
-
+    this.auth.setLoggedIn(true);
+    this.router.navigate(["home"]);
 
 
   }

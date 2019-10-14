@@ -3,6 +3,7 @@ import { AuthService } from '../auth.service';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OrdenRsType, OrdenService, StatusType, DetalleOrdenService, OrdenM, DetalleOrden } from '../_restOrdenes';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Listas, Estados } from '../Paramentricos/Listas';
 
 @Component({
   selector: 'app-ordenes',
@@ -22,6 +23,8 @@ export class OrdenesComponent implements OnInit {
   panelActualizar:boolean = false;
   panelDetOrden:boolean = false;
   //panelEditarOrden:boolean = false;
+  //listEstado: string[];
+  listaEstados2: Estados[] = new Listas().estados;
 
   constructor(
     private ordenesApi: OrdenService,
@@ -67,8 +70,16 @@ export class OrdenesComponent implements OnInit {
       eFechaSol: ['', Validators.required],
       eFechaAprob: ['', Validators.required],
       eFechaCierre: ['', Validators.required],
-      eEstado: ['', Validators.required]
-
+      eEstado: ['', Validators.required],
+      //cIdOrden: ['',Validators.required],
+      cCliente: ['', Validators.required],
+      cDireccion: ['', Validators.required],
+      cValTotal: ['', Validators.required],
+      cCantidad: ['', Validators.required],
+      cFechaSol: ['', Validators.required],
+      cFechaAprob: ['', Validators.required],
+      cFechaCierre: ['', Validators.required],
+      cEstado: ['', Validators.required],
     });
   }
 
@@ -108,8 +119,9 @@ export class OrdenesComponent implements OnInit {
     //this.productoRsType = pValue;
     //console.log(pValue.productos);
     this.listOrdenes.push(...pValue.datosBasicos.ordenes);
-    //console.log("size: " + this.tablaProductos.length);
-    //console.log("0: " + this.tablaProductos[0].nombre);
+    //console.log("size: " + this.estados.retornarEstadosOrden());
+    //this.listEstado = this.estados.retornarEstadosOrden();
+    
   }
 
 
@@ -118,8 +130,6 @@ export class OrdenesComponent implements OnInit {
    * @param ordenId id de la orden a consultar
    */
   colsultarOrdenXid(id: number): void {
-    //this.listOrdenes = [];
-    //if (this.angForm.controls.consultaId.value != '' && this.angForm.controls.consultaId.value != null) {
       this.tablaOrdenes = true;
       this.ordenesApi.conultarOrdenPorId('1', '1', id).subscribe(
         value => setTimeout(() => {
@@ -129,7 +139,6 @@ export class OrdenesComponent implements OnInit {
         error => console.error(JSON.stringify(error)),
         () => console.log('done')
       );
-    //}
   }
 
   colsultarOrdenEstado(idEstado: number): void {
@@ -146,8 +155,8 @@ export class OrdenesComponent implements OnInit {
   }
 
   colsultarOrdenXCliente(cliente: string ): void {
-    //this.listOrdenes = [];
-    //if (this.angForm.controls.cliente.value != '' && this.angForm.controls.cliente.value != null) {
+    this.listOrdenes = [];
+    if (cliente != '' && cliente != null) {
       this.tablaOrdenes = true;
       this.ordenesApi.conultarOrdenPorCliente('1', '1', cliente).subscribe(
         value => setTimeout(() => {
@@ -157,14 +166,16 @@ export class OrdenesComponent implements OnInit {
         error => console.error(JSON.stringify(error)),
         () => console.log('done')
       );
-    //}
+    }
   }
 
-  colsultarOrdenXProducto(producto: number): void {
+  colsultarOrdenXProducto(producto: string): void {
+    console.log('valor producto '+ producto);
     this.listOrdenes = [];
-    if (this.angForm.controls.producto.value != '' && this.angForm.controls.producto.value != null) {
+    if (producto != '' && producto != null) {
+      console.log('pase el if');
       this.tablaOrdenes = true;
-      this.ordenesApi.conultarOrdenesPorIdProducto('1', '1', producto).subscribe(
+      this.ordenesApi.conultarOrdenesPorIdProducto('1', '1', producto.toUpperCase()).subscribe(
         value => setTimeout(() => {
           const prd = value;
           this.procesarResponse(value);
@@ -196,7 +207,7 @@ export class OrdenesComponent implements OnInit {
           break;
         }
         case '4': {
-          //console.log("entre 4"); 
+          console.log('consulta generica'); 
           this.colsultarOrdenXProducto(this.angForm.controls.paramConsulta.value);
           break;
         }
@@ -219,18 +230,21 @@ export class OrdenesComponent implements OnInit {
       this.habilitaCrear = false;
     }else {
       this.habilitaCrear = true;
+      this.tablaOrdenes =false;
     }
   }
 
   crearOrden(): void {
     let orden: OrdenM = {};
-    orden.idCliente = this.angForm.controls.clienteID.value;
-    orden.idDireccion = this.angForm.controls.direccionID.value;
-    orden.valorTotal = this.angForm.controls.valTotal.value;
-    orden.cantidadProductos = this.angForm.controls.cantProductos.value;
-    orden.fechaSolicitud = this.angForm.controls.fechaSol.value;
-    orden.fechaAprobacion = this.angForm.controls.fechaAprob.value;
-    orden.fechaCierre = this.angForm.controls.fechaCierre.value;
+    orden.idCliente = this.angForm.controls.cCliente.value;
+    orden.idDireccion = this.angForm.controls.cDireccion.value;
+    orden.valorTotal = this.angForm.controls.cValTotal.value;
+    orden.cantidadProductos = this.angForm.controls.cCantidad.value;
+    orden.fechaSolicitud = this.angForm.controls.cFechaSol.value;
+    orden.fechaAprobacion = this.angForm.controls.cFechaAprob.value;
+    orden.fechaCierre = this.angForm.controls.cFechaCierre.value;
+    orden.origen = "OMS WS";
+    orden.comentario = "Comentario Generico";
     orden.estado = 1;
     console.log(orden);
     this.ordenesApi.registrarOrden('1', '1', orden).subscribe(
@@ -242,6 +256,15 @@ export class OrdenesComponent implements OnInit {
       error => console.error(JSON.stringify(error)),
       () => console.log('done')
     );
+    this.angForm.controls.cCliente.setValue('');
+    this.angForm.controls.cDireccion.setValue('');
+    this.angForm.controls.cValTotal.setValue('')
+    this.angForm.controls.cCantidad.setValue('');
+    this.angForm.controls.cFechaSol.setValue('');
+    this.angForm.controls.cFechaAprob.setValue('');
+    this.angForm.controls.cFechaCierre.setValue('');
+
+
   }
 
   verDetalle(orden: OrdenM):void{
@@ -291,6 +314,7 @@ export class OrdenesComponent implements OnInit {
     orden.fechaAprobacion = this.angForm.controls.eFechaAprob.value;
     orden.fechaCierre = this.angForm.controls.eFechaCierre.value;
     orden.estado = this.angForm.controls.eEstado.value;
+    console.log(orden);
     this.ordenesApi.actualizarOrdenPorId('1', '1', orden.idOrden, orden).subscribe(
       value => setTimeout(() => {
         const prd = value;
@@ -300,5 +324,7 @@ export class OrdenesComponent implements OnInit {
       () => console.log('done')
     );
     this.panelActualizar = false;
+    this.listOrdenes = [];
+    this.colsultarOrdenXid(orden.idOrden);
   }
 }

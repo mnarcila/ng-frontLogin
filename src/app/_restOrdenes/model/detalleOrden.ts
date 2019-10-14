@@ -17,9 +17,9 @@
 export interface DetalleOrden { 
     idDetOrden?: number;
     idOrden?: number;
-    idProducto?: number;
+    idProducto?: string;
     cantidad?: number;
     valorUnidad?: number;
-    idProveedor?: number;
+    idProveedor?: string;
     estado?: string;
 }

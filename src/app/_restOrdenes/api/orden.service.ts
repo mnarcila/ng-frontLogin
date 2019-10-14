@@ -316,10 +316,10 @@ export class OrdenService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public conultarOrdenesPorIdProducto(headerRq: string, serviceID: string, idProducto: number, observe?: 'body', reportProgress?: boolean): Observable<OrdenRsType>;
-    public conultarOrdenesPorIdProducto(headerRq: string, serviceID: string, idProducto: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OrdenRsType>>;
-    public conultarOrdenesPorIdProducto(headerRq: string, serviceID: string, idProducto: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OrdenRsType>>;
-    public conultarOrdenesPorIdProducto(headerRq: string, serviceID: string, idProducto: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public conultarOrdenesPorIdProducto(headerRq: string, serviceID: string, idProducto: string, observe?: 'body', reportProgress?: boolean): Observable<OrdenRsType>;
+    public conultarOrdenesPorIdProducto(headerRq: string, serviceID: string, idProducto: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OrdenRsType>>;
+    public conultarOrdenesPorIdProducto(headerRq: string, serviceID: string, idProducto: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OrdenRsType>>;
+    public conultarOrdenesPorIdProducto(headerRq: string, serviceID: string, idProducto: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (headerRq === null || headerRq === undefined) {
             throw new Error('Required parameter headerRq was null or undefined when calling conultarOrdenesPorIdProducto.');
