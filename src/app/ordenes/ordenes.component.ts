@@ -3,9 +3,7 @@ import { AuthService } from '../auth.service';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OrdenRsType, OrdenService, StatusType, DetalleOrdenService, OrdenM, DetalleOrden } from '../_restOrdenes';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Listas, Estados, tipoIdentificacion, ListaProveedores } from '../Paramentricos/Listas';
-import { ClienteService, Direccion} from '../_restClientes';
-import { ProductoService } from '../_restProducto';
+import { Listas, Estados } from '../Paramentricos/Listas';
 
 @Component({
   selector: 'app-ordenes',
@@ -27,18 +25,6 @@ export class OrdenesComponent implements OnInit {
   //panelEditarOrden:boolean = false;
   //listEstado: string[];
   listaEstados2: Estados[] = new Listas().estados;
-  panelBuscarCliente: boolean = false;
-  listaTipoId: tipoIdentificacion[] = new Listas().listaTipoId;
-  nombreCliente:string ;
-  idCliente: number;
-  userCliente:string ;
-  panelBuscarDireccion: boolean = false;
-  direcciones: Direccion[] ;
-  idDireccion: number;
-  textDireccion: string;
-  PanelCrearDetalle: boolean = false;
-  panelBuscarProducto: boolean = false;
-  listaProveedor: ListaProveedores[] = new Listas().listaProveedores;
 
   constructor(
     private ordenesApi: OrdenService,
@@ -46,8 +32,6 @@ export class OrdenesComponent implements OnInit {
     private auth: AuthService,
     private router: Router,
     private formBuilder: FormBuilder,
-    private clienteApi: ClienteService,
-    private productoApi: ProductoService,
   ) { }
 
 
@@ -96,12 +80,6 @@ export class OrdenesComponent implements OnInit {
       cFechaAprob: ['', Validators.required],
       cFechaCierre: ['', Validators.required],
       cEstado: ['', Validators.required],
-      cIdentificacion: ['', Validators.required],
-      cTipoId: ['',Validators.required],
-      dtIdOrden: ['',Validators.required],
-      dtCantidad: ['',Validators.required],
-      dtProveedor: ['', Validators.required],
-      pNombre: ['',Validators.required],
     });
   }
 
@@ -256,6 +234,39 @@ export class OrdenesComponent implements OnInit {
     }
   }
 
+  crearOrden(): void {
+    let orden: OrdenM = {};
+    orden.idCliente = this.angForm.controls.cCliente.value;
+    orden.idDireccion = this.angForm.controls.cDireccion.value;
+    orden.valorTotal = this.angForm.controls.cValTotal.value;
+    orden.cantidadProductos = this.angForm.controls.cCantidad.value;
+    orden.fechaSolicitud = this.angForm.controls.cFechaSol.value;
+    orden.fechaAprobacion = this.angForm.controls.cFechaAprob.value;
+    orden.fechaCierre = this.angForm.controls.cFechaCierre.value;
+    orden.origen = "OMS WS";
+    orden.comentario = "Comentario Generico";
+    orden.estado = 1;
+    console.log(orden);
+    this.ordenesApi.registrarOrden('1', '1', orden).subscribe(
+      value => setTimeout(() => {
+        const prd = value;
+        //this.consultaEspecifica(value.productos[0].idProducto);
+        console.log(value);
+      }, 200),
+      error => console.error(JSON.stringify(error)),
+      () => console.log('done')
+    );
+    this.angForm.controls.cCliente.setValue('');
+    this.angForm.controls.cDireccion.setValue('');
+    this.angForm.controls.cValTotal.setValue('')
+    this.angForm.controls.cCantidad.setValue('');
+    this.angForm.controls.cFechaSol.setValue('');
+    this.angForm.controls.cFechaAprob.setValue('');
+    this.angForm.controls.cFechaCierre.setValue('');
+
+
+  }
+
   verDetalle(orden: OrdenM):void{
     console.log("entre al detalle");
     this.panelDetOrden = true;
@@ -315,103 +326,5 @@ export class OrdenesComponent implements OnInit {
     this.panelActualizar = false;
     this.listOrdenes = [];
     this.colsultarOrdenXid(orden.idOrden);
-  }
-
-  mostrarPanelBuscarCliente():void {
-    this.panelBuscarCliente = true;
-  }
-
-  ConsultaCliente():void{
-    let tipoID = this.angForm.controls.cTipoId.value;
-    let identi = this.angForm.controls.cIdentificacion.value;
-    console.log(tipoID+' '+identi);
-    this.clienteApi.consultarClientePorIdentificacion('1', '1', tipoID, identi).subscribe(
-      value => setTimeout(() => {
-        const prd = value;
-        this.nombreCliente = value.cliente.nombre +' '+value.cliente.apellido;
-        this.panelBuscarCliente = false;
-        this.userCliente = value.cliente.usuario;
-        this.idCliente = value.cliente.idCliente;
-      }, 200),
-      error => console.error(JSON.stringify(error)),
-      () => console.log('done')
-    );
-  }
-
-  mostrarPanelDireccion():void{
-    this.panelBuscarDireccion = true;
-    this.consultaDireccion();
-  }
-
-  consultaDireccion():void{
-    this.clienteApi.direccionesCliente('1', '1', this.userCliente).subscribe(
-      value => setTimeout(() => {
-        const prd = value;
-        //console.log(value);
-        this.direcciones = value.direcciones;
-      }, 200),
-      error => console.error(JSON.stringify(error)),
-      () => console.log('done')
-    );
-  }
-
-  verDireccion(dir:Direccion):void{
-    this.idDireccion = dir.iddireccion;
-    this.textDireccion = dir.direccion;
-    this.panelBuscarDireccion = false;
-    console.log('direccion '+dir.iddireccion);
-  }
-
-  
-  crearOrden(): void {
-    let orden: OrdenM = {};
-    let today = new Date();
-    let dd = String(today.getDate());
-    let mm = String(today.getMonth() + 1); 
-    let yyyy = today.getFullYear();
-    let fecha = dd + '/' + mm + '/' + yyyy;
-    orden.idCliente = this.idCliente;
-    orden.idDireccion = this.idDireccion;
-    orden.valorTotal = 0;
-    orden.cantidadProductos = 0;
-    orden.fechaSolicitud = fecha;
-    orden.origen = "OMS";
-    orden.comentario = "Comentario Generico";
-    orden.estado = 1;
-    console.log(orden);
-    this.ordenesApi.registrarOrden('1', '1', orden).subscribe(
-      value => setTimeout(() => {
-        const prd = value;
-        //this.consultaEspecifica(value.productos[0].idProducto);
-        console.log(value);
-        this.procesarResponse(value);
-      }, 200),
-      error => console.error(JSON.stringify(error)),
-      () => console.log('done')
-    );
-    this.tablaOrdenes=true;
-    
-  }
-
-  mostrarPanelCrearDetalle():void{
-    this.PanelCrearDetalle = true;
-  }
-
-  mostrarPanelProducto():void{
-    this.panelBuscarProducto = true;
-  }
-
-  buscarProducto():void{
-    console.log("entre a busqueda producto "+this.angForm.controls.pNombre.value);
-    this.productoApi.conultarProductoPorNombre('1', '1', this.angForm.controls.pNombre.value).subscribe(
-      value => setTimeout(() => {
-        const prd = value;
-        //this.consultaEspecifica(value.productos[0].idProducto);
-        console.log(value);
-        //this.procesarResponse(value);
-      }, 200),
-      error => console.error(JSON.stringify(error)),
-      () => console.log('done')
-    );
   }
 }

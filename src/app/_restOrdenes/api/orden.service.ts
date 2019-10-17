@@ -11,17 +11,18 @@
  */
 /* tslint:disable:no-unused-variable member-ordering */
 
-import { Inject, Injectable, Optional } from '@angular/core';
-import {
-    HttpClient, HttpHeaders, HttpParams,
-    HttpResponse, HttpEvent
-} from '@angular/common/http';
-import { CustomHttpUrlEncodingCodec } from '../encoder';
-import { Observable } from 'rxjs/Observable';
+import { Inject, Injectable, Optional }                      from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams,
+         HttpResponse, HttpEvent }                           from '@angular/common/http';
+import { CustomHttpUrlEncodingCodec }                        from '../encoder';
+
+import { Observable }                                        from 'rxjs/Observable';
+
 import { OrdenM } from '../model/ordenM';
 import { OrdenRsType } from '../model/ordenRsType';
-import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
-import { Configuration } from '../configuration';
+
+import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
+import { Configuration }                                     from '../configuration';
 
 
 @Injectable()
@@ -31,7 +32,7 @@ export class OrdenService {
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
-    constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
+    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
         if (basePath) {
             this.basePath = basePath;
         }
@@ -69,7 +70,7 @@ export class OrdenService {
     public actualizarOrdenPorId(headerRq: string, serviceID: string, idOrden: number, orden: OrdenM, observe?: 'body', reportProgress?: boolean): Observable<OrdenRsType>;
     public actualizarOrdenPorId(headerRq: string, serviceID: string, idOrden: number, orden: OrdenM, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OrdenRsType>>;
     public actualizarOrdenPorId(headerRq: string, serviceID: string, idOrden: number, orden: OrdenM, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OrdenRsType>>;
-    public actualizarOrdenPorId(headerRq: string, serviceID: string, idOrden: number, orden: OrdenM, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
+    public actualizarOrdenPorId(headerRq: string, serviceID: string, idOrden: number, orden: OrdenM, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (headerRq === null || headerRq === undefined) {
             throw new Error('Required parameter headerRq was null or undefined when calling actualizarOrdenPorId.');
@@ -135,7 +136,7 @@ export class OrdenService {
     public conultarOrdenPorCliente(headerRq: string, serviceID: string, idCliente: string, observe?: 'body', reportProgress?: boolean): Observable<OrdenRsType>;
     public conultarOrdenPorCliente(headerRq: string, serviceID: string, idCliente: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OrdenRsType>>;
     public conultarOrdenPorCliente(headerRq: string, serviceID: string, idCliente: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OrdenRsType>>;
-    public conultarOrdenPorCliente(headerRq: string, serviceID: string, idCliente: string, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
+    public conultarOrdenPorCliente(headerRq: string, serviceID: string, idCliente: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (headerRq === null || headerRq === undefined) {
             throw new Error('Required parameter headerRq was null or undefined when calling conultarOrdenPorCliente.');
@@ -149,7 +150,7 @@ export class OrdenService {
             throw new Error('Required parameter idCliente was null or undefined when calling conultarOrdenPorCliente.');
         }
 
-        let queryParameters = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (idCliente !== undefined && idCliente !== null) {
             queryParameters = queryParameters.set('idCliente', <any>idCliente);
         }
@@ -198,7 +199,7 @@ export class OrdenService {
     public conultarOrdenPorId(headerRq: string, serviceID: string, idOrden: number, observe?: 'body', reportProgress?: boolean): Observable<OrdenRsType>;
     public conultarOrdenPorId(headerRq: string, serviceID: string, idOrden: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OrdenRsType>>;
     public conultarOrdenPorId(headerRq: string, serviceID: string, idOrden: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OrdenRsType>>;
-    public conultarOrdenPorId(headerRq: string, serviceID: string, idOrden: number, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
+    public conultarOrdenPorId(headerRq: string, serviceID: string, idOrden: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (headerRq === null || headerRq === undefined) {
             throw new Error('Required parameter headerRq was null or undefined when calling conultarOrdenPorId.');
@@ -255,7 +256,7 @@ export class OrdenService {
     public conultarOrdenesPorEstado(headerRq: string, serviceID: string, idEstado: number, observe?: 'body', reportProgress?: boolean): Observable<OrdenRsType>;
     public conultarOrdenesPorEstado(headerRq: string, serviceID: string, idEstado: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OrdenRsType>>;
     public conultarOrdenesPorEstado(headerRq: string, serviceID: string, idEstado: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OrdenRsType>>;
-    public conultarOrdenesPorEstado(headerRq: string, serviceID: string, idEstado: number, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
+    public conultarOrdenesPorEstado(headerRq: string, serviceID: string, idEstado: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (headerRq === null || headerRq === undefined) {
             throw new Error('Required parameter headerRq was null or undefined when calling conultarOrdenesPorEstado.');
@@ -269,7 +270,7 @@ export class OrdenService {
             throw new Error('Required parameter idEstado was null or undefined when calling conultarOrdenesPorEstado.');
         }
 
-        let queryParameters = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (idEstado !== undefined && idEstado !== null) {
             queryParameters = queryParameters.set('idEstado', <any>idEstado);
         }
@@ -318,7 +319,7 @@ export class OrdenService {
     public conultarOrdenesPorIdProducto(headerRq: string, serviceID: string, idProducto: string, observe?: 'body', reportProgress?: boolean): Observable<OrdenRsType>;
     public conultarOrdenesPorIdProducto(headerRq: string, serviceID: string, idProducto: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OrdenRsType>>;
     public conultarOrdenesPorIdProducto(headerRq: string, serviceID: string, idProducto: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OrdenRsType>>;
-    public conultarOrdenesPorIdProducto(headerRq: string, serviceID: string, idProducto: string, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
+    public conultarOrdenesPorIdProducto(headerRq: string, serviceID: string, idProducto: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (headerRq === null || headerRq === undefined) {
             throw new Error('Required parameter headerRq was null or undefined when calling conultarOrdenesPorIdProducto.');
@@ -332,7 +333,7 @@ export class OrdenService {
             throw new Error('Required parameter idProducto was null or undefined when calling conultarOrdenesPorIdProducto.');
         }
 
-        let queryParameters = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (idProducto !== undefined && idProducto !== null) {
             queryParameters = queryParameters.set('idProducto', <any>idProducto);
         }
@@ -381,7 +382,7 @@ export class OrdenService {
     public registrarOrden(headerRq: string, serviceID: string, orden: OrdenM, observe?: 'body', reportProgress?: boolean): Observable<OrdenRsType>;
     public registrarOrden(headerRq: string, serviceID: string, orden: OrdenM, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OrdenRsType>>;
     public registrarOrden(headerRq: string, serviceID: string, orden: OrdenM, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OrdenRsType>>;
-    public registrarOrden(headerRq: string, serviceID: string, orden: OrdenM, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
+    public registrarOrden(headerRq: string, serviceID: string, orden: OrdenM, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (headerRq === null || headerRq === undefined) {
             throw new Error('Required parameter headerRq was null or undefined when calling registrarOrden.');
