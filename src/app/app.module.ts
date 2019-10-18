@@ -1,7 +1,6 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core'; 
 import { RouterModule } from '@angular/router';
-import {MatRadioModule} from '@angular/material/radio';
 import { AppRoutingModule } from './app.routing';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
@@ -64,8 +63,7 @@ import { ClientesComponent } from './clientes/clientes.component';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatTooltipModule, 
-    MatRadioModule,
+    MatTooltipModule,
     AgmCoreModule.forRoot({
       apiKey: 'YOUR_GOOGLE_MAPS_API_KEY'
     })

@@ -21,6 +21,13 @@
                                             </button>
                                         </div>
                                     </td>
+                                    <td>
+                                        <div class="example-full-width"><button class="btn btn-primary"
+                                                (click)="mostrarPanelCrearDetalle()">
+                                                Crear Detalle Orden
+                                            </button>
+                                        </div>
+                                    </td>
                                 </tr>
                             </table>
                         </div>
@@ -116,17 +123,20 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="ID Orden" formControlName="eIdOrden" type="text" readonly="true">
+                                        <input matInput placeholder="ID Orden" formControlName="eIdOrden" type="text"
+                                            readonly="true">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-4">
                                     <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="Cliente" formControlName="eCliente" type="text" readonly="true">
+                                        <input matInput placeholder="Cliente" formControlName="eCliente" type="text"
+                                            readonly="true">
                                     </mat-form-field>
                                 </div>
                                 <div class="col-md-4">
                                     <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="Dirección" formControlName="eDireccion" type="text" readonly="true">
+                                        <input matInput placeholder="Dirección" formControlName="eDireccion" type="text"
+                                            readonly="true">
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -146,8 +156,8 @@
                                 <div class="col-md-4">
                                     <mat-form-field>
                                         <mat-label>Estado</mat-label>
-                                        <mat-select formControlName="eEstado" >
-                                            <mat-option *ngFor="let est of listaEstados2" [value]="est.value" >
+                                        <mat-select formControlName="eEstado">
+                                            <mat-option *ngFor="let est of listaEstados2" [value]="est.value">
                                                 {{est.viewValue}}
                                             </mat-option>
                                         </mat-select>
@@ -216,25 +226,169 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6">
-                                    {{tablaOrdenes}}
+                                    {{nombreCliente}}
                                 </div>
                                 <div class="col-md-6">
-                                    {{tablaOrdenes}}
+                                    {{textDireccion}}
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <button mat-raised-button (click)="crearOrden()" class="btn btn-danger pull-left">Crear
+                                    <button mat-raised-button (click)="mostrarPanelBuscarCliente()"
+                                        class="btn btn-danger pull-left">
                                         Consultar Cliente</button>
                                 </div>
                                 <div class="col-md-6">
-                                    <button mat-raised-button (click)="crearOrden()" class="btn btn-danger pull-left">Crear
+                                    <button mat-raised-button (click)="mostrarPanelDireccion()"
+                                        class="btn btn-danger pull-left">
                                         Consultar Dirección</button>
-                                </div> 
+                                </div>
                             </div>
                             <button mat-raised-button (click)="crearOrden()" class="btn btn-danger pull-right">Crear
                                 Producto</button>
                             <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <div class="card" *ngIf="panelBuscarCliente">
+                        <div class="card-header card-header-danger">
+                            <h4 class="card-title ">Buscar Cliente</h4>
+                            <p class="card-category">Complete la siguiente información</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field>
+                                        <mat-label>Tipo de documento de identidad</mat-label>
+                                        <mat-select formControlName="cTipoId">
+                                            <mat-option *ngFor="let tipid of listaTipoId" [value]="tipid.value">
+                                                {{tipid.viewValue}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Número de Identificación"
+                                            formControlName="cIdentificacion" type="text">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button mat-raised-button (click)="ConsultaCliente()"
+                                        class="btn btn-danger pull-left">
+                                        Buscar Cliente</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" *ngIf="panelBuscarDireccion">
+                        <div class="card-header card-header-danger">
+                            <h4 class="card-title ">Seleccionar Dirección</h4>
+                            <p class="card-category">Seleccione una dirección</p>
+                        </div>
+                        <div class="card-body">
+                            <table class="table">
+                                <thead class=" text-primary">
+                                    <th>Dirección</th>
+                                    <th>País</th>
+                                    <th>Ciudad</th>
+                                    <th>Tipo de Dirección</th>
+                                    <th>Estado</th>
+                                    <th>Seleccionar</th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let dir of direcciones">
+                                        <td hidden>{{dir.iddireccion}}</td>
+                                        <td>{{dir.direccion}}</td>
+                                        <td>{{dir.pais}}</td>
+                                        <td>{{dir.ciudad}}</td>
+                                        <td>{{dir.tipodireccion}}</td>
+                                        <td>{{dir.estado}}</td>
+                                        <td><i class="material-icons" style="cursor: pointer;"
+                                                (click)="$event.stopPropagation();verDireccion(dir)">Ver</i>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card" *ngIf="PanelCrearDetalle">
+                        <div class="card-header card-header-danger">
+                            <h4 class="card-title ">Crear Detalle de Orden</h4>
+                            <p class="card-category">Complete los datos del detalle</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="ID Orden" formControlName="dtIdOrden" type="text">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        Producto
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Cantidad" formControlName="dtCantidad" type="text">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        valor unitario
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <!--<mat-form-field>
+                                        <mat-label>Proveedor</mat-label>
+                                        <mat-select formControlName="dtProveedor">
+                                            <mat-option *ngFor="let prov of listaProveedor" [value]="prov.value">
+                                                {{prov.viewValue}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>-->
+                                    Proveedores
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Estado" type="text" value="ACTIVA" readonly=true>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button mat-raised-button (click)="mostrarPanelProducto()" class="btn btn-danger pull-left">
+                                        Buscar Producto</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button mat-raised-button (click)="crearDetalle()" class="btn btn-danger pull-left">
+                                        Crear Detalle</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" *ngIf="panelBuscarProducto">
+                        <div class="card-header card-header-danger">
+                            <h4 class="card-title ">Buscar Producto</h4>
+                            <p class="card-category">Complete la siguiente información</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Producto" type="text" formControlName="pNombre">
+                                    </mat-form-field>
+                                    <div class="col-md-6">
+                                        <button mat-raised-button (click)="buscarProducto()" class="btn btn-danger pull-left">
+                                            Buscar Producto</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

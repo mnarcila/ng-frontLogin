@@ -12,7 +12,7 @@
 
 
 export interface Direccion { 
-    idDireccion?: number;
+    iddireccion?: number;
     idCliente?: number;
     direccion?: string;
     pais?: string;
