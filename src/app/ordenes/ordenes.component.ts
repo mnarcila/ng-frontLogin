@@ -5,7 +5,7 @@ import { OrdenRsType, OrdenService, StatusType, DetalleOrdenService, OrdenM, Det
 import { Router, ActivatedRoute } from '@angular/router';
 import { Listas, Estados, tipoIdentificacion, ListaProveedores } from '../Paramentricos/Listas';
 import { ClienteService, Direccion} from '../_restClientes';
-import { ProductoService } from '../_restProducto';
+import { ProductoService, Producto } from '../_restProducto';
 
 @Component({
   selector: 'app-ordenes',
@@ -39,6 +39,9 @@ export class OrdenesComponent implements OnInit {
   PanelCrearDetalle: boolean = false;
   panelBuscarProducto: boolean = false;
   listaProveedor: ListaProveedores[] = new Listas().listaProveedores;
+  panelSeleccionProducto: boolean = false;
+  tablaProductos: Producto[] = [];
+  pIdProducto: number;
 
   constructor(
     private ordenesApi: OrdenService,
@@ -102,6 +105,7 @@ export class OrdenesComponent implements OnInit {
       dtCantidad: ['',Validators.required],
       dtProveedor: ['', Validators.required],
       pNombre: ['',Validators.required],
+      pValorUnitario: ['',Validators.required],
     });
   }
 
@@ -408,10 +412,20 @@ export class OrdenesComponent implements OnInit {
         const prd = value;
         //this.consultaEspecifica(value.productos[0].idProducto);
         console.log(value);
-        //this.procesarResponse(value);
+        this.panelSeleccionProducto = true;
+        this.tablaProductos = value.productos;
       }, 200),
       error => console.error(JSON.stringify(error)),
       () => console.log('done')
     );
+  }
+
+  seleccionarProducto(productoz: Producto): void{
+    console.log("impirmir productoz "+productoz);
+    this.angForm.controls.pNombre.setValue(productoz.nombre);
+    this.angForm.controls.pValorUnitario.setValue(productoz.valorBase);
+    this.pIdProducto = productoz.idProducto;
+    this.panelSeleccionProducto = false;
+    this.panelBuscarProducto = false;
   }
 }

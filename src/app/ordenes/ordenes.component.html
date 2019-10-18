@@ -326,7 +326,8 @@
                                 </div>
                                 <div class="col-md-6">
                                     <mat-form-field class="example-full-width">
-                                        Producto
+                                        <input matInput placeholder="Producto" formControlName="pNombre"
+                                            type="text" value="Producto" readonly=true>
                                     </mat-form-field>
                                 </div>
                             </div>
@@ -338,31 +339,30 @@
                                 </div>
                                 <div class="col-md-6">
                                     <mat-form-field class="example-full-width">
-                                        valor unitario
+                                        <input matInput placeholder="Valor Unitario" formControlName="pValorUnitario"
+                                            type="text" value="Valor Unitario" readonly=true>
                                     </mat-form-field>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <!--<mat-form-field>
+                                    <mat-form-field>
                                         <mat-label>Proveedor</mat-label>
                                         <mat-select formControlName="dtProveedor">
                                             <mat-option *ngFor="let prov of listaProveedor" [value]="prov.value">
                                                 {{prov.viewValue}}
                                             </mat-option>
                                         </mat-select>
-                                    </mat-form-field>-->
-                                    Proveedores
+                                    </mat-form-field>
                                 </div>
                                 <div class="col-md-6">
-                                    <mat-form-field class="example-full-width">
-                                        <input matInput placeholder="Estado" type="text" value="ACTIVA" readonly=true>
-                                    </mat-form-field>
+                                    Activa
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <button mat-raised-button (click)="mostrarPanelProducto()" class="btn btn-danger pull-left">
+                                    <button mat-raised-button (click)="mostrarPanelProducto()"
+                                        class="btn btn-danger pull-left">
                                         Buscar Producto</button>
                                 </div>
                                 <div class="col-md-6">
@@ -384,8 +384,50 @@
                                         <input matInput placeholder="Producto" type="text" formControlName="pNombre">
                                     </mat-form-field>
                                     <div class="col-md-6">
-                                        <button mat-raised-button (click)="buscarProducto()" class="btn btn-danger pull-left">
+                                        <button mat-raised-button (click)="buscarProducto()"
+                                            class="btn btn-danger pull-left">
                                             Buscar Producto</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid" *ngIf="panelSeleccionProducto">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header card-header-rose">
+                                        <h4 class="card-title mt-0"> PRODUCTOS </h4>
+                                        <p class="card-category">Productos registrados en el sistema</p>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <strong *ngIf="tablaProductos.length == 0">Sin datos..</strong>
+                                            <table *ngIf="tablaProductos.length > 0" class="table table-hover">
+                                                <thead class="">
+                                                    <th>ID Producto</th>
+                                                    <th>Nombre</th>
+                                                    <th>Descripción</th>
+                                                    <th>Valor base</th>
+                                                    <th>Estado</th>
+                                                    <th>Seleccionar</th>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let productoz of tablaProductos">
+                                                        <td>{{ productoz.idProducto }}</td>
+                                                        <td>{{ productoz.nombre }}</td>
+                                                        <td>{{ productoz.descripcion }}</td>
+                                                        <td>{{ productoz.valorBase }}</td>
+                                                        <td>{{ productoz.estado }}</td>
+                                                        <td><i class="material-icons" style="cursor: pointer;"
+                                                                (click)="$event.stopPropagation();seleccionarProducto(productoz)">edit</i>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
