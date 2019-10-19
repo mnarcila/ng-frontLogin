@@ -9,17 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { PatchDocument } from './patchDocument';
 
 
-/**
- * Detalle de las ordenes de la plataforma Kallsonys
- */
-export interface DetalleOrden { 
-    idDetOrden?: number;
-    idOrden?: number;
-    idProducto?: number;
-    cantidad?: number;
-    valorUnidad?: number;
-    idProveedor?: number;
-    estado?: string;
+export interface PatchRequest extends Array<PatchDocument> { 
 }

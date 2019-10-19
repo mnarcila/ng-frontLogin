@@ -9,17 +9,14 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ParametrosDeSalidaType } from './parametrosDeSalidaType';
+import { StatusType } from './statusType';
 
 
 /**
- * Detalle de las ordenes de la plataforma Kallsonys
+ * Respuesta genérica.
  */
-export interface DetalleOrden { 
-    idDetOrden?: number;
-    idOrden?: number;
-    idProducto?: number;
-    cantidad?: number;
-    valorUnidad?: number;
-    idProveedor?: number;
-    estado?: string;
+export interface OrdenRsType { 
+    status?: StatusType;
+    datosBasicos?: ParametrosDeSalidaType;
 }

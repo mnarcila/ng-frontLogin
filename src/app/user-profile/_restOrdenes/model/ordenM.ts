@@ -12,14 +12,18 @@
 
 
 /**
- * Detalle de las ordenes de la plataforma Kallsonys
+ * Ordenes de la plataforma Kallsonys
  */
-export interface DetalleOrden { 
-    idDetOrden?: number;
+export interface OrdenM { 
     idOrden?: number;
-    idProducto?: number;
-    cantidad?: number;
-    valorUnidad?: number;
-    idProveedor?: number;
-    estado?: string;
+    idCliente?: number;
+    idDireccion?: number;
+    valorTotal?: number;
+    cantidadProductos?: number;
+    fechaSolicitud?: string;
+    fechaAprobacion?: string;
+    fechaCierre?: string;
+    estado?: number;
+    comentario?: string;
+    origen?: string;
 }

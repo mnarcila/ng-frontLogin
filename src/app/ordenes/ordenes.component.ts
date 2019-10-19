@@ -428,4 +428,24 @@ export class OrdenesComponent implements OnInit {
     this.panelSeleccionProducto = false;
     this.panelBuscarProducto = false;
   }
+
+  crearDetalle(): void{
+    let detalle: DetalleOrden = {};
+    detalle.cantidad = this.angForm.controls.dtCantidad.value;
+    detalle.estado = 'ACTIVA';
+    detalle.idOrden = this.angForm.controls.dtIdOrden.value;
+    detalle.idProducto = this.pIdProducto;
+    detalle.idProveedor = this.angForm.controls.dtProveedor.value;
+    detalle.valorUnidad = this.angForm.controls.pValorUnitario.value;
+    console.log('crear detalle '+ detalle);
+    this.detalleApi.registrarDetalleOrden('1', '1', detalle).subscribe(
+    value => setTimeout(() => {
+      //const prd = value;
+      console.log(value);
+      this.panelDetOrden = false;
+    }, 200),
+    error => console.error(JSON.stringify(error)),
+    () => console.log('done')
+  );
+  }
 }

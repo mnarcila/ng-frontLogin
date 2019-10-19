@@ -12,14 +12,15 @@
 
 
 /**
- * Detalle de las ordenes de la plataforma Kallsonys
+ * Status de respuesta.
  */
-export interface DetalleOrden { 
-    idDetOrden?: number;
-    idOrden?: number;
-    idProducto?: number;
-    cantidad?: number;
-    valorUnidad?: number;
-    idProveedor?: number;
-    estado?: string;
+export interface StatusType { 
+    /**
+     * Código de status.
+     */
+    statusCode?: number;
+    /**
+     * Descripción de estatus.
+     */
+    statusDesc?: string;
 }

@@ -9,17 +9,14 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { DetalleOrden } from './detalleOrden';
+import { OrdenM } from './ordenM';
 
 
 /**
- * Detalle de las ordenes de la plataforma Kallsonys
+ * información de devuelta.
  */
-export interface DetalleOrden { 
-    idDetOrden?: number;
-    idOrden?: number;
-    idProducto?: number;
-    cantidad?: number;
-    valorUnidad?: number;
-    idProveedor?: number;
-    estado?: string;
+export interface ParametrosDeSalidaType { 
+    ordenes?: Array<OrdenM>;
+    detalles?: Array<DetalleOrden>;
 }
