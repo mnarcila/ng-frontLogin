@@ -6,6 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Listas, Estados, tipoIdentificacion, ListaProveedores } from '../Paramentricos/Listas';
 import { ClienteService, Direccion} from '../_restClientes';
 import { ProductoService, Producto } from '../_restProducto';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-ordenes',
@@ -114,7 +115,10 @@ export class OrdenesComponent implements OnInit {
       this.panelConsultar = true;
       this.panelActualizar = false;
       this.panelCrear = false;
-      //this.panelEditarOrden = false;
+      this.panelBuscarCliente = false;
+      this.panelBuscarDireccion = false;
+      this.PanelCrearDetalle = false;
+      this.panelBuscarProducto = false;
     }
   }
 
@@ -134,7 +138,10 @@ export class OrdenesComponent implements OnInit {
       this.panelActualizar = false;
       this.panelCrear = true;
       this.tablaOrdenes = false;
-      //this.panelEditarOrden = false;
+      this.listaDetalle  = [];
+      this.panelDetOrden = false;
+      this.PanelCrearDetalle = false;
+      this.panelBuscarProducto = false;
     }
   }
 
@@ -263,6 +270,7 @@ export class OrdenesComponent implements OnInit {
   verDetalle(orden: OrdenM):void{
     console.log("entre al detalle");
     this.panelDetOrden = true;
+    this.panelActualizar = false;
     this.listaDetalle = [];
     this.detalleApi.conultarDetalleOrdenPorIdOrden('1', '1', orden.idOrden).subscribe(
       value => setTimeout(() => {
@@ -319,6 +327,7 @@ export class OrdenesComponent implements OnInit {
     this.panelActualizar = false;
     this.listOrdenes = [];
     this.colsultarOrdenXid(orden.idOrden);
+    this.listOrdenes = [];
   }
 
   mostrarPanelBuscarCliente():void {
@@ -399,6 +408,14 @@ export class OrdenesComponent implements OnInit {
 
   mostrarPanelCrearDetalle():void{
     this.PanelCrearDetalle = true;
+    this.panelDetOrden = false;
+    this.listaDetalle = [];
+    this.panelConsultar = false;
+    this.panelBuscarCliente = false;
+    this.panelBuscarDireccion = false;
+    this.panelCrear = false;
+    this.tablaOrdenes = false;
+    this.panelActualizar = false;
   }
 
   mostrarPanelProducto():void{

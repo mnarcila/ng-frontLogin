@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header card-header-danger">
+                        <div class="card-header card-header-rose">
                             <table class="table-responsive">
                                 <tr>
                                     <td>
@@ -34,7 +34,7 @@
                     </div>
                     <div class="col-md-8" *ngIf="panelConsultar">
                         <div class="card">
-                            <div class="card-header card-header-danger">
+                            <div class="card-header card-header-rose">
                                 <h4 class="card-title">Filtar Ordenes</h4>
                                 <p class="card-category">Seleccione uno de los siguientes filtros</p>
                             </div>
@@ -73,11 +73,12 @@
                         </div>
                     </div>
                     <div class="card" *ngIf="tablaOrdenes">
-                        <div class="card-header card-header-danger">
+                        <div class="card-header card-header-rose">
                             <h4 class="card-title ">Ordenes</h4>
                             <p class="card-category"> Últimas Ordenes Activas</p>
                         </div>
-                        <div class="card-body">
+                        <strong *ngIf="listOrdenes.length == 0">Sin datos..</strong>
+                        <div *ngIf="listOrdenes.length > 0" class="card-body">
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead class=" text-primary">
@@ -105,9 +106,9 @@
                                             <td>{{ord.fechaCierre}}</td>
                                             <td>{{ord.estado}}</td>
                                             <td><i class="material-icons" style="cursor: pointer;"
-                                                    (click)="$event.stopPropagation();verDetalle(ord)">Ver</i>
+                                                    (click)="$event.stopPropagation();verDetalle(ord)">done</i>
                                             <td><i class="material-icons" style="cursor: pointer;"
-                                                    (click)="$event.stopPropagation();editarOrden(ord)">Editar</i>
+                                                    (click)="$event.stopPropagation();editarOrden(ord)">edit</i>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -115,7 +116,7 @@
                         </div>
                     </div>
                     <div class="card" *ngIf="panelActualizar">
-                        <div class="card-header card-header-danger">
+                        <div class="card-header card-header-rose">
                             <h4 class="card-title ">Editar Orden</h4>
                             <p class="card-category">Complete la siguiente información</p>
                         </div>
@@ -191,12 +192,13 @@
                         </div>
                     </div>
                     <div class="card" *ngIf="panelDetOrden">
-                        <div class="card-header card-header-danger">
+                        <div class="card-header card-header-rose">
                             <h4 class="card-title ">Detalle de Orden</h4>
                             <p class="card-category"> Detalle de productos de una orden</p>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
+                            <strong *ngIf="listaDetalle.length == 0">Sin datos..</strong>
+                            <div *ngIf="listaDetalle.length > 0" class="table-responsive">
                                 <table class="table">
                                     <thead class=" text-primary">
                                         <th>Producto</th>
@@ -219,7 +221,7 @@
                         </div>
                     </div>
                     <div class="card" *ngIf="panelCrear">
-                        <div class="card-header card-header-danger">
+                        <div class="card-header card-header-rose">
                             <h4 class="card-title ">Crear Orden</h4>
                             <p class="card-category">Complete la siguiente información</p>
                         </div>
@@ -244,13 +246,13 @@
                                         Consultar Dirección</button>
                                 </div>
                             </div>
-                            <button mat-raised-button (click)="crearOrden()" class="btn btn-danger pull-right">Crear
-                                Producto</button>
+                            <button mat-raised-button (click)="crearOrden()" class="btn btn-danger pull-right">
+                                Crear Orden</button>
                             <div class="clearfix"></div>
                         </div>
                     </div>
                     <div class="card" *ngIf="panelBuscarCliente">
-                        <div class="card-header card-header-danger">
+                        <div class="card-header card-header-rose">
                             <h4 class="card-title ">Buscar Cliente</h4>
                             <p class="card-category">Complete la siguiente información</p>
                         </div>
@@ -283,12 +285,13 @@
                         </div>
                     </div>
                     <div class="card" *ngIf="panelBuscarDireccion">
-                        <div class="card-header card-header-danger">
+                        <div class="card-header card-header-rose">
                             <h4 class="card-title ">Seleccionar Dirección</h4>
                             <p class="card-category">Seleccione una dirección</p>
                         </div>
                         <div class="card-body">
-                            <table class="table">
+                            <strong *ngIf="direcciones.length == 0">Sin datos..</strong>
+                            <table *ngIf="direcciones.length > 0" class="table">
                                 <thead class=" text-primary">
                                     <th>Dirección</th>
                                     <th>País</th>
@@ -306,14 +309,14 @@
                                         <td>{{dir.tipodireccion}}</td>
                                         <td>{{dir.estado}}</td>
                                         <td><i class="material-icons" style="cursor: pointer;"
-                                                (click)="$event.stopPropagation();verDireccion(dir)">Ver</i>
+                                                (click)="$event.stopPropagation();verDireccion(dir)">done</i>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                     <div class="card" *ngIf="PanelCrearDetalle">
-                        <div class="card-header card-header-danger">
+                        <div class="card-header card-header-rose">
                             <h4 class="card-title ">Crear Detalle de Orden</h4>
                             <p class="card-category">Complete los datos del detalle</p>
                         </div>
@@ -373,7 +376,7 @@
                         </div>
                     </div>
                     <div class="card" *ngIf="panelBuscarProducto">
-                        <div class="card-header card-header-danger">
+                        <div class="card-header card-header-rose">
                             <h4 class="card-title ">Buscar Producto</h4>
                             <p class="card-category">Complete la siguiente información</p>
                         </div>
@@ -421,7 +424,7 @@
                                                         <td>{{ productoz.valorBase }}</td>
                                                         <td>{{ productoz.estado }}</td>
                                                         <td><i class="material-icons" style="cursor: pointer;"
-                                                                (click)="$event.stopPropagation();seleccionarProducto(productoz)">edit</i>
+                                                                (click)="$event.stopPropagation();seleccionarProducto(productoz)">done</i>
                                                         </td>
                                                     </tr>
                                                 </tbody>
