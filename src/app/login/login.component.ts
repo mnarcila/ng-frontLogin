@@ -3,6 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Empleado, EmpleadoService, AutenticarRsType, StatusType } from '../_restLogin';
 import { AuthService } from '../auth.service';
+import { sha256, sha224 } from 'js-sha256';
+
 @Component({
   selector: 'LoginComponent',
   templateUrl: './login.component.html',
@@ -76,16 +78,17 @@ export class LoginComponent implements OnInit {
   }
 
   onClick(): void {
-
-    this.empleadoApi.autenticarEmpleado('1', '1', this.angForm.controls.username.value, this.angForm.controls.password.value).subscribe(
+    let pass = sha256(this.angForm.controls.password.value);
+    //console.log(pass);
+    this.empleadoApi.autenticarEmpleado('1', '1', this.angForm.controls.username.value, pass).subscribe(
       value => {
         this.procesarResponse(value);
       },
       error => console.error(JSON.stringify(error)),
       () => console.log('done')
     );
-    this.auth.setLoggedIn(true);
-    this.router.navigate(["home"]);
+    //this.auth.setLoggedIn(true);
+    //this.router.navigate(["home"]);
 
 
   }

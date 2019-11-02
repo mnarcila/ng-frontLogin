@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { AuthService } from '../auth.service';
 import { Router} from '@angular/router';
 import { EmpleadoService, Empleado } from 'app/_restLogin';
-import { Listas, Estados } from '../Paramentricos/Listas';
+import { sha256, sha224 } from 'js-sha256';
 
 @Component({
   selector: 'app-usuario',
@@ -93,12 +93,6 @@ export class UsuarioComponent implements OnInit {
   }*/
 
   ActualizarEmpleado(usuario:Empleado ){
-    //let empl :Empleado = {};
-    //empl.idEmpleado = this.angForm.controls.uId.value;
-    //empl.nombre = this.angForm.controls.uNombre.value;
-    //empl.apellido = this.angForm.controls.uApellido.value;
-    //empl.usuario = this.angForm.controls.uUsuario.value;
-    //empl.estado = this.angForm.controls.uEstado.value;
     this.empleadoApi.actualizarEmpleadoPorId('1', '1', usuario.idEmpleado).subscribe(
       value => setTimeout(() => {
         const prd = value;
@@ -117,11 +111,10 @@ export class UsuarioComponent implements OnInit {
 
   CrearEmpleado(){
     let empl :Empleado = {};
-    //empl.idEmpleado = this.angForm.controls.uId.value;
     empl.nombre = this.angForm.controls.uNombre.value;
     empl.apellido = this.angForm.controls.uApellido.value;
     empl.usuario = this.angForm.controls.uUsuario.value;
-    empl.clave = this.angForm.controls.uClave.value;
+    empl.clave = sha256(this.angForm.controls.uClave.value);
     empl.estado = this.angForm.controls.uEstado.value;
     this.empleadoApi.registrarEmpleado('1', '1', empl).subscribe(
       value => setTimeout(() => {
