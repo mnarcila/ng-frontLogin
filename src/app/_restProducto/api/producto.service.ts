@@ -73,7 +73,8 @@ export class ProductoService {
     public actualizarProductoPorId(headerRq: string, serviceID: string, idProducto: number, jsonPatch: Producto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ProductoRsType>>;
     public actualizarProductoPorId(headerRq: string, serviceID: string, idProducto: number, jsonPatch: Producto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ProductoRsType>>;
     public actualizarProductoPorId(headerRq: string, serviceID: string, idProducto: number, jsonPatch: Producto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
+        console.log("actualizarProductoPorId");
+        console.log(jsonPatch);
         if (headerRq === null || headerRq === undefined) {
             throw new Error('Required parameter headerRq was null or undefined when calling actualizarProductoPorId.');
         }

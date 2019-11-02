@@ -1,24 +1,24 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core'; 
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import {MatRadioModule} from '@angular/material/radio';
+import { MatRadioModule } from '@angular/material/radio';
 import { AppRoutingModule } from './app.routing';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
- 
+import { MatDialogModule } from '@angular/material/dialog';
 import { TypographyComponent } from './typography/typography.component';
 import { IconsComponent } from './icons/icons.component';
 import { MapsComponent } from './maps/maps.component';
 import { NotificationsComponent } from './notifications/notifications.component';
- 
+
 //componentes de pantalla 
 import { ComponentsModule } from './components/components.module';
 import { LoginComponent } from './login/login.component';
 import { AppComponent } from './app.component';
 
 //componentes para consumo de webService
-import { HttpModule,Http } from '@angular/http';
-import { HttpClientModule ,HttpHeaders} from '@angular/common/http';
+import { HttpModule, Http } from '@angular/http';
+import { HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Empleado, EmpleadoService, AutenticarRsType } from './_restLogin';
 import { Producto, ProductoService, ProductoRsType } from './_restProducto';
@@ -40,7 +40,7 @@ import {
   AgmCoreModule
 } from '@agm/core';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
-import { ProductosComponent } from './productos/productos.component';
+import { ProductosComponent, DialogOverviewExampleDialog } from './productos/productos.component';
 import { ClientesComponent } from './clientes/clientes.component';
 
 
@@ -61,7 +61,8 @@ import { ClientesComponent } from './clientes/clientes.component';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatTooltipModule, 
+    MatTooltipModule,
+    MatDialogModule,
     AgmCoreModule.forRoot({
       apiKey: 'YOUR_GOOGLE_MAPS_API_KEY'
     })
@@ -69,10 +70,11 @@ import { ClientesComponent } from './clientes/clientes.component';
   declarations: [
     //componentes que se utilizaran para la navegacion 
     AppComponent,
+    DialogOverviewExampleDialog,
     AdminLayoutComponent,
-    LoginComponent, 
+    LoginComponent,
     DashboardComponent,
-    UserProfileComponent, 
+    UserProfileComponent,
     TypographyComponent,
     IconsComponent,
     MapsComponent,
@@ -93,6 +95,7 @@ import { ClientesComponent } from './clientes/clientes.component';
     HttpClientModule
 
   ],
+  entryComponents: [DialogOverviewExampleDialog],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

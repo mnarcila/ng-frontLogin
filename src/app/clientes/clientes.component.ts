@@ -72,8 +72,22 @@ export class ClientesComponent implements OnInit {
       eiemail: ['', Validators.required],
       ecateProduct: ['', Validators.required],
       eestadoProduct: ['', Validators.required],
-
-
+      //campos de la direccion 
+      iddireccionId:['', Validators.required],
+      idcliente:['', Validators.required],
+      iddireccion:['', Validators.required],
+      idPais:['', Validators.required],
+      idCiudad:['', Validators.required],
+      idTipoDireccion:['', Validators.required],
+      idEstado:['', Validators.required],
+      //edicion direccion 
+      eddireccionId:['', Validators.required],
+      edcliente:['', Validators.required],
+      eddireccion:['', Validators.required],
+      edPais:['', Validators.required],
+      edCiudad:['', Validators.required],
+      edTipoDireccion:['', Validators.required],
+      edEstado:['', Validators.required],
 
     });
   }
@@ -248,7 +262,7 @@ export class ClientesComponent implements OnInit {
   }
 
   direccion(){
-    
+
   }
 
 

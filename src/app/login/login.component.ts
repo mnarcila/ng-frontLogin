@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Empleado, EmpleadoService, AutenticarRsType, StatusType } from '../_restLogin';
+import { HttpParameterCodec } from "@angular/common/http";
 import { AuthService } from '../auth.service';
 @Component({
   selector: 'LoginComponent',
@@ -77,7 +78,12 @@ export class LoginComponent implements OnInit {
 
   onClick(): void {
 
-    this.empleadoApi.autenticarEmpleado('1', '1', this.angForm.controls.username.value, this.angForm.controls.password.value).subscribe(
+    var usuario = this.angForm.controls.username.value;
+    var password = encodeURIComponent(this.angForm.controls.password.value);
+
+    
+
+    this.empleadoApi.autenticarEmpleado('1', '1', usuario,password ).subscribe(
       value => {
         this.procesarResponse(value);
       },
