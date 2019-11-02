@@ -1,0 +1,443 @@
+<div class="main-content">
+    <form [formGroup]="angForm">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header card-header-rose">
+                            <table class="table-responsive">
+                                <tr>
+                                    <td>
+                                        <div class="example-full-width"><button class="btn btn-primary"
+                                                (click)="mostrarPanelConsulta()">
+                                                Consultar Ordenes
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="example-full-width"><button class="btn btn-primary"
+                                                (click)="mostrarPanelCrear()">
+                                                Crear Orden
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="example-full-width"><button class="btn btn-primary"
+                                                (click)="mostrarPanelCrearDetalle()">
+                                                Crear Detalle Orden
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-md-8" *ngIf="panelConsultar">
+                        <div class="card">
+                            <div class="card-header card-header-rose">
+                                <h4 class="card-title">Filtar Ordenes</h4>
+                                <p class="card-category">Seleccione uno de los siguientes filtros</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <mat-radio-group aria-label="Seleccione una opción" formControlName="tipoConsulta">
+                                        <table>
+                                            <td>
+                                                <tr>
+                                                    <mat-radio-button value=1>Estado</mat-radio-button>
+                                                </tr>
+                                                <tr>
+                                                    <mat-radio-button value=2>Por cliente</mat-radio-button>
+                                                </tr>
+                                                <!-- <tr><mat-radio-button value=3>Activas por cliente</mat-radio-button></tr> -->
+                                                <tr>
+                                                    <mat-radio-button value=4>Por Producto</mat-radio-button>
+                                                </tr>
+                                                <tr>
+                                                    <mat-radio-button value=5>Número de orden</mat-radio-button>
+                                                </tr>
+                                            </td>
+                                        </table>
+                                    </mat-radio-group>
+                                </div>
+                                <div class="row">
+                                    <input type="text" formControlName="paramConsulta" class="form-control"
+                                        placeholder="Ingrese valor" />
+                                </div>
+                                <div class="row">
+                                    <button class="btn btn-primary" (click)="consultaGenerica()">
+                                        Consultar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" *ngIf="tablaOrdenes">
+                        <div class="card-header card-header-rose">
+                            <h4 class="card-title ">Ordenes</h4>
+                            <p class="card-category"> Últimas Ordenes Activas</p>
+                        </div>
+                        <strong *ngIf="listOrdenes.length == 0">Sin datos..</strong>
+                        <div *ngIf="listOrdenes.length > 0" class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class=" text-primary">
+                                        <th>ID Orden</th>
+                                        <th>Cliente</th>
+                                        <th>Dirección</th>
+                                        <th>Valor Total</th>
+                                        <th>Cantidad Productos</th>
+                                        <th>Fecha Solicitud</th>
+                                        <th>Fecha Aprobación</th>
+                                        <th>Fecha Cierre</th>
+                                        <th>Estado</th>
+                                        <th>Ver Detalle</th>
+                                        <th>Editar Orden</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let ord of listOrdenes">
+                                            <td>{{ord.idOrden}}</td>
+                                            <td>{{ord.idCliente}}</td>
+                                            <td>{{ord.idDireccion}}</td>
+                                            <td>{{ord.valorTotal}}</td>
+                                            <td>{{ord.cantidadProductos}}</td>
+                                            <td>{{ord.fechaSolicitud}}</td>
+                                            <td>{{ord.fechaAprobacion}}</td>
+                                            <td>{{ord.fechaCierre}}</td>
+                                            <td>{{ord.estado}}</td>
+                                            <td><i class="material-icons" style="cursor: pointer;"
+                                                    (click)="$event.stopPropagation();verDetalle(ord)">done</i>
+                                            <td><i class="material-icons" style="cursor: pointer;"
+                                                    (click)="$event.stopPropagation();editarOrden(ord)">edit</i>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" *ngIf="panelActualizar">
+                        <div class="card-header card-header-rose">
+                            <h4 class="card-title ">Editar Orden</h4>
+                            <p class="card-category">Complete la siguiente información</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="ID Orden" formControlName="eIdOrden" type="text"
+                                            readonly="true">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Cliente" formControlName="eCliente" type="text"
+                                            readonly="true">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Dirección" formControlName="eDireccion" type="text"
+                                            readonly="true">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Valor Total" formControlName="eValTotal"
+                                            type="text" readonly="true">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Cantidad Productos" formControlName="eCantidad"
+                                            type="text" readonly="true">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field>
+                                        <mat-label>Estado</mat-label>
+                                        <mat-select formControlName="eEstado">
+                                            <mat-option *ngFor="let est of listaEstados2" [value]="est.value">
+                                                {{est.viewValue}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Fecha Solicitud" formControlName="eFechaSol"
+                                            type="text" readonly="true">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Fecha Aprobación" formControlName="eFechaAprob"
+                                            type="text" readonly="true">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-4">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Fecha Cierre" formControlName="eFechaCierre"
+                                            type="text" readonly="true">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <button mat-raised-button (click)="ActualizarOrden()"
+                                class="btn btn-danger pull-right">Editar Orden</button>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <div class="card" *ngIf="panelDetOrden">
+                        <div class="card-header card-header-rose">
+                            <h4 class="card-title ">Detalle de Orden</h4>
+                            <p class="card-category"> Detalle de productos de una orden</p>
+                        </div>
+                        <div class="card-body">
+                            <strong *ngIf="listaDetalle.length == 0">Sin datos..</strong>
+                            <div *ngIf="listaDetalle.length > 0" class="table-responsive">
+                                <table class="table">
+                                    <thead class=" text-primary">
+                                        <th>Producto</th>
+                                        <th>Cantidad</th>
+                                        <th>Valor Unidad</th>
+                                        <th>Proveedor</th>
+                                        <th>Estado</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let det of listaDetalle">
+                                            <td>{{det.idProducto}}</td>
+                                            <td>{{det.cantidad}}</td>
+                                            <td>{{det.valorUnidad}}</td>
+                                            <td>{{det.idProveedor}}</td>
+                                            <td>{{det.estado}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" *ngIf="panelCrear">
+                        <div class="card-header card-header-rose">
+                            <h4 class="card-title ">Crear Orden</h4>
+                            <p class="card-category">Complete la siguiente información</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {{nombreCliente}}
+                                </div>
+                                <div class="col-md-6">
+                                    {{textDireccion}}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button mat-raised-button (click)="mostrarPanelBuscarCliente()"
+                                        class="btn btn-danger pull-left">
+                                        Consultar Cliente</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button mat-raised-button (click)="mostrarPanelDireccion()"
+                                        class="btn btn-danger pull-left">
+                                        Consultar Dirección</button>
+                                </div>
+                            </div>
+                            <button mat-raised-button (click)="crearOrden()" class="btn btn-danger pull-right">
+                                Crear Orden</button>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                    <div class="card" *ngIf="panelBuscarCliente">
+                        <div class="card-header card-header-rose">
+                            <h4 class="card-title ">Buscar Cliente</h4>
+                            <p class="card-category">Complete la siguiente información</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field>
+                                        <mat-label>Tipo de documento de identidad</mat-label>
+                                        <mat-select formControlName="cTipoId">
+                                            <mat-option *ngFor="let tipid of listaTipoId" [value]="tipid.value">
+                                                {{tipid.viewValue}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Número de Identificación"
+                                            formControlName="cIdentificacion" type="text">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button mat-raised-button (click)="ConsultaCliente()"
+                                        class="btn btn-danger pull-left">
+                                        Buscar Cliente</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" *ngIf="panelBuscarDireccion">
+                        <div class="card-header card-header-rose">
+                            <h4 class="card-title ">Seleccionar Dirección</h4>
+                            <p class="card-category">Seleccione una dirección</p>
+                        </div>
+                        <div class="card-body">
+                            <strong *ngIf="direcciones.length == 0">Sin datos..</strong>
+                            <table *ngIf="direcciones.length > 0" class="table">
+                                <thead class=" text-primary">
+                                    <th>Dirección</th>
+                                    <th>País</th>
+                                    <th>Ciudad</th>
+                                    <th>Tipo de Dirección</th>
+                                    <th>Estado</th>
+                                    <th>Seleccionar</th>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let dir of direcciones">
+                                        <td hidden>{{dir.iddireccion}}</td>
+                                        <td>{{dir.direccion}}</td>
+                                        <td>{{dir.pais}}</td>
+                                        <td>{{dir.ciudad}}</td>
+                                        <td>{{dir.tipodireccion}}</td>
+                                        <td>{{dir.estado}}</td>
+                                        <td><i class="material-icons" style="cursor: pointer;"
+                                                (click)="$event.stopPropagation();verDireccion(dir)">done</i>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card" *ngIf="PanelCrearDetalle">
+                        <div class="card-header card-header-rose">
+                            <h4 class="card-title ">Crear Detalle de Orden</h4>
+                            <p class="card-category">Complete los datos del detalle</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="ID Orden" formControlName="dtIdOrden" type="text">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Producto" formControlName="pNombre"
+                                            type="text" value="Producto" readonly=true>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Cantidad" formControlName="dtCantidad" type="text">
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Valor Unitario" formControlName="pValorUnitario"
+                                            type="text" value="Valor Unitario" readonly=true>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field>
+                                        <mat-label>Proveedor</mat-label>
+                                        <mat-select formControlName="dtProveedor">
+                                            <mat-option *ngFor="let prov of listaProveedor" [value]="prov.value">
+                                                {{prov.viewValue}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div class="col-md-6">
+                                    Activa
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button mat-raised-button (click)="mostrarPanelProducto()"
+                                        class="btn btn-danger pull-left">
+                                        Buscar Producto</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <button mat-raised-button (click)="crearDetalle()" class="btn btn-danger pull-left">
+                                        Crear Detalle</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" *ngIf="panelBuscarProducto">
+                        <div class="card-header card-header-rose">
+                            <h4 class="card-title ">Buscar Producto</h4>
+                            <p class="card-category">Complete la siguiente información</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <mat-form-field class="example-full-width">
+                                        <input matInput placeholder="Producto" type="text" formControlName="pNombre">
+                                    </mat-form-field>
+                                    <div class="col-md-6">
+                                        <button mat-raised-button (click)="buscarProducto()"
+                                            class="btn btn-danger pull-left">
+                                            Buscar Producto</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid" *ngIf="panelSeleccionProducto">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header card-header-rose">
+                                        <h4 class="card-title mt-0"> PRODUCTOS </h4>
+                                        <p class="card-category">Productos registrados en el sistema</p>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <strong *ngIf="tablaProductos.length == 0">Sin datos..</strong>
+                                            <table *ngIf="tablaProductos.length > 0" class="table table-hover">
+                                                <thead class="">
+                                                    <th>ID Producto</th>
+                                                    <th>Nombre</th>
+                                                    <th>Descripción</th>
+                                                    <th>Valor base</th>
+                                                    <th>Estado</th>
+                                                    <th>Seleccionar</th>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let productoz of tablaProductos">
+                                                        <td>{{ productoz.idProducto }}</td>
+                                                        <td>{{ productoz.nombre }}</td>
+                                                        <td>{{ productoz.descripcion }}</td>
+                                                        <td>{{ productoz.valorBase }}</td>
+                                                        <td>{{ productoz.estado }}</td>
+                                                        <td><i class="material-icons" style="cursor: pointer;"
+                                                                (click)="$event.stopPropagation();seleccionarProducto(productoz)">done</i>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

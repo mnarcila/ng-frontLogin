@@ -37,7 +37,7 @@ export class ClienteService {
     //http://localhost:8280/OMS/Clientes/v1
     // http://10.39.1.149:8280/OMS/Clientes/v1'; // endpoint
     //http://10.39.1.156:8210/esb-skynet ; // bus 
-    protected basePath = ' http://10.39.1.149:8280/OMS/Clientes/v1';
+    protected basePath = 'http://10.39.1.149:8280/OMS/Clientes/v1';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -274,10 +274,10 @@ export class ClienteService {
       * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
       * @param reportProgress flag to report request and response progress.
       */
-    public consultarClientePorIdentificacion(headerRq: string, serviceID: string, tipoidentificacion: String, numidentificacion: String, observe?: 'body', reportProgress?: boolean): Observable<ClienteRsType>;
-    public consultarClientePorIdentificacion(headerRq: string, serviceID: string, tipoidentificacion: String, numidentificacion: String, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ClienteRsType>>;
-    public consultarClientePorIdentificacion(headerRq: string, serviceID: string, tipoidentificacion: String, numidentificacion: String, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ClienteRsType>>;
-    public consultarClientePorIdentificacion(headerRq: string, serviceID: string, tipoidentificacion: String, numidentificacion: String, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
+    public consultarClientePorIdentificacion(headerRq: string, serviceID: string, tipoidentificacion: string, numidentificacion: string, observe?: 'body', reportProgress?: boolean): Observable<ClienteRsType>;
+    public consultarClientePorIdentificacion(headerRq: string, serviceID: string, tipoidentificacion: string, numidentificacion: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ClienteRsType>>;
+    public consultarClientePorIdentificacion(headerRq: string, serviceID: string, tipoidentificacion: string, numidentificacion: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ClienteRsType>>;
+    public consultarClientePorIdentificacion(headerRq: string, serviceID: string, tipoidentificacion: string, numidentificacion: string, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
 
         if (headerRq === null || headerRq === undefined) {
             throw new Error('Required parameter headerRq was null or undefined when calling consultarClientePorId.');

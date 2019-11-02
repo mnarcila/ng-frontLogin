@@ -1,0 +1,88 @@
+<div class="main-content">
+  <form [formGroup]="angForm">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-rose">
+              <table class="table-responsive">
+                <tr>
+                  <td>
+                    <div class="example-full-width"><button class="btn btn-primary" (click)="mostrarPanelConsulta()">
+                        Consultar Campaña
+                      </button>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="example-full-width"><button class="btn btn-primary" (click)="mostrarPanelCrear()">
+                        Crear Campaña
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12" *ngIf="panelFiltroCampanas">
+        <div class="card">
+          <div class="card-header card-header-rose">
+            <h4 class="card-title">Filtar Campaña por ID</h4>
+            <p class="card-category">Ingrese el ID</p>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="ID Campana" formControlName="cId" type="text">
+                </mat-form-field>
+              </div>
+              <button class="btn btn-danger pull-right" (click)="buscarCampanaID()">Buscar Campana</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card" *ngIf="panelListaCampana">
+        <div class="card-header card-header-rose">
+          <h4 class="card-title ">Campañas</h4>
+          <p class="card-category">Lista de Campañas</p>
+        </div>
+        <strong *ngIf="listaCampanas.length == 0">Sin datos..</strong>
+        <div class="card-body" *ngIf="listaCampanas.length > 0">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>ID Campaña</th>
+                <th>Descripcion</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Fin</th>
+                <th>Creador</th>
+                <th>Fecha Creación</th>
+                <th>Banner</th>
+                <th>Producto</th>
+                <th>Estado</th>
+                <th>Editdar</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let camp of listaCampanas">
+                  <td>{{cam.idCampana}}</td>
+                  <td>{{cam.descripcion}}</td>
+                  <td>{{cam.fechaInicio}}</td>
+                  <td>{{cam.fechaFin}}</td>
+                  <td>{{cam.usuarioCreador}}</td>
+                  <td>{{cam.fechaCreacion}}</td>
+                  <td>{{cam.idProducto}}</td>
+                  <td>{{cam.nombreProducto}}</td>
+                  <td>{{cam.estado}}</td>
+                  <td><i class="material-icons" style="cursor: pointer;"
+                      (click)="$event.stopPropagation();ActualizarCampana(cam)">update</i>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

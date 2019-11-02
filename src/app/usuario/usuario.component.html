@@ -1,0 +1,125 @@
+<div class="main-content">
+  <form [formGroup]="angForm">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-rose">
+              <table class="table-responsive">
+                <tr>
+                  <td>
+                    <div class="example-full-width"><button class="btn btn-primary" (click)="mostrarPanelConsulta()">
+                        Consultar Usuario
+                      </button>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="example-full-width"><button class="btn btn-primary" (click)="mostrarPanelCrear()">
+                        Crear Usuario
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12" *ngIf="panelFiltroEmpleado">
+        <div class="card">
+          <div class="card-header card-header-rose">
+            <h4 class="card-title">Filtar Usuario por ID</h4>
+            <p class="card-category">Ingrese el ID</p>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="ID Usuario" formControlName="uId" type="text">
+                </mat-form-field>
+              </div>
+              <button class="btn btn-danger pull-right" (click)="buscarEmpleadoID()">Buscar Empleado</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card" *ngIf="panelListaEmpleado">
+        <div class="card-header card-header-rose">
+          <h4 class="card-title ">Empleados</h4>
+          <p class="card-category">Lista de Empleados</p>
+        </div>
+        <strong *ngIf="listaEmpleados.length == 0">Sin datos..</strong>
+        <div class="card-body" *ngIf="listaEmpleados.length > 0">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>ID Empleado</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Usuario</th>
+                <th>Estado</th>
+                <th>Activar / Desactivar</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let usu of listaEmpleados">
+                  <td>{{usu.idEmpleado}}</td>
+                  <td>{{usu.nombre}}</td>
+                  <td>{{usu.apellido}}</td>
+                  <td>{{usu.usuario}}</td>
+                  <td>{{usu.estado}}</td>
+                  <td><i class="material-icons" style="cursor: pointer;"
+                      (click)="$event.stopPropagation();ActualizarEmpleado(usu)">update</i>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="card" *ngIf="panelCrearEmpleado">
+          <div class="card-header card-header-rose">
+              <h4 class="card-title ">Crear Empleado</h4>
+              <p class="card-category">Ingrese la siguiente información</p>
+          </div>
+          <div class="card-body">
+              <div class="row">
+                  <div class="col-md-6">
+                      <mat-form-field class="example-full-width">
+                          <input matInput placeholder="Nombres" formControlName="uNombre" required="true" type="text"
+                          required="true">
+                      </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                      <mat-form-field class="example-full-width">
+                          <input matInput placeholder="Apellidos" formControlName="uApellido" type="text"
+                          required="true">
+                      </mat-form-field>
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                          <input matInput placeholder="Usuario" formControlName="uUsuario"
+                              type="text" required="true">
+                      </mat-form-field>
+                  </div>
+                  <div class="col-md-4">
+                      <mat-form-field class="example-full-width">
+                          <input matInput placeholder="Clave" formControlName="uClave"
+                              type="password" required="true">
+                      </mat-form-field>
+                  </div>
+                  <div class="col-md-4">
+                    <mat-form-field class="example-full-width">
+                      <input matInput placeholder="Estado" formControlName="uEstado"
+                        type="text" value="Activo" readonly>
+                </mat-form-field>
+                  </div>
+              </div>
+              <button mat-raised-button (click)="CrearEmpleado()"
+                  class="btn btn-danger pull-right">Crear Empleado</button>
+              <div class="clearfix"></div>
+          </div>
+      </div>
+    </div>
+  </form>
+</div>

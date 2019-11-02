@@ -22,6 +22,7 @@ import { HttpClientModule, HttpHeaders } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Empleado, EmpleadoService, AutenticarRsType } from './_restLogin';
 import { Producto, ProductoService, ProductoRsType } from './_restProducto';
+import { OrdenM, DetalleOrden, OrdenService, DetalleOrdenService, OrdenRsType } from './_restOrdenes';
 import { Cliente, ClienteService, ClientesRsType } from './_restClientes';
 import { ReqCategoria, CategoriaService, CategoriaRsType } from './_restCategoria';
 import { BrowserModule } from '@angular/platform-browser';
@@ -35,13 +36,20 @@ import {
   MatFormFieldModule,
   MatTooltipModule,
   MatSelectModule
+
 } from '@angular/material';
 import {
   AgmCoreModule
 } from '@agm/core';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
+
 import { ProductosComponent, DialogOverviewExampleDialog } from './productos/productos.component';
+
+import { OrdenesComponent } from './ordenes/ordenes.component';
+
 import { ClientesComponent } from './clientes/clientes.component';
+import { UsuarioComponent } from './usuario/usuario.component';
+import { CampanasComponent } from './campanas/campanas.component';
 
 
 @NgModule({
@@ -79,8 +87,12 @@ import { ClientesComponent } from './clientes/clientes.component';
     IconsComponent,
     MapsComponent,
     NotificationsComponent,
+    OrdenesComponent,
     ProductosComponent,
     ClientesComponent,
+    UsuarioComponent,
+    CampanasComponent,
+
 
   ],
   providers: [
@@ -92,8 +104,10 @@ import { ClientesComponent } from './clientes/clientes.component';
     CategoriaService,
     Http,
     HttpModule,
-    HttpClientModule
-
+    HttpClientModule,
+    OrdenService,
+    DetalleOrdenService,
+    ClienteService,
   ],
   entryComponents: [DialogOverviewExampleDialog],
   bootstrap: [AppComponent]
