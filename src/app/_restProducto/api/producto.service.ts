@@ -30,7 +30,7 @@ export class ProductoService {
     // http://10.39.1.149:8095
     // http://localhost:8095/OMS/Productos/v1
     // http://10.39.1.156:8210/esb-skynet
-    protected basePath = 'http://10.39.1.149:8095/OMS/Productos/v1';
+    protected basePath = 'http://10.39.1.156:8210/esb-skynet';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
