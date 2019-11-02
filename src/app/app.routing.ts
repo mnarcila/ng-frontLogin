@@ -15,14 +15,16 @@ import { MapsComponent } from './maps/maps.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { OrdenesComponent } from './ordenes/ordenes.component';
 import {ClientesComponent} from './clientes/clientes.component';
+import {UsuarioComponent} from './usuario/usuario.component';
+import {CampanasComponent} from './campanas/campanas.component';
 const menuRoutes: Routes = [
 
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'user-profile', component: UserProfileComponent },
+  { path: 'usuario', component: UsuarioComponent },
   { path: 'productos', component: ProductosComponent },
   { path: 'clientes', component: ClientesComponent },
   { path: 'typography', component: TypographyComponent },
-  { path: 'icons', component: IconsComponent },
+  { path: 'campanas', component: CampanasComponent },
   { path: 'maps', component: MapsComponent },
   { path: 'notifications', component: NotificationsComponent },
   { path: 'ordenes', component: OrdenesComponent},
@@ -38,13 +40,13 @@ const routes: Routes = [
   { path: '**', redirectTo: 'login' },
 
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'user-profile', component: UserProfileComponent },
+  { path: 'usuario', component: UsuarioComponent },
 
   { path: 'productos', component: ProductosComponent },
   { path: 'clientes', component: ClientesComponent },
   
   { path: 'typography', component: TypographyComponent },
-  { path: 'icons', component: IconsComponent },
+  { path: 'campanas', component: CampanasComponent },
   { path: 'maps', component: MapsComponent },
   { path: 'notifications', component: NotificationsComponent },
 

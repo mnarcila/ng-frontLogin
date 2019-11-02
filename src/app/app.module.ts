@@ -44,6 +44,8 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 import { OrdenesComponent } from './ordenes/ordenes.component';
 import { ProductosComponent } from './productos/productos.component';
 import { ClientesComponent } from './clientes/clientes.component';
+import { UsuarioComponent } from './usuario/usuario.component';
+import { CampanasComponent } from './campanas/campanas.component';
 
 
 @NgModule({
@@ -82,6 +84,8 @@ import { ClientesComponent } from './clientes/clientes.component';
     OrdenesComponent,
     ProductosComponent,
     ClientesComponent,
+    UsuarioComponent,
+    CampanasComponent,
 
 
   ],
