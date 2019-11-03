@@ -242,11 +242,11 @@
                                                     <td>{{ cliente.email }}</td>
                                                     <td>{{ cliente.estado }}</td>
                                                     <td>{{ cliente.origen }}</td>
-                                                    <td><i alt="Editar datos" class="material-icons" style="cursor: pointer;"
+                                                    <td><i  matTooltip="Editar registro" class="material-icons" style="cursor: pointer;"
                                                             (click)="$event.stopPropagation();editar(cliente)">edit</i>
                                                     </td>
                                                   
-                                                    <td><i alt="Agregar direccion" class="material-icons" style="cursor: pointer;"
+                                                    <td><i  matTooltip="Editar direcciones"  class="material-icons" style="cursor: pointer;"
                                                         (click)="$event.stopPropagation();direccion(cliente)">home</i>
                                                 </td>
                                                 </tr>

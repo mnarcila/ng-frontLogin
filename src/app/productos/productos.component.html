@@ -88,7 +88,15 @@
                                                 </mat-form-field>
                                             </div>
                                         </div>
-
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <mat-label>Imagen del producto</mat-label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input (change)="fileChange($event)" type="file" id="inputGroupFile01"
+                                                    aria-describedby="inputGroupFileAddon01">
+                                            </div>
+                                        </div>
                                         <button mat-raised-button (click)="crearProducto()"
                                             class="btn btn-rose pull-right">Crear
                                             Producto</button>
@@ -160,7 +168,15 @@
                                                 </mat-form-field>
                                             </div>
                                         </div>
-
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <mat-label>Imagen del producto</mat-label>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input (change)="fileChange($event)" accept="image/*" type="file"
+                                                    id="inputGroupFile02" aria-describedby="inputGroupFileAddon02">
+                                            </div>
+                                        </div>
                                         <button mat-raised-button (click)="editarProducto()"
                                             class="btn btn-rose pull-right">Editar
                                             Producto</button>
@@ -196,6 +212,7 @@
                                                     <th>Categoria</th>
                                                     <th>Estado</th>
                                                     <th>Editar</th>
+                                                    <th>Imagen</th>
                                                 </thead>
                                                 <tbody>
                                                     <tr *ngFor="let productoz of tablaProductos">
@@ -205,8 +222,13 @@
                                                         <td>{{ productoz.valorBase }}</td>
                                                         <td>{{ consultarCategoria(productoz.idCategoria) }}</td>
                                                         <td>{{ productoz.estado }}</td>
-                                                        <td><i class="material-icons" style="cursor: pointer;"
+                                                        <td><i class="material-icons" matTooltip="Editar registro"
+                                                                style="cursor: pointer;"
                                                                 (click)="$event.stopPropagation();editar(productoz)">edit</i>
+                                                        </td>
+                                                        <td><i class="material-icons" matTooltip="Ver imagen"
+                                                                style="cursor: pointer;"
+                                                                (click)="$event.stopPropagation();verImagen(productoz.rutaImagen)">image</i>
                                                         </td>
                                                     </tr>
                                                 </tbody>

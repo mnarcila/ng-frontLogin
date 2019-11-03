@@ -1,11 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProductosInner, Producto, ProductoService, ProductoRsType } from "../_restProducto";
 import { ParamSalidaTypeCategoriaInner, ReqCategoria, CategoriaService, CategoriaRsType, StatusType } from "../_restCategoria";
-
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
-
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DomSanitizer } from '@angular/platform-browser';
+export interface DialogData {
+  imagen: string;
+  nombre: string;
+}
 export interface Estados {
   value: string;
   viewValue: string;
@@ -25,7 +30,7 @@ declare var $: any;
   styleUrls: ['./productos.component.scss']
 })
 export class ProductosComponent implements OnInit {
-
+  uploadedFiles: Array<File>;
 
 
   estados: Estados[] = [
@@ -37,7 +42,9 @@ export class ProductosComponent implements OnInit {
   categoriasArray: Categorias[] = [
   ];
 
-
+  imagenModal: string = "";
+  // folderImagen: string = "c:/uploads";
+  folderImagen: string = "http://localhost:8080";
   renderCrear: boolean = false;
   renderConsulta: boolean = false;
   renderEditar: boolean = false;
@@ -51,12 +58,16 @@ export class ProductosComponent implements OnInit {
   tablaProductos: ProductosInner[] = [];
 
   constructor(
+
+    public dialog: MatDialog,
+    private http: HttpClient,
     private auth: AuthService,
     private router: Router,
     private productoApi: ProductoService,
     private categoriaApi: CategoriaService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
+
   ) { }
 
   createForm() {
@@ -90,6 +101,10 @@ export class ProductosComponent implements OnInit {
     }
 
   }
+  obtenerExtension(pNombreArchivo: string): string {
+    var tmp = pNombreArchivo.split('.');
+    return tmp[1];
+  }
   editarProducto(): void {
     let producto: Producto = {};
     producto.idProducto = this.angForm.controls.eidproducto.value;
@@ -98,10 +113,12 @@ export class ProductosComponent implements OnInit {
     producto.valorBase = this.angForm.controls.evalorProduct.value;
     producto.idCategoria = this.angForm.controls.ecateProduct.value;
     producto.estado = this.angForm.controls.eestadoProduct.value;
+    var nombArchivo = this.upload(producto.idProducto + "." + this.obtenerExtension(this.uploadedFiles[0].name));
+    producto.rutaImagen = nombArchivo;
     console.log(producto);
     this.productoApi.actualizarProductoPorId('1', '1', producto.idProducto, producto).subscribe(
       value => setTimeout(() => {
-        const prd = value;
+
         this.consultaEspecifica(producto.idProducto);
         this.mostrarNotificacion('Actualización de Producto', 'se actualizo con exito', 'success');
       }, 200),
@@ -121,6 +138,24 @@ export class ProductosComponent implements OnInit {
     this.renderConsulta = false;
     this.renderEditar = false;
   }
+
+  /**
+   * actualizar componente
+   */
+
+  actualizarProducto(pProducto: Producto) {
+    this.productoApi.actualizarProductoPorId('1', '1', pProducto.idProducto, pProducto).subscribe(
+      value2 => setTimeout(() => {
+        this.consultaEspecifica(pProducto.idProducto);
+        this.mostrarNotificacion('Creación de Producto', 'Producto creado con exito', 'success');
+      }, 200),
+      error => {
+        this.mostrarNotificacion('Actualización de Producto', 'se presento un error, por favor notifique al administrador', 'danger');
+        console.error(JSON.stringify(error))
+      },
+      () => console.log('done')
+    );
+  }
   /**
    * Evento cuando se da click en crear este debe ir y crearlo en base de datos 
    */
@@ -133,12 +168,14 @@ export class ProductosComponent implements OnInit {
     producto.valorBase = this.angForm.controls.valorProduct.value;
     producto.idCategoria = this.angForm.controls.cateProduct.value;
     producto.estado = this.angForm.controls.estadoProduct.value;
-    console.log(producto);
+
     this.productoApi.registrarProducto('1', '1', producto).subscribe(
       value => setTimeout(() => {
-        const prd = value;
-        this.consultaEspecifica(value.productos[0].idProducto);
-        this.mostrarNotificacion('Creación de Producto', 'Producto creado con exito', 'success');
+        var nombArchivo = this.upload(value.productos[0].idProducto
+          + "." + this.obtenerExtension(this.uploadedFiles[0].name));
+        producto.rutaImagen = nombArchivo;
+        producto.idProducto = value.productos[0].idProducto;
+        this.actualizarProducto(producto);
       }, 200),
       error => {
         this.mostrarNotificacion('Creación de Producto', 'se presento un error, por favor notifique al administrador', 'danger');
@@ -152,7 +189,7 @@ export class ProductosComponent implements OnInit {
   }
 
   consultarCategoria(idCategoria: number): String {
-   
+
     return this.categoriasMap.get(idCategoria);
   }
 
@@ -163,9 +200,6 @@ export class ProductosComponent implements OnInit {
     this.angForm.controls.enameProduct.setValue(productoz.nombre);
     this.angForm.controls.edescProduct.setValue(productoz.descripcion);
     this.angForm.controls.evalorProduct.setValue(productoz.valorBase);
-
-
-
     this.angForm.controls.ecateProduct.setValue(productoz.idcategoria);
     this.angForm.controls.eestadoProduct.setValue(productoz.estado);
 
@@ -255,13 +289,55 @@ export class ProductosComponent implements OnInit {
       this.mostrarNotificacion('consulta', 'Ingrese un concepto de busqueda', 'warning');
     }
   }
+  fileChange(element) {
+    this.uploadedFiles = element.target.files;
+  }
+
+  upload(filename: string): string {
+    let formData = new FormData();
+    let varName = filename;
+    for (var i = 0; i < this.uploadedFiles.length; i++) {
+      formData.append("uploads[]", this.uploadedFiles[i], filename);
+      varName = filename
+    }
+    var headers = new HttpHeaders();
+    this.http.post('http://localhost:3000/api/upload', formData, {
+      headers: headers
+    })
+      .subscribe((response) => {
+        console.log('response received is ', response);
+      });
+
+    return varName;
+  }
+
+
+
+  verImagen(rutaImagen: string) {
+    this.imagenModal = this.folderImagen + "/" + rutaImagen;
+
+    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+      width: '350px',
+      data: {
+        'imagen': this.imagenModal,
+        'archivo': rutaImagen
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+
+  }
+
+
   procesarResponseCategoria(value: CategoriaRsType) {
-    
+
     this.categoriasArray = [];
 
-    for( let i=0; i < value.categoria.length ; i++){
-      let cat: Categorias  = {} as any;   ; 
-      cat.value =value.categoria[i].idCategoria; 
+    for (let i = 0; i < value.categoria.length; i++) {
+      let cat: Categorias = {} as any;;
+      cat.value = value.categoria[i].idCategoria;
       cat.viewValue = value.categoria[i].nombreCategoria;
       this.categoriasArray.push(cat);
       this.categoriasMap.set(value.categoria[i].idCategoria, value.categoria[i].nombreCategoria);
@@ -291,7 +367,7 @@ export class ProductosComponent implements OnInit {
   }
 
   mostrarNotificacion(pTitulo: String, pTexto: String, pTipo: String) {
-    const color = Math.floor((Math.random() * 4) + 1);
+
     $.notify({
       icon: "notifications",
       message: " "
@@ -310,6 +386,22 @@ export class ProductosComponent implements OnInit {
         '<span data-notify="message">' + pTexto + '</span>' +
         '</div>'
     });
+  }
+
+}
+
+@Component({
+  templateUrl: 'imagen.html',
+})
+export class DialogOverviewExampleDialog {
+
+  constructor(
+    public sanitizer: DomSanitizer,
+    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 
 }

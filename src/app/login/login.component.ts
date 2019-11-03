@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Empleado, EmpleadoService, AutenticarRsType, StatusType } from '../_restLogin';
+import { HttpParameterCodec } from "@angular/common/http";
 import { AuthService } from '../auth.service';
 import { sha256, sha224 } from 'js-sha256';
 

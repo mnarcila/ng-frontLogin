@@ -30,7 +30,7 @@ export class ProductoService {
     // http://10.39.1.149:8095
     // http://localhost:8095/OMS/Productos/v1
     // http://10.39.1.156:8210/esb-skynet
-    protected basePath = 'http://10.39.1.149:8095/OMS/Productos/v1';
+    protected basePath = 'http://10.39.1.156:8210/esb-skynet';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -73,7 +73,8 @@ export class ProductoService {
     public actualizarProductoPorId(headerRq: string, serviceID: string, idProducto: number, jsonPatch: Producto, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ProductoRsType>>;
     public actualizarProductoPorId(headerRq: string, serviceID: string, idProducto: number, jsonPatch: Producto, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ProductoRsType>>;
     public actualizarProductoPorId(headerRq: string, serviceID: string, idProducto: number, jsonPatch: Producto, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
+        console.log("actualizarProductoPorId");
+        console.log(jsonPatch);
         if (headerRq === null || headerRq === undefined) {
             throw new Error('Required parameter headerRq was null or undefined when calling actualizarProductoPorId.');
         }
