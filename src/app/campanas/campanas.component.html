@@ -38,12 +38,12 @@
                   <input matInput placeholder="ID Campana" formControlName="cId" type="text">
                 </mat-form-field>
               </div>
-              <button class="btn btn-danger pull-right" (click)="buscarCampanaID()">Buscar Campana</button>
+              <button class="btn btn-danger pull-right" (click)="buscarCampanaID()">Buscar Campaña</button>
             </div>
           </div>
         </div>
       </div>
-      <div class="card" *ngIf="panelListaCampana">
+      <div class="card" *ngIf="panelListaCampanas">
         <div class="card-header card-header-rose">
           <h4 class="card-title ">Campañas</h4>
           <p class="card-category">Lista de Campañas</p>
@@ -77,6 +77,132 @@
                   <td>{{cam.estado}}</td>
                   <td><i class="material-icons" style="cursor: pointer;"
                       (click)="$event.stopPropagation();ActualizarCampana(cam)">update</i>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="card" *ngIf="panelCrearCampanas">
+        <div class="card-header card-header-rose">
+          <h4 class="card-title ">Crear Campaña</h4>
+          <p class="card-category">Ingrese la siguiente información</p>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Descripcion" formControlName="cDescripcion" required="true" type="text"
+                  required="true" class="form-control">
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Fecha de Inicio" formControlName="cFechaInicio" type="date"
+                  required="true" class="form-control">
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Fecha de Fin" formControlName="cFechaFin" type="date" 
+                required="true" class="form-control">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Producto" formControlName="pNombreProd" type="text" readonly>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <button mat-raised-button (click)="mostrarPanelProducto()" class="btn btn-danger pull-left">Buscar
+                Producto</button>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Estado</mat-label>
+                <mat-select formControlName="cEstado">
+                    <mat-option *ngFor="let est of estados" [value]="est.value">
+                        {{est.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+                <mat-label>Imagen del Banner</mat-label>
+            </div>
+            <div class="col-md-2">
+                <input (change)="imageUpload($event)" type="file" id="inputGroupFile01"
+                    aria-describedby="inputGroupFileAddon01">
+            </div>
+          </div>
+          <button mat-raised-button (click)="CrearCampana()" class="btn btn-danger pull-right">Crear Campaña</button>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+      <div class="card" *ngIf="panelMostrarProducto">
+        <div class="card-header card-header-rose">
+          <h4 class="card-title ">Busqueda de Productos</h4>
+          <p class="card-category">Seleccione alguna de las siguientes opciones</p>
+        </div>
+        <br />
+        <div class="row">
+          <div class="col-md-8">
+            <mat-radio-group formControlName="busquedaC">
+              <mat-radio-button class="example-radio-button" [value]="1">
+                Busqueda Por ID
+              </mat-radio-button>
+              <mat-radio-button class="example-radio-button" [value]="2">
+                Busqueda Nombre
+              </mat-radio-button>
+              <mat-radio-button class="example-radio-button" [value]="3">
+                Busqueda Descripcion
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <input type="text" formControlName="product" class="form-control" placeholder="Busqueda Producto"
+              required />
+          </div>
+          <div class="col-md-6">
+            <button mat-raised-button (click)="PanelProductos()" class="btn btn-danger pull-right">Buscar
+              Producto</button>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card" *ngIf="panelTablaProductos">
+        <div class="card-header card-header-rose">
+          <h4 class="card-title mt-0"> PRODUCTOS </h4>
+          <p class="card-category">Productos registrados en el sistema</p>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <strong *ngIf="tablaProductos.length == 0">Sin datos..</strong>
+            <table *ngIf="tablaProductos.length > 0" class="table table-hover">
+              <thead class="">
+                <th>ID Producto</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Valor base</th>
+                <th>Estado</th>
+                <th>Seleccionar</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let productoz of tablaProductos">
+                  <td>{{ productoz.idProducto }}</td>
+                  <td>{{ productoz.nombre }}</td>
+                  <td>{{ productoz.descripcion }}</td>
+                  <td>{{ productoz.valorBase }}</td>
+                  <td>{{ productoz.estado }}</td>
+                  <td><i class="material-icons" matTooltip="Seleccionar registro" style="cursor: pointer;"
+                      (click)="$event.stopPropagation();seleccionarProducto(productoz)">check</i>
+                  </td>
                 </tr>
               </tbody>
             </table>

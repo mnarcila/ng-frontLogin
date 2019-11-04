@@ -50,6 +50,7 @@ import { OrdenesComponent } from './ordenes/ordenes.component';
 import { ClientesComponent } from './clientes/clientes.component';
 import { UsuarioComponent } from './usuario/usuario.component';
 import { CampanasComponent } from './campanas/campanas.component';
+import { CampanaService } from './_restCampanas';
 
 
 @NgModule({
@@ -108,6 +109,7 @@ import { CampanasComponent } from './campanas/campanas.component';
     OrdenService,
     DetalleOrdenService,
     ClienteService,
+    CampanaService,
   ],
   entryComponents: [DialogOverviewExampleDialog],
   bootstrap: [AppComponent]

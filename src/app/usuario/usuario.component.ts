@@ -5,6 +5,8 @@ import { Router} from '@angular/router';
 import { EmpleadoService, Empleado } from 'app/_restLogin';
 import { sha256, sha224 } from 'js-sha256';
 
+declare var $: any;
+
 @Component({
   selector: 'app-usuario',
   templateUrl: './usuario.component.html',
@@ -77,20 +79,13 @@ export class UsuarioComponent implements OnInit {
         this.listaEmpleados.push(value.empleado);
         this.panelListaEmpleado = true;
       }, 200),
-      error => console.error(JSON.stringify(error)),
+      error => {
+        this.mostrarNotificacion('CBuscar Empleado', 'Se presento un error, por favor notifique al administrador', 'danger');
+        console.error(JSON.stringify(error))
+      },
       () => console.log('done')
     );
   }
-
-  /*editarEmpleado(usu: Empleado):void {
-    this.panelEditarEmpleado = true;
-    this.angForm.controls.uId.setValue(usu.idEmpleado);
-    this.angForm.controls.uNombre.setValue(usu.nombre);
-    this.angForm.controls.uApellido.setValue(usu.apellido);
-    this.angForm.controls.uUsuario.setValue(usu.usuario);
-    this.angForm.controls.uClave.setValue(usu.clave);
-    this.angForm.controls.uEstado.setValue(usu.estado);
-  }*/
 
   ActualizarEmpleado(usuario:Empleado ){
     this.empleadoApi.actualizarEmpleadoPorId('1', '1', usuario.idEmpleado).subscribe(
@@ -100,12 +95,14 @@ export class UsuarioComponent implements OnInit {
         this.angForm.controls.uId.setValue('');
         this.listaEmpleados = [];
       }, 200),
-      error => console.error(JSON.stringify(error)),
+      error => {
+        this.mostrarNotificacion('Actualizar Empleado', 'Se presento un error, por favor notifique al administrador', 'danger');
+        console.error(JSON.stringify(error))
+      },
       () => console.log('done')
     );
     this.panelFiltroEmpleado = false;
     this.panelListaEmpleado = false;
-    //this.panelEditarEmpleado = false;
     this.panelCrearEmpleado = false;
   }
 
@@ -119,9 +116,12 @@ export class UsuarioComponent implements OnInit {
     this.empleadoApi.registrarEmpleado('1', '1', empl).subscribe(
       value => setTimeout(() => {
         const prd = value;
-        //this.procesarResponseDetalle(value);
+        this.mostrarNotificacion('Crear Empleado', 'Se ha creado el empleado correctamente', 'success');
       }, 200),
-      error => console.error(JSON.stringify(error)),
+      error => {
+        this.mostrarNotificacion('Crear Empleado', 'Se presento un error, por favor notifique al administrador', 'danger');
+        console.error(JSON.stringify(error))
+      },
       () => console.log('done')
     );
     this.panelFiltroEmpleado = false;
@@ -130,4 +130,24 @@ export class UsuarioComponent implements OnInit {
     this.panelCrearEmpleado = false;
   }
 
+  mostrarNotificacion(pTitulo: String, pTexto: String, pTipo: String) {
+    $.notify({
+      icon: "notifications",
+      message: " "
+
+    }, {
+      type: pTipo,
+      timer: 2000,
+      placement: {
+        from: 'bottom',
+        align: 'center'
+      },
+      template: '<div data-notify="container" class="col-xl-4 col-lg-4 col-11 col-sm-4 col-md-4 alert alert-{0} alert-with-icon" role="alert">' +
+        '<button mat-button  type="button" aria-hidden="true" class="close mat-button" data-notify="dismiss">  <i class="material-icons">close</i></button>' +
+        '<i class="material-icons" data-notify="icon">notifications</i> ' +
+        '<span data-notify="title">' + pTitulo + '</span> ' +
+        '<span data-notify="message">' + pTexto + '</span>' +
+        '</div>'
+    });
+  }
 }

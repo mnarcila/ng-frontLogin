@@ -30,7 +30,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class CampanaService {
 
-    protected basePath = 'https://virtserver.swaggerhub.com/Campanas/1.0.0';
+    protected basePath = 'http://10.39.1.122:5002/campaña';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

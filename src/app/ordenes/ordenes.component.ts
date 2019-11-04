@@ -8,6 +8,8 @@ import { ClienteService, Direccion} from '../_restClientes';
 import { ProductoService, Producto } from '../_restProducto';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
+declare var $: any;
+
 @Component({
   selector: 'app-ordenes',
   templateUrl: './ordenes.component.html',
@@ -149,11 +151,7 @@ export class OrdenesComponent implements OnInit {
 
     console.log('procesarResponse ordenResponse');
     console.log(pValue);
-    //this.productoRsType = pValue;
-    //console.log(pValue.productos);
     this.listOrdenes.push(...pValue.datosBasicos.ordenes);
-    //console.log("size: " + this.estados.retornarEstadosOrden());
-    //this.listEstado = this.estados.retornarEstadosOrden();
     
   }
 
@@ -169,7 +167,10 @@ export class OrdenesComponent implements OnInit {
           const prd = value;
           this.procesarResponse(value);
         }, 200),
-        error => console.error(JSON.stringify(error)),
+        error => {
+          this.mostrarNotificacion('Consulta de Ordenes', 'se presento un error, por favor notifique al administrador', 'danger');
+          console.error(JSON.stringify(error))
+        },
         () => console.log('done')
       );
   }
@@ -182,7 +183,10 @@ export class OrdenesComponent implements OnInit {
         const prd = value;
         this.procesarResponse(value);
       }, 200),
-      error => console.error(JSON.stringify(error)),
+      error => {
+        this.mostrarNotificacion('Consulta de Orden', 'Se presento un error, por favor notifique al administrador', 'danger');
+        console.error(JSON.stringify(error))
+      },
       () => console.log('done')
     );
   }
@@ -196,7 +200,10 @@ export class OrdenesComponent implements OnInit {
           const prd = value;
           this.procesarResponse(value);
         }, 200),
-        error => console.error(JSON.stringify(error)),
+        error => {
+          this.mostrarNotificacion('Consulta de Orden', 'Se presento un error, por favor notifique al administrador', 'danger');
+          console.error(JSON.stringify(error))
+        },
         () => console.log('done')
       );
     }
@@ -213,7 +220,10 @@ export class OrdenesComponent implements OnInit {
           const prd = value;
           this.procesarResponse(value);
         }, 200),
-        error => console.error(JSON.stringify(error)),
+        error => {
+          this.mostrarNotificacion('Consulta de Orden', 'Se presento un error, por favor notifique al administrador', 'danger');
+          console.error(JSON.stringify(error))
+        },
         () => console.log('done')
       );
     }
@@ -291,6 +301,7 @@ export class OrdenesComponent implements OnInit {
   editarOrden(orden:OrdenM):void{
     this.panelActualizar = true;
     this.panelDetOrden = false;
+    this.tablaOrdenes = false;
     this.angForm.controls.eIdOrden.setValue(orden.idOrden);
     this.angForm.controls.eCliente.setValue(orden.idCliente);
     this.angForm.controls.eDireccion.setValue(orden.idDireccion);
@@ -320,8 +331,12 @@ export class OrdenesComponent implements OnInit {
       value => setTimeout(() => {
         const prd = value;
         this.procesarResponseDetalle(value);
+        this.mostrarNotificacion('Actualizar Orden', 'Se ha actualizado la orden correctamente', 'success');
       }, 200),
-      error => console.error(JSON.stringify(error)),
+      error => {
+        this.mostrarNotificacion('Actualizar Orden', 'Se presento un error, por favor notifique al administrador', 'danger');
+        console.error(JSON.stringify(error))
+      },
       () => console.log('done')
     );
     this.panelActualizar = false;
@@ -346,7 +361,10 @@ export class OrdenesComponent implements OnInit {
         this.userCliente = value.cliente.usuario;
         this.idCliente = value.cliente.idCliente;
       }, 200),
-      error => console.error(JSON.stringify(error)),
+      error => {
+        this.mostrarNotificacion('Consulta Cliente', 'Se presento un error, por favor notifique al administrador', 'danger');
+        console.error(JSON.stringify(error))
+      },
       () => console.log('done')
     );
   }
@@ -363,7 +381,10 @@ export class OrdenesComponent implements OnInit {
         //console.log(value);
         this.direcciones = value.direcciones;
       }, 200),
-      error => console.error(JSON.stringify(error)),
+      error => {
+        this.mostrarNotificacion('Consulta Dirección', 'Se presento un error, por favor notifique al administrador', 'danger');
+        console.error(JSON.stringify(error))
+      },
       () => console.log('done')
     );
   }
@@ -398,8 +419,12 @@ export class OrdenesComponent implements OnInit {
         //this.consultaEspecifica(value.productos[0].idProducto);
         console.log(value);
         this.procesarResponse(value);
+        this.mostrarNotificacion('Creación de Orden', 'Se ha creado la orden correctamente', 'success');
       }, 200),
-      error => console.error(JSON.stringify(error)),
+      error => {
+        this.mostrarNotificacion('Creación de Orden', 'Se presento un error, por favor notifique al administrador', 'danger');
+        console.error(JSON.stringify(error))
+      },
       () => console.log('done')
     );
     this.tablaOrdenes=true;
@@ -432,7 +457,10 @@ export class OrdenesComponent implements OnInit {
         this.panelSeleccionProducto = true;
         this.tablaProductos = value.productos;
       }, 200),
-      error => console.error(JSON.stringify(error)),
+      error => {
+        this.mostrarNotificacion('Busqueda de Producto', 'Se presento un error, por favor notifique al administrador', 'danger');
+        console.error(JSON.stringify(error))
+      },
       () => console.log('done')
     );
   }
@@ -461,8 +489,32 @@ export class OrdenesComponent implements OnInit {
       console.log(value);
       this.panelDetOrden = false;
     }, 200),
-    error => console.error(JSON.stringify(error)),
+    error => {
+      this.mostrarNotificacion('Creación del detalle', 'Se presento un error, por favor notifique al administrador', 'danger');
+      console.error(JSON.stringify(error))
+    },
     () => console.log('done')
   );
+  }
+
+  mostrarNotificacion(pTitulo: String, pTexto: String, pTipo: String) {
+    $.notify({
+      icon: "notifications",
+      message: " "
+
+    }, {
+      type: pTipo,
+      timer: 2000,
+      placement: {
+        from: 'bottom',
+        align: 'center'
+      },
+      template: '<div data-notify="container" class="col-xl-4 col-lg-4 col-11 col-sm-4 col-md-4 alert alert-{0} alert-with-icon" role="alert">' +
+        '<button mat-button  type="button" aria-hidden="true" class="close mat-button" data-notify="dismiss">  <i class="material-icons">close</i></button>' +
+        '<i class="material-icons" data-notify="icon">notifications</i> ' +
+        '<span data-notify="title">' + pTitulo + '</span> ' +
+        '<span data-notify="message">' + pTexto + '</span>' +
+        '</div>'
+    });
   }
 }

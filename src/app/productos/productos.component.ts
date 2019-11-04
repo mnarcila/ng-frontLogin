@@ -2,11 +2,12 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProductosInner, Producto, ProductoService, ProductoRsType } from "../_restProducto";
-import { ParamSalidaTypeCategoriaInner, ReqCategoria, CategoriaService, CategoriaRsType, StatusType } from "../_restCategoria";
+import { CategoriaService, CategoriaRsType, } from "../_restCategoria";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
+
 export interface DialogData {
   imagen: string;
   nombre: string;

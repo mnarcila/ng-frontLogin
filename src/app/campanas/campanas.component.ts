@@ -3,7 +3,15 @@ import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Campana, CampanaService} from 'app/_restCampanas';
 import { AuthService } from '../auth.service';
 import { Router} from '@angular/router';
+import { ProductosInner, Producto, ProductoService, ProductoRsType } from "../_restProducto";
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
+export interface Estados {
+  value: string;
+  viewValue: string;
+}
+
+declare var $: any;
 
 @Component({
   selector: 'app-campanas',
@@ -12,17 +20,30 @@ import { Router} from '@angular/router';
 })
 export class CampanasComponent implements OnInit {
 
+  estados: Estados[] = [
+    { value: 'ACTIVO', viewValue: 'ACTIVO' },
+    { value: 'INACTIVO', viewValue: 'INACTIVO' }
+  ];
+
   angForm: FormGroup;
   panelFiltroCampanas = false;
   panelListaCampanas = false;
   panelCrearCampanas = false;
   listaCampanas: Campana[] = [];
+  panelMostrarProducto = false;
+  panelTablaProductos = false;
+  productoRsType: ProductoRsType;
+  tablaProductos: ProductosInner[] = [];
+  uploadedFiles: Array<File>;
+  idProdducto;
 
   constructor(
     private formBuilder: FormBuilder,
     private auth: AuthService,
     private router: Router,
     private campanaApi: CampanaService,
+    private productoApi: ProductoService,
+    private http: HttpClient,
   ) {}
 
   
@@ -41,93 +62,207 @@ export class CampanasComponent implements OnInit {
 
   createForm() {
     this.angForm = this.formBuilder.group({
-      
+      busquedaC: ['', Validators.required],
+      itemBusqueda: ['', Validators.required],
+      product: ['', Validators.required],
+      pNombreProd: ['', Validators.required],
+      cDescripcion: ['', Validators.required],
+      cFechaInicio: ['', Validators.required],
+      cFechaFin: ['', Validators.required],
+      cEstado: ['',Validators.required],
     });
   }
 
   mostrarPanelConsulta():void {
     this.panelFiltroCampanas = true;
     this.panelListaCampanas = false;
-    //this.panelEditarEmpleado = false;
     this.panelCrearCampanas = false;
   }
 
   mostrarPanelCrear(){
     this.panelFiltroCampanas = false;
     this.panelListaCampanas = false;
-    //this.panelEditarEmpleado = false;
     this.panelCrearCampanas = true;
-    this.angForm.controls.uId.setValue('');
     this.listaCampanas = [];
   }
-/*
-  buscarEmpleadoID():void{
-    this.listaCampanas = [];
-    this.empleadoApi.consultarEmpleadoPorId('1', '1', this.angForm.controls.uId.value).subscribe(
+
+  mostrarPanelProducto(){
+    this.panelMostrarProducto = true;
+    this.panelFiltroCampanas = false;
+    this.panelListaCampanas = false;
+  }
+
+  procesarResponse(pValue: ProductoRsType) {
+    //this.renderConsulta = true;
+    if (pValue != null && pValue.productos[0] != null) {
+      this.productoRsType = pValue;
+      this.tablaProductos.push(...pValue.productos);
+    }
+
+  }
+
+  PanelProductos(){
+    var tipoBusqueda = this.angForm.controls.busquedaC.value;
+    var itemBusqueda = this.angForm.controls.product.value;
+
+    if (tipoBusqueda == 1) {
+      this.productoApi.conultarProductoPorId('1', '1', itemBusqueda).subscribe(
+        value => setTimeout(() => {
+          const prd = value;
+          this.procesarResponse(value);
+        }, 200),
+        error => {
+          this.mostrarNotificacion('consulta', 'Se genero un error interno', 'danger');
+          console.error(JSON.stringify(error));
+        },
+        () => console.log('done')
+      );
+    }
+    else if (tipoBusqueda == 2) {
+      this.productoApi.conultarProductoPorNombre('1', '1', itemBusqueda).subscribe(
+        value => setTimeout(() => {
+          const prd = value;
+          this.procesarResponse(value);
+        }, 200),
+        error => {
+          this.mostrarNotificacion('consulta', 'Se genero un error interno', 'danger');
+          console.error(JSON.stringify(error));
+        }
+        ,
+        () => console.log('done')
+      );
+    }
+    else if (tipoBusqueda == 3) {
+      this.productoApi.conultarProductoPorDescripcion('1', '1', itemBusqueda).subscribe(
+        value => setTimeout(() => {
+          const prd = value;
+          this.procesarResponse(value);
+        }, 200),
+        error => {
+          this.mostrarNotificacion('consulta', 'Se genero un error interno', 'danger');
+          console.error(JSON.stringify(error));
+        },
+        () => console.log('done')
+      );
+    } 
+    this.panelTablaProductos = true;
+
+  }
+
+  mostrarNotificacion(pTitulo: String, pTexto: String, pTipo: String) {
+    $.notify({
+      icon: "notifications",
+      message: " "
+
+    }, {
+      type: pTipo,
+      timer: 2000,
+      placement: {
+        from: 'bottom',
+        align: 'center'
+      },
+      template: '<div data-notify="container" class="col-xl-4 col-lg-4 col-11 col-sm-4 col-md-4 alert alert-{0} alert-with-icon" role="alert">' +
+        '<button mat-button  type="button" aria-hidden="true" class="close mat-button" data-notify="dismiss">  <i class="material-icons">close</i></button>' +
+        '<i class="material-icons" data-notify="icon">notifications</i> ' +
+        '<span data-notify="title">' + pTitulo + '</span> ' +
+        '<span data-notify="message">' + pTexto + '</span>' +
+        '</div>'
+    });
+  }
+
+  seleccionarProducto(productoz: ProductosInner){
+    this.angForm.controls.pNombreProd.setValue(productoz.nombre);
+    this.idProdducto = productoz.idProducto;
+    this.panelTablaProductos = false;
+    this.tablaProductos = [];
+    this.panelMostrarProducto = false;
+    
+
+  }
+
+  fileChange(element) {
+    this.uploadedFiles = element.target.files;
+  }
+
+  upload(filename: string): string {
+    let formData = new FormData();
+    let varName = filename;
+    for (var i = 0; i < this.uploadedFiles.length; i++) {
+      formData.append("uploads[]", this.uploadedFiles[i], filename);
+      varName = filename
+    }
+    var headers = new HttpHeaders();
+    this.http.post('http://localhost:3000/api/upload', formData, {
+      headers: headers
+    })
+      .subscribe((response) => {
+        console.log('response received is ', response);
+      });
+
+    return varName;
+  }
+
+  obtenerExtension(pNombreArchivo: string): string {
+    var tmp = pNombreArchivo.split('.');
+    return tmp[1];
+  }
+
+  CrearCampana(){
+    let campana:Campana = {};
+    
+    campana.fechaInicio = this.angForm.controls.cFechaFin.value;
+    campana.fechaFin = this.angForm.controls.cFechaFin.value;
+    campana.descripcion = this.angForm.controls.cDescripcion.value;
+    campana.fechaCreacion = new Date().toDateString()
+    campana.usuarioCreador = 'ADMIN';
+    campana.idProducto = this.idProdducto;
+    campana.rutaBanner = '';
+
+    this.campanaApi.registrarCampana('1', '1', campana).subscribe(
       value => setTimeout(() => {
-        console.log(value);
-        //deberia settear el onjeto
-        this.listaEmpleados.push(value.empleado);
-        this.panelListaEmpleado = true;
+        //var nombArchivo = "CPN_"+this.upload(value.idCreado
+        //  + "." + this.obtenerExtension(this.uploadedFiles[0].name));
+        //campana.rutaBanner = nombArchivo;
+        //campana.idProducto = value.idCreado;
+        //this.actualizarCampana();
+        this.mostrarNotificacion('Creación de Campaña', 'Se ha creado la campañan exitosamente', 'success');
       }, 200),
-      error => console.error(JSON.stringify(error)),
+      error => {
+        this.mostrarNotificacion('Creación de Producto', 'se presento un error, por favor notifique al administrador', 'danger');
+        console.error(JSON.stringify(error))
+      },
+      () => console.log('done')
+    );
+    
+  }
+
+  actualizarCampana() {
+    this.campanaApi.campanaIdCampanaPut().subscribe(
+      value2 => setTimeout(() => {
+        //this.consultaEspecifica(pProducto.idProducto);
+        this.mostrarNotificacion('Creación de Campaña', 'Campaña creado con exito', 'success');
+      }, 200),
+      error => {
+        this.mostrarNotificacion('Actualización de Campaña', 'se presento un error, por favor notifique al administrador', 'danger');
+        console.error(JSON.stringify(error))
+      },
       () => console.log('done')
     );
   }
 
-  editarEmpleado(usu: Empleado):void {
-    this.panelEditarEmpleado = true;
-    this.angForm.controls.uId.setValue(usu.idEmpleado);
-    this.angForm.controls.uNombre.setValue(usu.nombre);
-    this.angForm.controls.uApellido.setValue(usu.apellido);
-    this.angForm.controls.uUsuario.setValue(usu.usuario);
-    this.angForm.controls.uClave.setValue(usu.clave);
-    this.angForm.controls.uEstado.setValue(usu.estado);
-  }
-
-  ActualizarEmpleado(usuario:Empleado ){
-    //let empl :Empleado = {};
-    //empl.idEmpleado = this.angForm.controls.uId.value;
-    //empl.nombre = this.angForm.controls.uNombre.value;
-    //empl.apellido = this.angForm.controls.uApellido.value;
-    //empl.usuario = this.angForm.controls.uUsuario.value;
-    //empl.estado = this.angForm.controls.uEstado.value;
-    this.empleadoApi.actualizarEmpleadoPorId('1', '1', usuario.idEmpleado).subscribe(
+  buscarCampanaID(){
+    this.campanaApi.conultarCampanaPorId("1","1",this.angForm.controls.cId.value).subscribe(
       value => setTimeout(() => {
-        const prd = value;
-        //this.procesarResponseDetalle(value);
-        this.angForm.controls.uId.setValue('');
-        this.listaEmpleados = [];
+        this.listaCampanas.push(value.campana);
+        this.panelListaCampanas = true;
+        this.panelFiltroCampanas = false;
       }, 200),
-      error => console.error(JSON.stringify(error)),
+      error => {
+        this.mostrarNotificacion('consulta', 'Se genero un error interno', 'danger');
+        console.error(JSON.stringify(error));
+      },
       () => console.log('done')
     );
-    this.panelFiltroEmpleado = false;
-    this.panelListaEmpleado = false;
-    //this.panelEditarEmpleado = false;
-    this.panelCrearEmpleado = false;
   }
 
-  CrearEmpleado(){
-    let empl :Empleado = {};
-    //empl.idEmpleado = this.angForm.controls.uId.value;
-    empl.nombre = this.angForm.controls.uNombre.value;
-    empl.apellido = this.angForm.controls.uApellido.value;
-    empl.usuario = this.angForm.controls.uUsuario.value;
-    empl.clave = this.angForm.controls.uClave.value;
-    empl.estado = this.angForm.controls.uEstado.value;
-    this.empleadoApi.registrarEmpleado('1', '1', empl).subscribe(
-      value => setTimeout(() => {
-        const prd = value;
-        //this.procesarResponseDetalle(value);
-      }, 200),
-      error => console.error(JSON.stringify(error)),
-      () => console.log('done')
-    );
-    this.panelFiltroEmpleado = false;
-    this.panelListaEmpleado = false;
-    //this.panelEditarEmpleado = false;
-    this.panelCrearEmpleado = false;
-  }
-*/
 }
