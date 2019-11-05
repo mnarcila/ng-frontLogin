@@ -77,6 +77,22 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
+                                            <mat-label>Tipo de Documento</mat-label>
+                                            <mat-select formControlName="eTipoDoc">
+                                                <mat-option *ngFor="let doc of listaTipoId" [value]="doc.value">
+                                                    {{doc.viewValue}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <mat-form-field class="example-full-width">
+                                                <input matInput placeholder="Número de Documento"
+                                                    formControlName="eDocId" type="text">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
                                             <mat-form-field class="example-full-width">
                                                 <input matInput placeholder="telefono" formControlName="eitelefono"
                                                     type="text">
@@ -154,6 +170,22 @@
                                             <mat-form-field class="example-full-width">
                                                 <input matInput placeholder="Apellido" formControlName="iapellido"
                                                     type="text">
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <mat-label>Tipo de Documento</mat-label>
+                                            <mat-select formControlName="tipoDoc">
+                                                <mat-option *ngFor="let doc of listaTipoId" [value]="doc.value">
+                                                    {{doc.viewValue}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <mat-form-field class="example-full-width">
+                                                <input matInput placeholder="Número de Documento"
+                                                    formControlName="docId" type="text">
                                             </mat-form-field>
                                         </div>
                                     </div>
@@ -242,13 +274,15 @@
                                                     <td>{{ cliente.email }}</td>
                                                     <td>{{ cliente.estado }}</td>
                                                     <td>{{ cliente.origen }}</td>
-                                                    <td><i  matTooltip="Editar registro" class="material-icons" style="cursor: pointer;"
+                                                    <td><i matTooltip="Editar registro" class="material-icons"
+                                                            style="cursor: pointer;"
                                                             (click)="$event.stopPropagation();editar(cliente)">edit</i>
                                                     </td>
-                                                  
-                                                    <td><i  matTooltip="Editar direcciones"  class="material-icons" style="cursor: pointer;"
-                                                        (click)="$event.stopPropagation();direccion(cliente)">home</i>
-                                                </td>
+
+                                                    <td><i matTooltip="Editar direcciones" class="material-icons"
+                                                            style="cursor: pointer;"
+                                                            (click)="$event.stopPropagation();direccion(cliente.usuario)">home</i>
+                                                    </td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -259,7 +293,99 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="card" *ngIf="panelBuscarDireccion">
+                    <div class="card-header card-header-rose">
+                        <h4 class="card-title ">Seleccionar Dirección</h4>
+                        <p class="card-category">Seleccione una dirección</p>
+                    </div>
+                    <div class="card-body">
+                        <strong *ngIf="direcciones.length == 0">Sin datos..</strong>
+                        <table *ngIf="direcciones.length > 0" class="table">
+                            <thead class=" text-primary">
+                                <th>Dirección</th>
+                                <th>País</th>
+                                <th>Ciudad</th>
+                                <th>Tipo de Dirección</th>
+                                <th>Estado</th>
+                                <th>Seleccionar</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let dir of direcciones">
+                                    <td hidden>{{dir.iddireccion}}</td>
+                                    <td>{{dir.direccion}}</td>
+                                    <td>{{dir.pais}}</td>
+                                    <td>{{dir.ciudad}}</td>
+                                    <td>{{dir.tipodireccion}}</td>
+                                    <td>{{dir.estado}}</td>
+                                    <td><i class="material-icons" style="cursor: pointer;"
+                                            (click)="$event.stopPropagation();verDireccion(dir)">done</i>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-4">
+                        <button mat-raised-button (click)="PanelDireccion()" class="btn btn-rose pull-right">Agregar Dirección</button>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="container-fluid" *ngIf="crearDireccion">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header card-header-rose">
+                                    <h4 class="card-title mt-0"> Dirección </h4>
+                                    <p class="card-category">Ingrese los siguiente datos</p>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <mat-form-field class="example-full-width">
+                                                <input matInput placeholder="Dirección" formControlName="dDirecion"
+                                                    type="text" required> 
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <mat-label>País</mat-label>
+                                            <mat-select formControlName="dPais" required>
+                                                <mat-option *ngFor="let p of listaPaises" [value]="p.value">
+                                                    {{p.viewValue}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <mat-form-field class="example-full-width">
+                                                <input matInput placeholder="Ciudad" formControlName="dCiudad"
+                                                    type="text" required>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <mat-form-field class="example-full-width">
+                                                <input matInput placeholder="Tipo Dirección" formControlName="dTipo"
+                                                    type="text" required>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <mat-label>Estado</mat-label>
+                                            <mat-select formControlName="dEstado" required>
+                                                <mat-option *ngFor="let est of estados" [value]="est.value">
+                                                    {{est.viewValue}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </div>
+                                    </div>
+                                    <button mat-raised-button (click)="crearDireccionCliente()"
+                                        class="btn btn-rose pull-right">Crear
+                                        Dirección</button>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

@@ -1,0 +1,8 @@
+<h1 mat-dialog-title> {{data.archivo}}</h1>
+<div mat-dialog-content>
+    <img style="width: 300px; height: 300px;" [src]="sanitizer.bypassSecurityTrustResourceUrl(data.imagen)" />
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">cerrar</button>
+
+</div>

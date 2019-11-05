@@ -59,24 +59,26 @@
                 <th>Fecha Fin</th>
                 <th>Creador</th>
                 <th>Fecha Creación</th>
-                <th>Banner</th>
                 <th>Producto</th>
                 <th>Estado</th>
-                <th>Editdar</th>
+                <th>Editar</th>
+                <th>Ver Imagen</th>
               </thead>
               <tbody>
-                <tr *ngFor="let camp of listaCampanas">
-                  <td>{{cam.idCampana}}</td>
+                <tr *ngFor="let cam of listaCampanas">
+                  <td>{{cam.idCamapana}}</td>
                   <td>{{cam.descripcion}}</td>
                   <td>{{cam.fechaInicio}}</td>
                   <td>{{cam.fechaFin}}</td>
                   <td>{{cam.usuarioCreador}}</td>
                   <td>{{cam.fechaCreacion}}</td>
                   <td>{{cam.idProducto}}</td>
-                  <td>{{cam.nombreProducto}}</td>
                   <td>{{cam.estado}}</td>
                   <td><i class="material-icons" style="cursor: pointer;"
                       (click)="$event.stopPropagation();ActualizarCampana(cam)">update</i>
+                  <td><i class="material-icons" matTooltip="Ver imagen"
+                    style="cursor: pointer;"
+                    (click)="$event.stopPropagation();verImagen(cam.rutaBanner)">image</i></td>
                 </tr>
               </tbody>
             </table>
@@ -135,7 +137,7 @@
                 <mat-label>Imagen del Banner</mat-label>
             </div>
             <div class="col-md-2">
-                <input (change)="imageUpload($event)" type="file" id="inputGroupFile01"
+                <input (change)="fileChange($event)" type="file" id="inputGroupFile01"
                     aria-describedby="inputGroupFileAddon01">
             </div>
           </div>

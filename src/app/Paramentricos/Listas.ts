@@ -23,6 +23,14 @@ export class Listas {
       { value: 1, viewValue: 'SONY' },
       { value: 2, viewValue: 'RAPID SERVICE' },
     ];
+    listaPaises: ListaPaises[] = [
+      { value: "CO", viewValue: 'COLOMBIA' },
+      { value: "VE", viewValue: 'VENEZUELA' },
+      { value: "BR", viewValue: 'BRASIL' },
+      { value: "PE", viewValue: 'PERU' },
+      { value: "EC", viewValue: 'ECUADOR' },
+      { value: "BO", viewValue: 'BOLIVIA' },
+    ];
 
 
     retornarEstadosOrden():string[]{
@@ -42,5 +50,10 @@ export interface tipoIdentificacion {
 
 export interface ListaProveedores {
   value: number;
+  viewValue: string;
+}
+
+export interface ListaPaises {
+  value: string;
   viewValue: string;
 }

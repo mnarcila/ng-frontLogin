@@ -10,14 +10,11 @@
  * Do not edit the class manually.
  */
 
-export interface Campana { 
-    idCamapana?: number;
-    descripcion?: string;
-    fechaInicio?: Date;
-    fechaFin?: Date;
-    usuarioCreador?: string;
-    fechaCreacion?: Date;
-    rutaBanner?: string;
-    idProducto?: number;
-    estado?: string;
+export interface ProblemDetails { 
+    type?: string;
+    title?: string;
+    status?: number;
+    detail?: string;
+    instance?: string;
+    readonly extensions?: { [key: string]: any; };
 }

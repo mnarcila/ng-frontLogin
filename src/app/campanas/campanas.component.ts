@@ -1,15 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Campana, CampanaService} from 'app/_restCampanas';
 import { AuthService } from '../auth.service';
 import { Router} from '@angular/router';
-import { ProductosInner, Producto, ProductoService, ProductoRsType } from "../_restProducto";
+import { ProductosInner, ProductoService, ProductoRsType } from "../_restProducto";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DomSanitizer } from '@angular/platform-browser';
 
 export interface Estados {
   value: string;
   viewValue: string;
 }
+
+export interface DialogData {
+  imagen: string;
+  nombre: string;
+}
+
 
 declare var $: any;
 
@@ -36,6 +44,8 @@ export class CampanasComponent implements OnInit {
   tablaProductos: ProductosInner[] = [];
   uploadedFiles: Array<File>;
   idProdducto;
+  imagenModal: string = "";
+  folderImagen: string = "http://localhost:8080";
 
   constructor(
     private formBuilder: FormBuilder,
@@ -44,6 +54,7 @@ export class CampanasComponent implements OnInit {
     private campanaApi: CampanaService,
     private productoApi: ProductoService,
     private http: HttpClient,
+    public dialog: MatDialog,
   ) {}
 
   
@@ -70,6 +81,7 @@ export class CampanasComponent implements OnInit {
       cFechaInicio: ['', Validators.required],
       cFechaFin: ['', Validators.required],
       cEstado: ['',Validators.required],
+      cId: ['',Validators.required],
     });
   }
 
@@ -213,18 +225,22 @@ export class CampanasComponent implements OnInit {
     campana.fechaInicio = this.angForm.controls.cFechaFin.value;
     campana.fechaFin = this.angForm.controls.cFechaFin.value;
     campana.descripcion = this.angForm.controls.cDescripcion.value;
-    campana.fechaCreacion = new Date().toDateString()
+    campana.fechaCreacion = new Date();
     campana.usuarioCreador = 'ADMIN';
     campana.idProducto = this.idProdducto;
     campana.rutaBanner = '';
+    campana.estado = this.angForm.controls.cEstado.value;
 
-    this.campanaApi.registrarCampana('1', '1', campana).subscribe(
+    this.campanaApi.campanaPost(campana).subscribe(
       value => setTimeout(() => {
-        //var nombArchivo = "CPN_"+this.upload(value.idCreado
-        //  + "." + this.obtenerExtension(this.uploadedFiles[0].name));
-        //campana.rutaBanner = nombArchivo;
-        //campana.idProducto = value.idCreado;
-        //this.actualizarCampana();
+        var nombArchivo = this.upload("CPN_"+value.idCamapana
+          + "." + this.obtenerExtension(this.uploadedFiles[0].name));
+        campana.idCamapana = value.idCamapana;
+        campana.rutaBanner = nombArchivo;
+        this.actualizarCampana(campana);
+        this.angForm.controls.cId.setValue(value.idCamapana);
+        this.buscarCampanaID();
+        this.panelCrearCampanas = false;
         this.mostrarNotificacion('Creación de Campaña', 'Se ha creado la campañan exitosamente', 'success');
       }, 200),
       error => {
@@ -236,11 +252,11 @@ export class CampanasComponent implements OnInit {
     
   }
 
-  actualizarCampana() {
-    this.campanaApi.campanaIdCampanaPut().subscribe(
+  actualizarCampana(campana: Campana) {
+    this.campanaApi.campanaIdCampanaPut(campana, campana.idCamapana).subscribe(
       value2 => setTimeout(() => {
         //this.consultaEspecifica(pProducto.idProducto);
-        this.mostrarNotificacion('Creación de Campaña', 'Campaña creado con exito', 'success');
+        this.mostrarNotificacion('Actualización de Campaña', 'Campaña actualizada con exito', 'success');
       }, 200),
       error => {
         this.mostrarNotificacion('Actualización de Campaña', 'se presento un error, por favor notifique al administrador', 'danger');
@@ -251,9 +267,9 @@ export class CampanasComponent implements OnInit {
   }
 
   buscarCampanaID(){
-    this.campanaApi.conultarCampanaPorId("1","1",this.angForm.controls.cId.value).subscribe(
+    this.campanaApi.campanaIdCampanaGet(this.angForm.controls.cId.value).subscribe(
       value => setTimeout(() => {
-        this.listaCampanas.push(value.campana);
+        this.listaCampanas.push(value);
         this.panelListaCampanas = true;
         this.panelFiltroCampanas = false;
       }, 200),
@@ -263,6 +279,38 @@ export class CampanasComponent implements OnInit {
       },
       () => console.log('done')
     );
+  }
+
+  verImagen(rutaImagen: string) {
+    this.imagenModal = this.folderImagen + "/" + rutaImagen;
+
+    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+      width: '350px',
+      data: {
+        'imagen': this.imagenModal,
+        'archivo': rutaImagen
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+
+  }
+}
+
+@Component({
+  templateUrl: 'imagen.html',
+})
+export class DialogOverviewExampleDialog {
+
+  constructor(
+    public sanitizer: DomSanitizer,
+    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 
 }

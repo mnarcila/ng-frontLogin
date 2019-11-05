@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ClienteRsType, Cliente, Clientes, ClienteService, ClientesRsType } from "../_restClientes";
-
+import { ClienteRsType, Cliente, ClienteService, ClientesRsType, Direccion } from "../_restClientes";
 import { Router, ActivatedRoute } from '@angular/router';
+import { Listas, tipoIdentificacion, ListaPaises } from '../Paramentricos/Listas';
+
 export interface Estados {
   value: string;
   viewValue: string;
@@ -12,6 +13,8 @@ export interface Categorias {
   value: string;
   viewValue: string;
 }
+
+
 declare var $: any;
 
 @Component({
@@ -37,6 +40,19 @@ export class ClientesComponent implements OnInit {
   submitted = false;
   angForm: FormGroup;
   angForm1: FormGroup;
+  clienteTabla: Cliente[] = [];
+  renderCrear: boolean = false;
+  renderConsulta: boolean = false;
+  renderEditar: boolean = false;
+  listaTipoId: tipoIdentificacion[] = new Listas().listaTipoId;
+  panelBuscarDireccion = false;
+  direcciones: Direccion[] ;
+  listaPaises: ListaPaises[] = new Listas().listaPaises;
+  crearDireccion = false;
+  idCliente: number;
+  userCliente: string;
+
+  
   constructor(
     private auth: AuthService,
     private router: Router,
@@ -44,12 +60,6 @@ export class ClientesComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
   ) { }
-
-  clienteTabla: Cliente[] = [];
-
-  renderCrear: boolean = false;
-  renderConsulta: boolean = false;
-  renderEditar: boolean = false;
 
   createForm() {
     this.angForm = this.formBuilder.group({
@@ -88,13 +98,25 @@ export class ClientesComponent implements OnInit {
       edCiudad:['', Validators.required],
       edTipoDireccion:['', Validators.required],
       edEstado:['', Validators.required],
+      tipoDoc:['', Validators.required],
+      docId:['', Validators.required],
+      eTipoDoc:['', Validators.required],
+      eDocId:['', Validators.required],
+      dDirecion:['', Validators.required],
+      dPais:['', Validators.required],
+      dCiudad:['', Validators.required],
+      dTipo:['', Validators.required],
+      dEstado:['', Validators.required],
 
     });
   }
+
   get f() { return this.angForm.controls; }
+
   sendLogin(): void {
     this.router.navigate(["login"]);
   }
+
   ngOnInit() {
 
     if (this.auth.isLoggedIn == false) {
@@ -115,6 +137,7 @@ export class ClientesComponent implements OnInit {
     this.renderCrear = true;
     this.renderConsulta = false;
     this.renderEditar = false;
+    this.panelBuscarDireccion = false;
   }
 
   consultarCategoria(idCategoria: number): String {
@@ -136,16 +159,18 @@ export class ClientesComponent implements OnInit {
     cliente.email = this.angForm.controls.eiemail.value;
     cliente.idCategoria = this.angForm.controls.ecateProduct.value;
     cliente.estado = this.angForm.controls.eestadoProduct.value;
+    cliente.tipoidentificacion = this.angForm.controls.eTipoDoc.value;
+    cliente.numidentificacion = this.angForm.controls.eDocId.value;
     // cliente.origen = 'OMS';
 
     this.clienteApi.actualizarClientePorId('1', '1', cliente).subscribe(
       value => setTimeout(() => {
         const prd = value;
         this.consultarPorId(cliente.idCliente);
-        this.mostrarNotificacion('Actualización de Producto', 'se actualizo con exito', 'success');
+        this.mostrarNotificacion('Actualización de Cliente', 'se actualizo con exito', 'success');
       }, 200),
       error => {
-        this.mostrarNotificacion('Actualización de Producto', 'se presento un error, por favor notifique al administrador', 'danger');
+        this.mostrarNotificacion('Actualización de Cliente', 'se presento un error, por favor notifique al administrador', 'danger');
         console.error(JSON.stringify(error))
       },
       () => console.log('done')
@@ -176,6 +201,7 @@ export class ClientesComponent implements OnInit {
         this.procesarResponseRsType(value);
         if (value.cliente != null && value.cliente != undefined) {
           this.renderConsulta = true;
+          this.userCliente = value.cliente.usuario;
         }
 
       }, 200),
@@ -194,11 +220,12 @@ export class ClientesComponent implements OnInit {
     this.renderCrear = false;
     this.renderEditar = false;
     this.clienteTabla = [];
+    this.panelBuscarDireccion = false;
 
     console.log(this.angForm.controls.bsc_cliente.value);
     var itemBusqueda = this.angForm.controls.bsc_cliente.value;
     var tipoBusqueda = this.angForm.controls.busquedaC.value;
-
+    this.idCliente = this.angForm.controls.bsc_cliente.value;
 
     if (itemBusqueda != '' && itemBusqueda != null) {
 
@@ -212,6 +239,7 @@ export class ClientesComponent implements OnInit {
             this.procesarResponseRsType(value);
             if (value.cliente != null && value.cliente != undefined) {
               this.renderConsulta = true;
+              this.userCliente = value.cliente.usuario;
             }
           }, 200),
           error => {
@@ -243,15 +271,17 @@ export class ClientesComponent implements OnInit {
     cliente.idCategoria = this.angForm.controls.cateProduct.value;
     cliente.estado = this.angForm.controls.estadoProduct.value;
     cliente.origen = 'OMS';
+    cliente.numidentificacion = this.angForm.controls.docId.value;
+    cliente.tipoidentificacion = this.angForm.controls.tipoDoc.value;
 
     this.clienteApi.registrarCliente('1', '1', cliente).subscribe(
       value => setTimeout(() => {
         const prd = value;
         this.consultarPorId(value.idClienteCreado);
-        this.mostrarNotificacion('Creación de Producto', 'Producto creado con exito', 'success');
+        this.mostrarNotificacion('Creación de Cliente', 'Cliente creado con exito', 'success');
       }, 200),
       error => {
-        this.mostrarNotificacion('Creación de Producto', 'se presento un error, por favor notifique al administrador', 'danger');
+        this.mostrarNotificacion('Creación de Cliente', 'se presento un error, por favor notifique al administrador', 'danger');
         console.error(JSON.stringify(error))
       },
       () => console.log('done')
@@ -261,8 +291,21 @@ export class ClientesComponent implements OnInit {
     this.renderEditar = false;
   }
 
-  direccion(){
-
+  direccion(cliente: string){
+    this.panelBuscarDireccion = true;
+    this.direcciones = [];
+    this.clienteApi.direccionesCliente('1', '1', cliente).subscribe(
+      value => setTimeout(() => {
+        const prd = value;
+        //console.log(value);
+        this.direcciones = value.direcciones;
+      }, 200),
+      error => {
+        this.mostrarNotificacion('Consulta Dirección', 'Se presento un error, por favor notifique al administrador', 'danger');
+        console.error(JSON.stringify(error))
+      },
+      () => console.log('done')
+    );
   }
 
 
@@ -283,15 +326,13 @@ export class ClientesComponent implements OnInit {
     this.renderCrear = false;
     this.renderConsulta = false;
     this.renderEditar = true;
+    this.panelBuscarDireccion = false;
+    this.crearDireccion = false;
   }
 
 
 
   mostrarNotificacion(pTitulo: String, pTexto: String, pTipo: String) {
-
-
-    // const type = ['','info','success','warning','danger'];
-
 
     $.notify({
       icon: "notifications",
@@ -311,6 +352,41 @@ export class ClientesComponent implements OnInit {
         '<span data-notify="message">' + pTexto + '</span>' +
         '</div>'
     });
+  }
+
+  PanelDireccion(){
+    this.crearDireccion = true;
+    this.angForm.controls.dCiudad.setValue('');
+    this.angForm.controls.dDirecion.setValue('');
+    this.angForm.controls.dPais.setValue('');
+    this.angForm.controls.dEstado.setValue('');
+    this.angForm.controls.dTipo.setValue('');
+  }
+
+  crearDireccionCliente(){
+    let direccion: Direccion = {};
+    direccion.ciudad =  this.angForm.controls.dCiudad.value;
+    direccion.direccion = this.angForm.controls.dDirecion.value;
+    direccion.estado = this.angForm.controls.dEstado.value;
+    direccion.idcliente = this.idCliente;
+    direccion.pais = this.angForm.controls.dPais.value;
+    direccion.tipodireccion = this.angForm.controls.dTipo.value;
+
+    this.clienteApi.registrarDireccion('1', '1', direccion).subscribe(
+      value => setTimeout(() => {
+        const prd = value;
+        //console.log(value);
+        this.direccion(this.userCliente);
+        this.mostrarNotificacion('Crear Dirección', 'Se ha creado la dirección correctamente', 'succes');
+        this.crearDireccion = false;
+        this.panelBuscarDireccion =false;
+      }, 200),
+      error => {
+        this.mostrarNotificacion('Crear Dirección', 'Se presento un error, por favor notifique al administrador', 'danger');
+        console.error(JSON.stringify(error))
+      },
+      () => console.log('done')
+    );
   }
 
 }
