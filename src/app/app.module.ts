@@ -46,10 +46,9 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 import { ProductosComponent, DialogOverviewExampleDialog } from './productos/productos.component';
 
 import { OrdenesComponent } from './ordenes/ordenes.component';
-
+import { CampanasComponent } from './campanas/campanas.component';
 import { ClientesComponent } from './clientes/clientes.component';
 import { UsuarioComponent } from './usuario/usuario.component';
-import { CampanasComponent } from './campanas/campanas.component';
 import { CampanaService } from './_restCampanas';
 
 
@@ -93,7 +92,6 @@ import { CampanaService } from './_restCampanas';
     ClientesComponent,
     UsuarioComponent,
     CampanasComponent,
-
 
   ],
   providers: [

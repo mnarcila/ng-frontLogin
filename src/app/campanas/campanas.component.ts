@@ -5,8 +5,8 @@ import { AuthService } from '../auth.service';
 import { Router} from '@angular/router';
 import { ProductosInner, ProductoService, ProductoRsType } from "../_restProducto";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DomSanitizer } from '@angular/platform-browser';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogOverviewExampleDialog} from 'app/productos/productos.component';
 
 export interface Estados {
   value: string;
@@ -282,6 +282,7 @@ export class CampanasComponent implements OnInit {
   }
 
   verImagen(rutaImagen: string) {
+    console.log('imagen ' + rutaImagen );
     this.imagenModal = this.folderImagen + "/" + rutaImagen;
 
     const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
@@ -299,18 +300,3 @@ export class CampanasComponent implements OnInit {
   }
 }
 
-@Component({
-  templateUrl: 'imagen.html',
-})
-export class DialogOverviewExampleDialog {
-
-  constructor(
-    public sanitizer: DomSanitizer,
-    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: DialogData) { }
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-
-}

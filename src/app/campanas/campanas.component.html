@@ -211,6 +211,66 @@
           </div>
         </div>
       </div>
+      <div class="card" *ngIf="panelActualizaCampanas">
+        <div class="card-header card-header-rose">
+          <h4 class="card-title ">Actualizar Campaña</h4>
+          <p class="card-category">Ingrese la siguiente información</p>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="ID Campaña" formControlName="ecIdCampana" type="text"
+                  class="form-control" readonly>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Fecha de Inicio" formControlName="cFechaInicio" type="date"
+                  required="true" class="form-control">
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Fecha de Fin" formControlName="cFechaFin" type="date" 
+                required="true" class="form-control">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Producto" formControlName="pNombreProd" type="text" readonly>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <button mat-raised-button (click)="mostrarPanelProducto()" class="btn btn-danger pull-left">Buscar
+                Producto</button>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Estado</mat-label>
+                <mat-select formControlName="cEstado">
+                    <mat-option *ngFor="let est of estados" [value]="est.value">
+                        {{est.viewValue}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+                <mat-label>Imagen del Banner</mat-label>
+            </div>
+            <div class="col-md-2">
+                <input (change)="fileChange($event)" type="file" id="inputGroupFile01"
+                    aria-describedby="inputGroupFileAddon01">
+            </div>
+          </div>
+          <button mat-raised-button (click)="CrearCampana()" class="btn btn-danger pull-right">Crear Campaña</button>
+          <div class="clearfix"></div>
+        </div>
+      </div>
     </div>
   </form>
 </div>
