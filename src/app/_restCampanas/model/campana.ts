@@ -20,4 +20,5 @@ export interface Campana {
     rutaBanner?: string;
     idProducto?: number;
     estado?: string;
+    nombreProducto?: string;
 }

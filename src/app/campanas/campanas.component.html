@@ -72,10 +72,10 @@
                   <td>{{cam.fechaFin}}</td>
                   <td>{{cam.usuarioCreador}}</td>
                   <td>{{cam.fechaCreacion}}</td>
-                  <td>{{cam.idProducto}}</td>
+                  <td>{{producto.nombre}}</td>
                   <td>{{cam.estado}}</td>
                   <td><i class="material-icons" style="cursor: pointer;"
-                      (click)="$event.stopPropagation();ActualizarCampana(cam)">update</i>
+                      (click)="$event.stopPropagation();mostrarPanelActualizar(cam)">update</i>
                   <td><i class="material-icons" matTooltip="Ver imagen"
                     style="cursor: pointer;"
                     (click)="$event.stopPropagation();verImagen(cam.rutaBanner)">image</i></td>
@@ -172,7 +172,7 @@
               required />
           </div>
           <div class="col-md-6">
-            <button mat-raised-button (click)="PanelProductos()" class="btn btn-danger pull-right">Buscar
+            <button mat-raised-button (click)="panelProductos()" class="btn btn-danger pull-right">Buscar
               Producto</button>
             <div class="clearfix"></div>
           </div>
@@ -212,65 +212,58 @@
         </div>
       </div>
       <div class="card" *ngIf="panelActualizaCampanas">
-        <div class="card-header card-header-rose">
-          <h4 class="card-title ">Actualizar Campaña</h4>
-          <p class="card-category">Ingrese la siguiente información</p>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-md-4">
-              <mat-form-field class="example-full-width">
-                <input matInput placeholder="ID Campaña" formControlName="ecIdCampana" type="text"
-                  class="form-control" readonly>
-              </mat-form-field>
+          <div class="card-header card-header-rose">
+            <h4 class="card-title ">Actualizar Campaña</h4>
+            <p class="card-category">Ingrese la siguiente información</p>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-4">
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="ID Campaña" formControlName="ecIdCampana" type="text"
+                    class="form-control" readonly>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Descripción" formControlName="ecDescripcion" type="text"
+                    class="form-control" required>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Fecha de Inicio" formControlName="ecFechaInicio" type="date"
+                    required="true" class="form-control">
+                </mat-form-field>
+              </div>
             </div>
-            <div class="col-md-4">
-              <mat-form-field class="example-full-width">
-                <input matInput placeholder="Fecha de Inicio" formControlName="cFechaInicio" type="date"
+            <div class="row">
+              <div class="col-md-4">
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Fecha de Fin" formControlName="ecFechaFin" type="date" 
                   required="true" class="form-control">
-              </mat-form-field>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field class="example-full-width">
+                  <input matInput placeholder="Producto" formControlName="epProd" type="text" required readonly>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Estado</mat-label>
+                  <mat-select formControlName="ecEstado">
+                      <mat-option *ngFor="let est of estados" [value]="est.value">
+                          {{est.viewValue}}
+                      </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
             </div>
-            <div class="col-md-4">
-              <mat-form-field class="example-full-width">
-                <input matInput placeholder="Fecha de Fin" formControlName="cFechaFin" type="date" 
-                required="true" class="form-control">
-              </mat-form-field>
-            </div>
+            <button mat-raised-button (click)="updateCampana()" class="btn btn-danger pull-right">Actualizar Campaña</button>
+            <div class="clearfix"></div>
           </div>
-          <div class="row">
-            <div class="col-md-4">
-              <mat-form-field class="example-full-width">
-                <input matInput placeholder="Producto" formControlName="pNombreProd" type="text" readonly>
-              </mat-form-field>
-            </div>
-            <div class="col-md-4">
-              <button mat-raised-button (click)="mostrarPanelProducto()" class="btn btn-danger pull-left">Buscar
-                Producto</button>
-            </div>
-            <div class="col-md-4">
-              <mat-form-field>
-                <mat-label>Estado</mat-label>
-                <mat-select formControlName="cEstado">
-                    <mat-option *ngFor="let est of estados" [value]="est.value">
-                        {{est.viewValue}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4">
-                <mat-label>Imagen del Banner</mat-label>
-            </div>
-            <div class="col-md-2">
-                <input (change)="fileChange($event)" type="file" id="inputGroupFile01"
-                    aria-describedby="inputGroupFileAddon01">
-            </div>
-          </div>
-          <button mat-raised-button (click)="CrearCampana()" class="btn btn-danger pull-right">Crear Campaña</button>
-          <div class="clearfix"></div>
         </div>
-      </div>
     </div>
   </form>
 </div>

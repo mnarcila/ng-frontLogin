@@ -65,11 +65,11 @@ export class LoginComponent implements OnInit {
     console.log(pValue);
     if (pValue.autenticacion) {
       this.auth.setLoggedIn(true);
+      this.auth.setLoggedName(this.angForm.controls.username.value)
       this.router.navigate(["home"]);
-      console.log("mensaje de session:"+this.auth.isLoggedIn);
+      console.log("mensaje de session:"+this.auth.getLoggedName);
     } else {
       this.auth.setLoggedIn(false);
-      console.log('usuario Invalido');
     }
   }
   procesarResponse(pValue: AutenticarRsType) {
@@ -88,9 +88,9 @@ export class LoginComponent implements OnInit {
       error => console.error(JSON.stringify(error)),
       () => console.log('done')
     );
-    //this.auth.setLoggedIn(true);
-    //this.router.navigate(["home"]);
-
+    this.auth.setLoggedIn(true);
+    this.router.navigate(["home"]);
+    console.log('usuario Invalido '+this.auth.getLoggedName);
 
   }
 

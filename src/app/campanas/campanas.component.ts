@@ -42,10 +42,13 @@ export class CampanasComponent implements OnInit {
   panelTablaProductos = false;
   productoRsType: ProductoRsType;
   tablaProductos: ProductosInner[] = [];
+  producto : ProductosInner ; 
   uploadedFiles: Array<File>;
   idProdducto;
   imagenModal: string = "";
   folderImagen: string = "http://localhost:8080";
+  panelActualizaCampanas = false;
+  campana: Campana = {};
 
   constructor(
     private formBuilder: FormBuilder,
@@ -61,6 +64,8 @@ export class CampanasComponent implements OnInit {
 
    ngOnInit() {
     console.log('entre al oninit');
+
+    this.producto =   {};
     if (this.auth.isLoggedIn == false) {
       this.sendLogin();
     }
@@ -82,6 +87,12 @@ export class CampanasComponent implements OnInit {
       cFechaFin: ['', Validators.required],
       cEstado: ['',Validators.required],
       cId: ['',Validators.required],
+      ecEstado: ['',Validators.required],
+      epProd: ['',Validators.required],
+      ecFechaFin: ['',Validators.required],
+      ecFechaInicio: ['',Validators.required],
+      ecDescripcion: ['',Validators.required],
+      ecIdCampana: ['',Validators.required],
     });
   }
 
@@ -96,6 +107,7 @@ export class CampanasComponent implements OnInit {
     this.panelListaCampanas = false;
     this.panelCrearCampanas = true;
     this.listaCampanas = [];
+    this.panelActualizaCampanas = false;
   }
 
   mostrarPanelProducto(){
@@ -113,9 +125,13 @@ export class CampanasComponent implements OnInit {
 
   }
 
-  PanelProductos(){
+  panelProductos(){
     var tipoBusqueda = this.angForm.controls.busquedaC.value;
     var itemBusqueda = this.angForm.controls.product.value;
+    this.busquedaProducto(tipoBusqueda,itemBusqueda);
+  }
+
+  busquedaProducto(tipoBusqueda:number, itemBusqueda:number){
 
     if (tipoBusqueda == 1) {
       this.productoApi.conultarProductoPorId('1', '1', itemBusqueda).subscribe(
@@ -131,7 +147,7 @@ export class CampanasComponent implements OnInit {
       );
     }
     else if (tipoBusqueda == 2) {
-      this.productoApi.conultarProductoPorNombre('1', '1', itemBusqueda).subscribe(
+      this.productoApi.conultarProductoPorNombre('1', '1', itemBusqueda+"").subscribe(
         value => setTimeout(() => {
           const prd = value;
           this.procesarResponse(value);
@@ -145,10 +161,22 @@ export class CampanasComponent implements OnInit {
       );
     }
     else if (tipoBusqueda == 3) {
-      this.productoApi.conultarProductoPorDescripcion('1', '1', itemBusqueda).subscribe(
+      this.productoApi.conultarProductoPorDescripcion('1', '1', itemBusqueda+"").subscribe(
         value => setTimeout(() => {
           const prd = value;
           this.procesarResponse(value);
+        }, 200),
+        error => {
+          this.mostrarNotificacion('consulta', 'Se genero un error interno', 'danger');
+          console.error(JSON.stringify(error));
+        },
+        () => console.log('done')
+      );
+    }
+    else if (tipoBusqueda == 4) {
+      this.productoApi.conultarProductoPorId('1', '1', itemBusqueda).subscribe(
+        value => setTimeout(() => {
+          this.producto = value.productos[0];
         }, 200),
         error => {
           this.mostrarNotificacion('consulta', 'Se genero un error interno', 'danger');
@@ -267,8 +295,12 @@ export class CampanasComponent implements OnInit {
   }
 
   buscarCampanaID(){
+    this.listaCampanas = [];
     this.campanaApi.campanaIdCampanaGet(this.angForm.controls.cId.value).subscribe(
       value => setTimeout(() => {
+        this.busquedaProducto(4,value.idProducto);
+        this.panelTablaProductos = false;
+        console.log(this.panelTablaProductos);
         this.listaCampanas.push(value);
         this.panelListaCampanas = true;
         this.panelFiltroCampanas = false;
@@ -297,6 +329,33 @@ export class CampanasComponent implements OnInit {
       console.log('The dialog was closed');
     });
 
+  }
+
+  mostrarPanelActualizar(cam: Campana){
+    this.angForm.controls.ecIdCampana.setValue(cam.idCamapana);
+    this.angForm.controls.ecDescripcion.setValue(cam.descripcion);
+    let fecInicio:string;
+    fecInicio = cam.fechaInicio+"";
+    this.angForm.controls.ecFechaInicio.setValue(fecInicio.substr(0,10));
+    let fecFin: string;
+    fecFin = cam.fechaFin+"";
+    this.angForm.controls.ecFechaFin.setValue(fecFin.substr(0,10));
+    this.angForm.controls.epProd.setValue(this.producto.nombre);
+    this.angForm.controls.ecEstado.setValue(cam.estado);
+    this.campana = cam;
+    this.panelActualizaCampanas = true;
+
+  } 
+
+  updateCampana(){
+    let cam: Campana = this.campana;
+    cam.descripcion =  this.angForm.controls.ecDescripcion.value;
+    cam.fechaInicio =  this.angForm.controls.ecFechaInicio.value;
+    cam.fechaFin =  this.angForm.controls.ecFechaFin.value;
+    cam.idProducto = this.producto.idProducto;
+    cam.estado = this.angForm.controls.ecEstado.value;
+    this.actualizarCampana(cam);
+    this.panelActualizaCampanas = false;
   }
 }
 

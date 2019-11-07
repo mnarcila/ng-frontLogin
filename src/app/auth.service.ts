@@ -10,6 +10,7 @@ interface myData {
 export class AuthService {
   private router: Router;
   private loggedInStatus = JSON.parse(localStorage.getItem('loggedIn') || 'false');
+  //private loggedName = JSON.parse(localStorage.getItem('loggedName') || 'nn');
 
   constructor(private http: HttpClient) { }
 
@@ -20,6 +21,14 @@ export class AuthService {
 
   get isLoggedIn() {
     return JSON.parse(localStorage.getItem('loggedIn') || this.loggedInStatus);
+  }
+
+  setLoggedName(name: string){
+    localStorage.setItem('loggedName',name);
+  }
+  
+  getLoggedName():string{
+    return localStorage.getItem('loggedName') ;
   }
   
 }
