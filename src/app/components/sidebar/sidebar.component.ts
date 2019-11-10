@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { RolesService, Roles, RolRsType} from '../../_restRoles';
+import {AuthService} from '../../auth.service';
 
 declare const $: any;
 declare interface RouteInfo {
@@ -27,7 +29,10 @@ export const ROUTES: RouteInfo[] = [
 export class SidebarComponent implements OnInit {
   menuItems: any[];
 
-  constructor() { }
+  constructor(
+    private auth: AuthService,
+    private rolesServices: RolesService,
+  ) { }
 
   ngOnInit() {
     this.menuItems = ROUTES.filter(menuItem => menuItem);
@@ -38,4 +43,23 @@ export class SidebarComponent implements OnInit {
     }
     return true;
   };
+
+  permisosRoles(titulo:string){
+    console.log("entre al metodo "+ titulo);
+    this.rolesServices.consultarPermisosRol('1', '1', this.auth.getLoggedName()).subscribe(
+      value => setTimeout(() => {
+        var roles = value.datosBasicos;
+        let per: number[];
+        for (let index = 0; index < roles.length; index++) {
+          per.push(roles[index].idpantallarol);
+        }
+        console.log("permisos "+per);
+      }, 200),
+      error => {
+        //this.mostrarNotificacion('Consulta Dirección', 'Se presento un error, por favor notifique al administrador', 'danger');
+        //console.error(JSON.stringify(error))
+      },
+      () => console.log('done')
+    );
+  }
 }

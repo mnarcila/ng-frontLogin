@@ -26,6 +26,7 @@ import { OrdenM, DetalleOrden, OrdenService, DetalleOrdenService, OrdenRsType } 
 import { Cliente, ClienteService, ClientesRsType } from './_restClientes';
 import { ReqCategoria, CategoriaService, CategoriaRsType } from './_restCategoria';
 import { BrowserModule } from '@angular/platform-browser';
+import { RolesService} from './_restRoles';
 //componentes de seguridad 
 import { AuthService } from './auth.service'
 //componentes visuales
@@ -92,7 +93,6 @@ import { CampanaService } from './_restCampanas';
     ClientesComponent,
     UsuarioComponent,
     CampanasComponent,
-
   ],
   providers: [
     AuthService,
@@ -108,6 +108,7 @@ import { CampanaService } from './_restCampanas';
     DetalleOrdenService,
     ClienteService,
     CampanaService,
+    RolesService,
   ],
   entryComponents: [DialogOverviewExampleDialog],
   bootstrap: [AppComponent]
