@@ -373,4 +373,126 @@ export class ProductoService {
         );
     }
 
+
+     /**
+        * Consultar Producto por mas vendido por fecha
+        * Retorna un producto
+        * @param headerRq Cabecera estándar
+        * @param serviceID sb2s1
+        * @param fechaInicial Rango de fechas por las cuales se consultara el producto
+        * @param fechaFinal
+        * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+        * @param reportProgress flag to report request and response progress.
+        */
+       public consultarProductoMasVendido(headerRq: string, serviceID: string, fechaInicial: string, fechaFinal: string, observe?: 'body', reportProgress?: boolean): Observable<ProductoRsType>;
+       public consultarProductoMasVendido(headerRq: string, serviceID: string, fechaInicial: string, fechaFinal: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ProductoRsType>>;
+       public consultarProductoMasVendido(headerRq: string, serviceID: string, fechaInicial: string, fechaFinal: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ProductoRsType>>;
+       public consultarProductoMasVendido(headerRq: string, serviceID: string, fechaInicial: string, fechaFinal: string, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
+           console.log("consultarProductoMasVendido");
+           if (headerRq === null || headerRq === undefined) {
+               throw new Error('Required parameter headerRq was null or undefined when calling conultarProductoPorNombre.');
+           }
+   
+           if (serviceID === null || serviceID === undefined) {
+               throw new Error('Required parameter serviceID was null or undefined when calling conultarProductoPorNombre.');
+           }
+   
+           if (fechaInicial === null || fechaInicial === undefined) {
+               throw new Error('Required parameter fechaInicial was null or undefined when calling conultarProductoPorNombre.');
+           }
+   
+           if (fechaFinal === null || fechaFinal === undefined) {
+               throw new Error('Required parameter fechaFinal was null or undefined when calling conultarProductoPorNombre.');
+           }
+    
+           let queryParameters = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
+           queryParameters = queryParameters.set('fechaInicial', <any>fechaInicial);
+           queryParameters = queryParameters.set('fechaFinal', <any>fechaFinal);
+           let headers = this.defaultHeaders;
+           if (headerRq !== undefined && headerRq !== null) {
+               headers = headers.set('headerRq', String(headerRq));
+           }
+           if (serviceID !== undefined && serviceID !== null) {
+               headers = headers.set('serviceID', String(serviceID));
+           }
+   
+           // to determine the Accept header
+           let httpHeaderAccepts: string[] = [
+               'application/json'
+           ];
+           const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+           if (httpHeaderAcceptSelected != undefined) {
+               headers = headers.set('Accept', httpHeaderAcceptSelected);
+           }
+   
+           // to determine the Content-Type header
+           const consumes: string[] = [
+           ];
+   
+           return this.httpClient.get<ProductoRsType>(`${this.basePath}/producto/consultarProductoMasVendido`,
+               {
+                   params: queryParameters,
+                   withCredentials: this.configuration.withCredentials,
+                   headers: headers,
+                   observe: observe,
+                   reportProgress: reportProgress
+               }
+           );
+       }
+   
+   
+       public consultarProductoPorCategoria(headerRq: string, serviceID: string, idCategoria: number, observe?: 'body', reportProgress?: boolean): Observable<ProductoRsType>;
+       public consultarProductoPorCategoria(headerRq: string, serviceID: string, idCategoria: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ProductoRsType>>;
+       public consultarProductoPorCategoria(headerRq: string, serviceID: string, idCategoria: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ProductoRsType>>;
+       public consultarProductoPorCategoria(headerRq: string, serviceID: string, idCategoria: number, observe: any = 'body', reportProgress: boolean = false): Observable<any> {
+   
+           if (headerRq === null || headerRq === undefined) {
+               throw new Error('Required parameter headerRq was null or undefined when calling conultarProductoPorNombre.');
+           }
+   
+           if (serviceID === null || serviceID === undefined) {
+               throw new Error('Required parameter serviceID was null or undefined when calling conultarProductoPorNombre.');
+           }
+   
+           if (idCategoria === null || idCategoria === undefined) {
+               throw new Error('Required parameter nombreProducto was null or undefined when calling conultarProductoPorNombre.');
+           }
+   
+           let queryParameters = new HttpParams({ encoder: new CustomHttpUrlEncodingCodec() });
+           if (idCategoria !== undefined && idCategoria !== null) {
+               queryParameters = queryParameters.set('idCategoria', <any>idCategoria);
+           }
+   
+           let headers = this.defaultHeaders;
+           if (headerRq !== undefined && headerRq !== null) {
+               headers = headers.set('headerRq', String(headerRq));
+           }
+           if (serviceID !== undefined && serviceID !== null) {
+               headers = headers.set('serviceID', String(serviceID));
+           }
+   
+           // to determine the Accept header
+           let httpHeaderAccepts: string[] = [
+               'application/json'
+           ];
+           const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+           if (httpHeaderAcceptSelected != undefined) {
+               headers = headers.set('Accept', httpHeaderAcceptSelected);
+           }
+   
+           // to determine the Content-Type header
+           const consumes: string[] = [
+           ];
+   
+           return this.httpClient.get<ProductoRsType>(`${this.basePath}/producto/consultarProductoPorCategoria`,
+               {
+                   params: queryParameters,
+                   withCredentials: this.configuration.withCredentials,
+                   headers: headers,
+                   observe: observe,
+                   reportProgress: reportProgress
+               }
+           );
+       }
+
 }

@@ -8,10 +8,13 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group">
-
+                        <button mat-raised-button class="btn btn-rose pull " (click)="mostrarBusquedaRanking()">
+                            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                            Ranking de Productos
+                        </button>
                         <button mat-raised-button class="btn btn-rose pull " (click)="onClick()">
                             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                            consultar
+                            Consultar
                         </button>
                         <button mat-raised-button class="btn btn-rose pull " (click)="renderCrearDiv()">
                             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
@@ -236,6 +239,31 @@
 
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12" *ngIf="panelFiltroRanking">
+                        <div class="card">
+                            <div class="card-header card-header-rose">
+                                <h4 class="card-title">Filtar Ranking de Productos</h4>
+                                <p class="card-category">Ingrese la siguiente información</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput placeholder="Fecha de Inicio" formControlName="pFechaInicio" type="date" required>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput placeholder="Fecha de Fin" formControlName="pFechaFin" type="date" required>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-danger pull-left" (click)="buscarRanking()">Buscar Ranking</button>
                                 </div>
                             </div>
                         </div>

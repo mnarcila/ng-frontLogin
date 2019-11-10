@@ -7,6 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
+import { formatDate } from "@angular/common";
 
 export interface DialogData {
   imagen: string;
@@ -57,6 +58,7 @@ export class ProductosComponent implements OnInit {
   angForm1: FormGroup;
   productoRsType: ProductoRsType;
   tablaProductos: ProductosInner[] = [];
+  panelFiltroRanking = false;
 
   constructor(
 
@@ -86,8 +88,9 @@ export class ProductosComponent implements OnInit {
       edescProduct: ['', Validators.required],
       evalorProduct: ['', Validators.required],
       ecateProduct: ['', Validators.required],
-      eestadoProduct: ['', Validators.required]
-
+      eestadoProduct: ['', Validators.required],
+      pFechaInicio: ['', Validators.required],
+      pFechaFin: ['', Validators.required]
     });
   }
   get f() { return this.angForm.controls; }
@@ -389,6 +392,30 @@ export class ProductosComponent implements OnInit {
     });
   }
 
+  mostrarBusquedaRanking(){
+    this.panelFiltroRanking = true;
+  }
+
+  buscarRanking(){
+    this.tablaProductos = [];
+    let f1 = formatDate(this.angForm.controls.pFechaInicio.value, 'ddMMyyyy', 'en');
+    let f2 = formatDate(this.angForm.controls.pFechaFin.value, 'ddMMyyyy', 'en');
+    //let fecInicio = this.angForm.controls.pFechaInicio.value;
+    //let fecFin = this.angForm.controls.pFechaFin.value;
+    this.productoApi.consultarProductoMasVendido('1', '1', f1,f2).subscribe(
+      value => setTimeout(() => {
+        const prd = value;
+        this.procesarResponse(value);
+        this.panelFiltroRanking = false;
+      }, 200),
+      error => {
+        this.mostrarNotificacion('consulta Especifica', 'Se genero un error interno', 'danger');
+        console.error(JSON.stringify(error))
+      },
+      () => console.log('done')
+    );
+  }
+
 }
 
 @Component({
@@ -406,3 +433,4 @@ export class DialogOverviewExampleDialog {
   }
 
 }
+  
