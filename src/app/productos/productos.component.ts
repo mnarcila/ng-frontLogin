@@ -8,6 +8,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { formatDate } from "@angular/common";
+import { RolesService, Roles } from 'app/_restRoles';
 
 export interface DialogData {
   imagen: string;
@@ -46,7 +47,7 @@ export class ProductosComponent implements OnInit {
 
   imagenModal: string = "";
   // folderImagen: string = "c:/uploads";
-  folderImagen: string = "http://localhost:8080";
+  folderImagen: string = "http://10.39.1.149:8080";
   renderCrear: boolean = false;
   renderConsulta: boolean = false;
   renderEditar: boolean = false;
@@ -59,6 +60,7 @@ export class ProductosComponent implements OnInit {
   productoRsType: ProductoRsType;
   tablaProductos: ProductosInner[] = [];
   panelFiltroRanking = false;
+  listaRoles: Roles[];
 
   constructor(
 
@@ -70,6 +72,7 @@ export class ProductosComponent implements OnInit {
     private categoriaApi: CategoriaService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
+    private rolesServices: RolesService,
 
   ) { }
 
@@ -138,9 +141,14 @@ export class ProductosComponent implements OnInit {
 
   }
   renderCrearDiv(): void {
-    this.renderCrear = true;
-    this.renderConsulta = false;
-    this.renderEditar = false;
+    if(this.validarPermisos(2)){
+      this.renderCrear = true;
+      this.renderConsulta = false;
+      this.renderEditar = false;
+      this.panelFiltroRanking = false;
+    }else{
+      this.mostrarNotificacion('Acceso denegado', 'No tiene permiso para esta función', 'danger');
+    }
   }
 
   /**
@@ -199,17 +207,21 @@ export class ProductosComponent implements OnInit {
 
   /**evento de boton cuando se selecciona el editar */
   editar(productoz: ProductosInner): void {
-    console.log("prd: " + productoz.idcategoria);
-    this.angForm.controls.eidproducto.setValue(productoz.idProducto);
-    this.angForm.controls.enameProduct.setValue(productoz.nombre);
-    this.angForm.controls.edescProduct.setValue(productoz.descripcion);
-    this.angForm.controls.evalorProduct.setValue(productoz.valorBase);
-    this.angForm.controls.ecateProduct.setValue(productoz.idcategoria);
-    this.angForm.controls.eestadoProduct.setValue(productoz.estado);
+    if(this.validarPermisos(2)){
+      //console.log("prd: " + productoz.idcategoria);
+      this.angForm.controls.eidproducto.setValue(productoz.idProducto);
+      this.angForm.controls.enameProduct.setValue(productoz.nombre);
+      this.angForm.controls.edescProduct.setValue(productoz.descripcion);
+      this.angForm.controls.evalorProduct.setValue(productoz.valorBase);
+      this.angForm.controls.ecateProduct.setValue(productoz.idcategoria);
+      this.angForm.controls.eestadoProduct.setValue(productoz.estado);
 
-    this.renderCrear = false;
-    this.renderConsulta = false;
-    this.renderEditar = true;
+      this.renderCrear = false;
+      this.renderConsulta = false;
+      this.renderEditar = true;
+    }else{
+      this.mostrarNotificacion('Acceso denegado', 'No tiene permiso para esta función', 'danger');
+    }
   }
 
 
@@ -236,63 +248,69 @@ export class ProductosComponent implements OnInit {
    * consulta generica de evento boton
    */
   onClick(): void {
-    this.renderConsulta = false;
-    this.renderCrear = false;
-    this.renderEditar = false;
-    this.tablaProductos = [];
+    if(this.validarPermisos(1) || this.validarPermisos(2)){
+      this.renderConsulta = false;
+      this.renderCrear = false;
+      this.renderEditar = false;
+      this.panelFiltroRanking = false;
+      this.tablaProductos = [];
 
-    var itemBusqueda = this.angForm.controls.product.value;
-    var tipoBusqueda = this.angForm.controls.busquedaC.value;
+      var itemBusqueda = this.angForm.controls.product.value;
+      var tipoBusqueda = this.angForm.controls.busquedaC.value;
 
-    if (itemBusqueda != '' && itemBusqueda != null) {
+      if (itemBusqueda != '' && itemBusqueda != null) {
 
-      console.log('como buscar:' + tipoBusqueda);
-      if (tipoBusqueda == 1) {
-        this.productoApi.conultarProductoPorId('1', '1', itemBusqueda).subscribe(
-          value => setTimeout(() => {
-            const prd = value;
-            this.procesarResponse(value);
-          }, 200),
-          error => {
-            this.mostrarNotificacion('consulta', 'Se genero un error interno', 'danger');
-            console.error(JSON.stringify(error));
-          },
-          () => console.log('done')
-        );
-      }
-      else if (tipoBusqueda == 2) {
-        this.productoApi.conultarProductoPorNombre('1', '1', itemBusqueda).subscribe(
-          value => setTimeout(() => {
-            const prd = value;
-            this.procesarResponse(value);
-          }, 200),
-          error => {
-            this.mostrarNotificacion('consulta', 'Se genero un error interno', 'danger');
-            console.error(JSON.stringify(error));
-          }
-          ,
-          () => console.log('done')
-        );
-      }
-      else if (tipoBusqueda == 3) {
-        this.productoApi.conultarProductoPorDescripcion('1', '1', itemBusqueda).subscribe(
-          value => setTimeout(() => {
-            const prd = value;
-            this.procesarResponse(value);
-          }, 200),
-          error => {
-            this.mostrarNotificacion('consulta', 'Se genero un error interno', 'danger');
-            console.error(JSON.stringify(error));
-          },
-          () => console.log('done')
-        );
+        console.log('como buscar:' + tipoBusqueda);
+        if (tipoBusqueda == 1) {
+          this.productoApi.conultarProductoPorId('1', '1', itemBusqueda).subscribe(
+            value => setTimeout(() => {
+              const prd = value;
+              this.procesarResponse(value);
+            }, 200),
+            error => {
+              this.mostrarNotificacion('consulta', 'Se genero un error interno', 'danger');
+              console.error(JSON.stringify(error));
+            },
+            () => console.log('done')
+          );
+        }
+        else if (tipoBusqueda == 2) {
+          this.productoApi.conultarProductoPorNombre('1', '1', itemBusqueda).subscribe(
+            value => setTimeout(() => {
+              const prd = value;
+              this.procesarResponse(value);
+            }, 200),
+            error => {
+              this.mostrarNotificacion('consulta', 'Se genero un error interno', 'danger');
+              console.error(JSON.stringify(error));
+            }
+            ,
+            () => console.log('done')
+          );
+        }
+        else if (tipoBusqueda == 3) {
+          this.productoApi.conultarProductoPorDescripcion('1', '1', itemBusqueda).subscribe(
+            value => setTimeout(() => {
+              const prd = value;
+              this.procesarResponse(value);
+            }, 200),
+            error => {
+              this.mostrarNotificacion('consulta', 'Se genero un error interno', 'danger');
+              console.error(JSON.stringify(error));
+            },
+            () => console.log('done')
+          );
+        } else {
+          this.mostrarNotificacion('consulta', 'Seleccione un concepto de busqueda', 'warning');
+        }
       } else {
-        this.mostrarNotificacion('consulta', 'Seleccione un concepto de busqueda', 'warning');
+        this.mostrarNotificacion('consulta', 'Ingrese un concepto de busqueda', 'warning');
       }
-    } else {
-      this.mostrarNotificacion('consulta', 'Ingrese un concepto de busqueda', 'warning');
+    }else{
+      this.mostrarNotificacion('Acceso denegado', 'No tiene permiso para esta función', 'danger');
     }
   }
+
   fileChange(element) {
     this.uploadedFiles = element.target.files;
   }
@@ -305,7 +323,7 @@ export class ProductosComponent implements OnInit {
       varName = filename
     }
     var headers = new HttpHeaders();
-    this.http.post('http://localhost:3000/api/upload', formData, {
+    this.http.post('http://10.39.1.151:3000/api/upload', formData, {
       headers: headers
     })
       .subscribe((response) => {
@@ -348,7 +366,7 @@ export class ProductosComponent implements OnInit {
     }
   }
   ngOnInit() {
-
+    this.permisosRoles();
     if (this.auth.isLoggedIn == false) {
       this.sendLogin();
     }
@@ -393,7 +411,11 @@ export class ProductosComponent implements OnInit {
   }
 
   mostrarBusquedaRanking(){
-    this.panelFiltroRanking = true;
+    if(this.validarPermisos(1) || this.validarPermisos(2) ){ 
+      this.panelFiltroRanking = true;
+    }else{
+      this.mostrarNotificacion('Acceso denegado', 'No tiene permiso para esta función', 'danger');
+    }
   }
 
   buscarRanking(){
@@ -414,6 +436,33 @@ export class ProductosComponent implements OnInit {
       },
       () => console.log('done')
     );
+  }
+
+  permisosRoles() {
+    this.rolesServices.consultarPermisosRol('1', '1', this.auth.getLoggedName()).subscribe(
+      value => setTimeout(() => {
+        var roles = value.datosBasicos;
+        this.listaRoles = roles;
+        console.log("permisos "+ this.listaRoles);
+      }, 200),
+      error => {
+      },
+      () => console.log('done')
+    );
+    //return false;
+  }
+
+  validarPermisos(id:number ):boolean {
+    let per: number;
+        for (let index = 0; index < this.listaRoles.length; index++) {
+          per = this.listaRoles[index].idrol;
+          console.log("permisos " + per);
+          if(per == id){
+            console.log('son iguales ');
+            return true;
+          }
+        }
+        return false;
   }
 
 }

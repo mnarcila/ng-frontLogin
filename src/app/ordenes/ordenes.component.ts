@@ -6,7 +6,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Listas, Estados, tipoIdentificacion, ListaProveedores } from '../Paramentricos/Listas';
 import { ClienteService, Direccion} from '../_restClientes';
 import { ProductoService, Producto } from '../_restProducto';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import { RolesService, Roles } from 'app/_restRoles';
+
 
 declare var $: any;
 
@@ -27,8 +28,6 @@ export class OrdenesComponent implements OnInit {
   panelCrear: boolean = false;
   panelActualizar:boolean = false;
   panelDetOrden:boolean = false;
-  //panelEditarOrden:boolean = false;
-  //listEstado: string[];
   listaEstados2: Estados[] = new Listas().estados;
   panelBuscarCliente: boolean = false;
   listaTipoId: tipoIdentificacion[] = new Listas().listaTipoId;
@@ -45,6 +44,7 @@ export class OrdenesComponent implements OnInit {
   panelSeleccionProducto: boolean = false;
   tablaProductos: Producto[] = [];
   pIdProducto: number;
+  listaRoles: Roles[];
 
   constructor(
     private ordenesApi: OrdenService,
@@ -54,12 +54,14 @@ export class OrdenesComponent implements OnInit {
     private formBuilder: FormBuilder,
     private clienteApi: ClienteService,
     private productoApi: ProductoService,
+    private rolesServices: RolesService,
   ) { }
 
 
 
   ngOnInit() {
-    console.log('entre al oninit');
+    this.permisosRoles();
+    //console.log('entre al oninit');
     if (this.auth.isLoggedIn == false) {
       this.sendLogin();
     }
@@ -113,14 +115,19 @@ export class OrdenesComponent implements OnInit {
   }
 
   mostrarPanelConsulta(): void {
-    if(!this.panelConsultar){
-      this.panelConsultar = true;
-      this.panelActualizar = false;
-      this.panelCrear = false;
-      this.panelBuscarCliente = false;
-      this.panelBuscarDireccion = false;
-      this.PanelCrearDetalle = false;
-      this.panelBuscarProducto = false;
+    //cuatro es el rol para consulta de ordenes
+    if(this.validarPermisos(4) || this.validarPermisos(5)){
+      if(!this.panelConsultar){
+          this.panelConsultar = true;
+          this.panelActualizar = false;
+          this.panelCrear = false;
+          this.panelBuscarCliente = false;
+          this.panelBuscarDireccion = false;
+          this.PanelCrearDetalle = false;
+          this.panelBuscarProducto = false;
+      }
+    }else{
+      this.mostrarNotificacion('Acceso Denegado', 'No tiene permiso para esta función', 'danger');
     }
   }
 
@@ -135,15 +142,19 @@ export class OrdenesComponent implements OnInit {
   }
 
   mostrarPanelCrear(): void {
-    if(!this.panelCrear){
-      this.panelConsultar = false;
-      this.panelActualizar = false;
-      this.panelCrear = true;
-      this.tablaOrdenes = false;
-      this.listaDetalle  = [];
-      this.panelDetOrden = false;
-      this.PanelCrearDetalle = false;
-      this.panelBuscarProducto = false;
+    if(this.validarPermisos(5)){
+      if(!this.panelCrear){
+        this.panelConsultar = false;
+        this.panelActualizar = false;
+        this.panelCrear = true;
+        this.tablaOrdenes = false;
+        this.listaDetalle  = [];
+        this.panelDetOrden = false;
+        this.PanelCrearDetalle = false;
+        this.panelBuscarProducto = false;
+      }
+    }else{
+      this.mostrarNotificacion('Acceso denegado', 'No tiene permiso para esta función', 'danger');
     }
   }
 
@@ -230,6 +241,7 @@ export class OrdenesComponent implements OnInit {
   }
 
   consultaGenerica(): void {
+    
     this.listOrdenes = [];
     this.consultaTip =  this.angForm.controls.tipoConsulta.value;
     if (this.consultaTip != '' && this.consultaTip != null && this.consultaTip != '' && this.consultaTip != null) {
@@ -299,18 +311,22 @@ export class OrdenesComponent implements OnInit {
   }
 
   editarOrden(orden:OrdenM):void{
-    this.panelActualizar = true;
-    this.panelDetOrden = false;
-    this.tablaOrdenes = false;
-    this.angForm.controls.eIdOrden.setValue(orden.idOrden);
-    this.angForm.controls.eCliente.setValue(orden.idCliente);
-    this.angForm.controls.eDireccion.setValue(orden.idDireccion);
-    this.angForm.controls.eValTotal.setValue(orden.valorTotal);
-    this.angForm.controls.eCantidad.setValue(orden.cantidadProductos);
-    this.angForm.controls.eFechaSol.setValue(orden.fechaSolicitud);
-    this.angForm.controls.eFechaAprob.setValue(orden.fechaAprobacion);
-    this.angForm.controls.eFechaCierre.setValue(orden.fechaCierre);
-    this.angForm.controls.eEstado.setValue(orden.estado);
+    if(this.validarPermisos(5)){
+      this.panelActualizar = true;
+      this.panelDetOrden = false;
+      this.tablaOrdenes = false;
+      this.angForm.controls.eIdOrden.setValue(orden.idOrden);
+      this.angForm.controls.eCliente.setValue(orden.idCliente);
+      this.angForm.controls.eDireccion.setValue(orden.idDireccion);
+      this.angForm.controls.eValTotal.setValue(orden.valorTotal);
+      this.angForm.controls.eCantidad.setValue(orden.cantidadProductos);
+      this.angForm.controls.eFechaSol.setValue(orden.fechaSolicitud);
+      this.angForm.controls.eFechaAprob.setValue(orden.fechaAprobacion);
+      this.angForm.controls.eFechaCierre.setValue(orden.fechaCierre);
+      this.angForm.controls.eEstado.setValue(orden.estado);
+    }else{
+      this.mostrarNotificacion('Acceso Denegado', 'No tiene permiso para esta función', 'danger');
+    }
   }
 
   ActualizarOrden():void{
@@ -432,15 +448,20 @@ export class OrdenesComponent implements OnInit {
   }
 
   mostrarPanelCrearDetalle():void{
-    this.PanelCrearDetalle = true;
-    this.panelDetOrden = false;
-    this.listaDetalle = [];
-    this.panelConsultar = false;
-    this.panelBuscarCliente = false;
-    this.panelBuscarDireccion = false;
-    this.panelCrear = false;
-    this.tablaOrdenes = false;
-    this.panelActualizar = false;
+    console.log("ya entre");
+    if(this.validarPermisos(5)){
+      this.PanelCrearDetalle = true;
+      this.panelDetOrden = false;
+      this.listaDetalle = [];
+      this.panelConsultar = false;
+      this.panelBuscarCliente = false;
+      this.panelBuscarDireccion = false;
+      this.panelCrear = false;
+      this.tablaOrdenes = false;
+      this.panelActualizar = false;
+    }else{
+      this.mostrarNotificacion('Acceso denegado', 'No tiene permiso para esta función', 'danger');
+    }
   }
 
   mostrarPanelProducto():void{
@@ -516,5 +537,32 @@ export class OrdenesComponent implements OnInit {
         '<span data-notify="message">' + pTexto + '</span>' +
         '</div>'
     });
+  }
+
+  permisosRoles() {
+    this.rolesServices.consultarPermisosRol('1', '1', this.auth.getLoggedName()).subscribe(
+      value => setTimeout(() => {
+        var roles = value.datosBasicos;
+        this.listaRoles = roles;
+        console.log("permisos "+ this.listaRoles);
+      }, 200),
+      error => {
+      },
+      () => console.log('done')
+    );
+    //return false;
+  }
+
+  validarPermisos(id:number ):boolean {
+    let per: number;
+        for (let index = 0; index < this.listaRoles.length; index++) {
+          per = this.listaRoles[index].idrol;
+          console.log("permisos " + per);
+          if(per == id){
+            console.log('son iguales ');
+            return true;
+          }
+        }
+        return false;
   }
 }

@@ -9,26 +9,25 @@ interface myData {
 @Injectable()
 export class AuthService {
   private router: Router;
-  private loggedInStatus = JSON.parse(localStorage.getItem('loggedIn') || 'false');
-  //private loggedName = JSON.parse(localStorage.getItem('loggedName') || 'nn');
+  private loggedInStatus = JSON.parse(sessionStorage.getItem('loggedIn') || 'false');
 
   constructor(private http: HttpClient) { }
 
   setLoggedIn(value: boolean) {
     this.loggedInStatus = value;
-    localStorage.setItem('loggedIn', 'true');
+    sessionStorage.setItem('loggedIn', 'true');
   }
 
   get isLoggedIn() {
-    return JSON.parse(localStorage.getItem('loggedIn') || this.loggedInStatus);
+    return JSON.parse(sessionStorage.getItem('loggedIn') || this.loggedInStatus);
   }
 
   setLoggedName(name: string){
-    localStorage.setItem('loggedName',name);
+    sessionStorage.setItem('loggedName',name);
   }
   
   getLoggedName():string{
-    return localStorage.getItem('loggedName') ;
+    return sessionStorage.getItem('loggedName') ;
   }
   
 }

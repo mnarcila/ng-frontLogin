@@ -7,6 +7,7 @@ import { ProductosInner, ProductoService, ProductoRsType } from "../_restProduct
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogOverviewExampleDialog} from 'app/productos/productos.component';
+import { RolesService, Roles } from 'app/_restRoles';
 
 export interface Estados {
   value: string;
@@ -46,9 +47,10 @@ export class CampanasComponent implements OnInit {
   uploadedFiles: Array<File>;
   idProdducto;
   imagenModal: string = "";
-  folderImagen: string = "http://localhost:8080";
+  folderImagen: string = "http://10.39.1.149:8080";
   panelActualizaCampanas = false;
   campana: Campana = {};
+  listaRoles: Roles[];
 
   constructor(
     private formBuilder: FormBuilder,
@@ -58,13 +60,13 @@ export class CampanasComponent implements OnInit {
     private productoApi: ProductoService,
     private http: HttpClient,
     public dialog: MatDialog,
+    private rolesServices: RolesService,
   ) {}
 
   
 
    ngOnInit() {
-    console.log('entre al oninit');
-
+    this.permisosRoles();
     this.producto =   {};
     if (this.auth.isLoggedIn == false) {
       this.sendLogin();
@@ -97,17 +99,25 @@ export class CampanasComponent implements OnInit {
   }
 
   mostrarPanelConsulta():void {
-    this.panelFiltroCampanas = true;
-    this.panelListaCampanas = false;
-    this.panelCrearCampanas = false;
+    if (this.validarPermisos(3)){
+      this.panelFiltroCampanas = true;
+      this.panelListaCampanas = false;
+      this.panelCrearCampanas = false;
+    }else{
+      this.mostrarNotificacion('Acceso denegado', 'No tiene permiso para esta función', 'danger');
+    }
   }
 
   mostrarPanelCrear(){
-    this.panelFiltroCampanas = false;
-    this.panelListaCampanas = false;
-    this.panelCrearCampanas = true;
-    this.listaCampanas = [];
-    this.panelActualizaCampanas = false;
+    if(this.validarPermisos(3)){
+      this.panelFiltroCampanas = false;
+      this.panelListaCampanas = false;
+      this.panelCrearCampanas = true;
+      this.listaCampanas = [];
+      this.panelActualizaCampanas = false;
+    }else{
+      this.mostrarNotificacion('Acceso denegado', 'No tiene permiso para esta función', 'danger');
+    }
   }
 
   mostrarPanelProducto(){
@@ -232,7 +242,7 @@ export class CampanasComponent implements OnInit {
       varName = filename
     }
     var headers = new HttpHeaders();
-    this.http.post('http://localhost:3000/api/upload', formData, {
+    this.http.post('http://10.39.1.151:3000/api/upload', formData, {
       headers: headers
     })
       .subscribe((response) => {
@@ -332,19 +342,22 @@ export class CampanasComponent implements OnInit {
   }
 
   mostrarPanelActualizar(cam: Campana){
-    this.angForm.controls.ecIdCampana.setValue(cam.idCamapana);
-    this.angForm.controls.ecDescripcion.setValue(cam.descripcion);
-    let fecInicio:string;
-    fecInicio = cam.fechaInicio+"";
-    this.angForm.controls.ecFechaInicio.setValue(fecInicio.substr(0,10));
-    let fecFin: string;
-    fecFin = cam.fechaFin+"";
-    this.angForm.controls.ecFechaFin.setValue(fecFin.substr(0,10));
-    this.angForm.controls.epProd.setValue(this.producto.nombre);
-    this.angForm.controls.ecEstado.setValue(cam.estado);
-    this.campana = cam;
-    this.panelActualizaCampanas = true;
-
+    if(this.validarPermisos(3)){
+      this.angForm.controls.ecIdCampana.setValue(cam.idCamapana);
+      this.angForm.controls.ecDescripcion.setValue(cam.descripcion);
+      let fecInicio:string;
+      fecInicio = cam.fechaInicio+"";
+      this.angForm.controls.ecFechaInicio.setValue(fecInicio.substr(0,10));
+      let fecFin: string;
+      fecFin = cam.fechaFin+"";
+      this.angForm.controls.ecFechaFin.setValue(fecFin.substr(0,10));
+      this.angForm.controls.epProd.setValue(this.producto.nombre);
+      this.angForm.controls.ecEstado.setValue(cam.estado);
+      this.campana = cam;
+      this.panelActualizaCampanas = true;
+    }else{
+      this.mostrarNotificacion('Acceso denegado', 'No tiene permiso para esta función', 'danger');
+    }
   } 
 
   updateCampana(){
@@ -356,6 +369,33 @@ export class CampanasComponent implements OnInit {
     cam.estado = this.angForm.controls.ecEstado.value;
     this.actualizarCampana(cam);
     this.panelActualizaCampanas = false;
+  }
+
+  permisosRoles() {
+    this.rolesServices.consultarPermisosRol('1', '1', this.auth.getLoggedName()).subscribe(
+      value => setTimeout(() => {
+        var roles = value.datosBasicos;
+        this.listaRoles = roles;
+        console.log("permisos "+ this.listaRoles);
+      }, 200),
+      error => {
+      },
+      () => console.log('done')
+    );
+    //return false;
+  }
+
+  validarPermisos(id:number ):boolean {
+    let per: number;
+        for (let index = 0; index < this.listaRoles.length; index++) {
+          per = this.listaRoles[index].idrol;
+          console.log("permisos " + per);
+          if(per == id){
+            console.log('son iguales ');
+            return true;
+          }
+        }
+        return false;
   }
 }
 

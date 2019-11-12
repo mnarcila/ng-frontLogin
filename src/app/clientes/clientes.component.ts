@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } 
 import { ClienteRsType, Cliente, ClienteService, ClientesRsType, Direccion } from "../_restClientes";
 import { Router, ActivatedRoute } from '@angular/router';
 import { Listas, tipoIdentificacion, ListaPaises } from '../Paramentricos/Listas';
+import { RolesService, Roles } from 'app/_restRoles';
 
 export interface Estados {
   value: string;
@@ -51,6 +52,7 @@ export class ClientesComponent implements OnInit {
   crearDireccion = false;
   idCliente: number;
   userCliente: string;
+  listaRoles: Roles[];
 
   
   constructor(
@@ -59,6 +61,7 @@ export class ClientesComponent implements OnInit {
     private clienteApi: ClienteService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
+    private rolesServices: RolesService,
   ) { }
 
   createForm() {
@@ -118,7 +121,7 @@ export class ClientesComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.permisosRoles();
     if (this.auth.isLoggedIn == false) {
       this.sendLogin();
     }
@@ -134,10 +137,14 @@ export class ClientesComponent implements OnInit {
 
 
   renderCrearDiv(): void {
-    this.renderCrear = true;
-    this.renderConsulta = false;
-    this.renderEditar = false;
-    this.panelBuscarDireccion = false;
+    if(this.validarPermisos(7)){
+      this.renderCrear = true;
+      this.renderConsulta = false;
+      this.renderEditar = false;
+      this.panelBuscarDireccion = false;
+    }else{
+      this.mostrarNotificacion('Acceso denegado', 'No tiene permiso para esta función', 'danger');
+    }
   }
 
   consultarCategoria(idCategoria: number): String {
@@ -216,42 +223,46 @@ export class ClientesComponent implements OnInit {
   }
 
   onClick(): void {
-    this.renderConsulta = false;
-    this.renderCrear = false;
-    this.renderEditar = false;
-    this.clienteTabla = [];
-    this.panelBuscarDireccion = false;
+    if(this.validarPermisos(6) || this.validarPermisos(7)){
+      this.renderConsulta = false;
+      this.renderCrear = false;
+      this.renderEditar = false;
+      this.clienteTabla = [];
+      this.panelBuscarDireccion = false;
 
-    console.log(this.angForm.controls.bsc_cliente.value);
-    var itemBusqueda = this.angForm.controls.bsc_cliente.value;
-    var tipoBusqueda = this.angForm.controls.busquedaC.value;
-    this.idCliente = this.angForm.controls.bsc_cliente.value;
+      console.log(this.angForm.controls.bsc_cliente.value);
+      var itemBusqueda = this.angForm.controls.bsc_cliente.value;
+      var tipoBusqueda = this.angForm.controls.busquedaC.value;
+      this.idCliente = this.angForm.controls.bsc_cliente.value;
 
-    if (itemBusqueda != '' && itemBusqueda != null) {
+      if (itemBusqueda != '' && itemBusqueda != null) {
 
-      if (tipoBusqueda == 1) {
-        this.consultarPorId(itemBusqueda);
-      } else if (tipoBusqueda == 2) {
-        this.clienteTabla = [];
-        this.clienteApi.consultarClientePorIdentificacion('1', '1', 'CC', itemBusqueda).subscribe(
-          value => setTimeout(() => {
-            console.log(value);
-            this.procesarResponseRsType(value);
-            if (value.cliente != null && value.cliente != undefined) {
-              this.renderConsulta = true;
-              this.userCliente = value.cliente.usuario;
-            }
-          }, 200),
-          error => {
-            this.mostrarNotificacion('consultarPorId ', 'se presento un error, por favor notifique al administrador', 'danger');
-            console.error(JSON.stringify(error))
-          },
-          () => console.log('done')
-        );
+        if (tipoBusqueda == 1) {
+          this.consultarPorId(itemBusqueda);
+        } else if (tipoBusqueda == 2) {
+          this.clienteTabla = [];
+          this.clienteApi.consultarClientePorIdentificacion('1', '1', 'CC', itemBusqueda).subscribe(
+            value => setTimeout(() => {
+              console.log(value);
+              this.procesarResponseRsType(value);
+              if (value.cliente != null && value.cliente != undefined) {
+                this.renderConsulta = true;
+                this.userCliente = value.cliente.usuario;
+              }
+            }, 200),
+            error => {
+              this.mostrarNotificacion('consultarPorId ', 'se presento un error, por favor notifique al administrador', 'danger');
+              console.error(JSON.stringify(error))
+            },
+            () => console.log('done')
+          );
+        }
+
+      } else {
+        this.mostrarNotificacion('consulta', 'Ingrese un concepto de busqueda', 'warning');
       }
-
-    } else {
-      this.mostrarNotificacion('consulta', 'Ingrese un concepto de busqueda', 'warning');
+    }else{
+      this.mostrarNotificacion('Acceso denegado', 'No tiene permiso para esta función', 'danger');
     }
 
   }
@@ -292,42 +303,46 @@ export class ClientesComponent implements OnInit {
   }
 
   direccion(cliente: string){
-    this.panelBuscarDireccion = true;
-    this.direcciones = [];
-    this.clienteApi.direccionesCliente('1', '1', cliente).subscribe(
-      value => setTimeout(() => {
-        const prd = value;
-        //console.log(value);
-        this.direcciones = value.direcciones;
-      }, 200),
-      error => {
-        this.mostrarNotificacion('Consulta Dirección', 'Se presento un error, por favor notifique al administrador', 'danger');
-        console.error(JSON.stringify(error))
-      },
-      () => console.log('done')
-    );
+    if(this.validarPermisos(7)){
+      this.panelBuscarDireccion = true;
+      this.direcciones = [];
+      this.clienteApi.direccionesCliente('1', '1', cliente).subscribe(
+        value => setTimeout(() => {
+          const prd = value;
+          //console.log(value);
+          this.direcciones = value.direcciones;
+        }, 200),
+        error => {
+          this.mostrarNotificacion('Consulta Dirección', 'Se presento un error, por favor notifique al administrador', 'danger');
+          console.error(JSON.stringify(error))
+        },
+        () => console.log('done')
+      );
+    }else{
+      this.mostrarNotificacion('Acceso denegado', 'No tiene permiso para esta función', 'danger');
+    }
   }
 
 
   editar(cliente: Cliente): void {
-
-
-    this.angForm.controls.eclienteId.setValue(cliente.idCliente);
-    this.angForm.controls.eiusuario.setValue(cliente.usuario);
-    this.angForm.controls.eipassword.setValue(cliente.password);
-    this.angForm.controls.einombre.setValue(cliente.nombre);
-    this.angForm.controls.eiapellido.setValue(cliente.apellido);
-    this.angForm.controls.eitelefono.setValue(cliente.telefono);
-    this.angForm.controls.eiemail.setValue(cliente.email);
-
-    this.angForm.controls.ecateProduct.setValue(cliente.idCategoria);
-    this.angForm.controls.eestadoProduct.setValue(cliente.estado);
-
-    this.renderCrear = false;
-    this.renderConsulta = false;
-    this.renderEditar = true;
-    this.panelBuscarDireccion = false;
-    this.crearDireccion = false;
+    if(this.validarPermisos(7)){
+      this.angForm.controls.eclienteId.setValue(cliente.idCliente);
+      this.angForm.controls.eiusuario.setValue(cliente.usuario);
+      this.angForm.controls.eipassword.setValue(cliente.password);
+      this.angForm.controls.einombre.setValue(cliente.nombre);
+      this.angForm.controls.eiapellido.setValue(cliente.apellido);
+      this.angForm.controls.eitelefono.setValue(cliente.telefono);
+      this.angForm.controls.eiemail.setValue(cliente.email);
+      this.angForm.controls.ecateProduct.setValue(cliente.idCategoria);
+      this.angForm.controls.eestadoProduct.setValue(cliente.estado);
+      this.renderCrear = false;
+      this.renderConsulta = false;
+      this.renderEditar = true;
+      this.panelBuscarDireccion = false;
+      this.crearDireccion = false;
+    }else{
+      this.mostrarNotificacion('Acceso denegado', 'No tiene permiso para esta función', 'danger');
+    }
   }
 
 
@@ -387,6 +402,33 @@ export class ClientesComponent implements OnInit {
       },
       () => console.log('done')
     );
+  }
+
+  permisosRoles() {
+    this.rolesServices.consultarPermisosRol('1', '1', this.auth.getLoggedName()).subscribe(
+      value => setTimeout(() => {
+        var roles = value.datosBasicos;
+        this.listaRoles = roles;
+        console.log("permisos "+ this.listaRoles);
+      }, 200),
+      error => {
+      },
+      () => console.log('done')
+    );
+    //return false;
+  }
+
+  validarPermisos(id:number ):boolean {
+    let per: number;
+        for (let index = 0; index < this.listaRoles.length; index++) {
+          per = this.listaRoles[index].idrol;
+          console.log("permisos " + per);
+          if(per == id){
+            console.log('son iguales ');
+            return true;
+          }
+        }
+        return false;
   }
 
 }
