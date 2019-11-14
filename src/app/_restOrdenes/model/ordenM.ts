@@ -26,4 +26,8 @@ export interface OrdenM {
     estado?: number;
     comentario?: string;
     origen?: string;
+    nomdespachador?: string;
+    nomproveedor?: string;
+    nomcliente?: string;
+    direccion?: string;
 }

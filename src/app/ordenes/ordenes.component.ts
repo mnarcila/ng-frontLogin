@@ -241,7 +241,7 @@ export class OrdenesComponent implements OnInit {
   }
 
   consultaGenerica(): void {
-    
+    this.panelDetOrden = false;
     this.listOrdenes = [];
     this.consultaTip =  this.angForm.controls.tipoConsulta.value;
     if (this.consultaTip != '' && this.consultaTip != null && this.consultaTip != '' && this.consultaTip != null) {
@@ -316,8 +316,8 @@ export class OrdenesComponent implements OnInit {
       this.panelDetOrden = false;
       this.tablaOrdenes = false;
       this.angForm.controls.eIdOrden.setValue(orden.idOrden);
-      this.angForm.controls.eCliente.setValue(orden.idCliente);
-      this.angForm.controls.eDireccion.setValue(orden.idDireccion);
+      this.angForm.controls.eCliente.setValue(orden.nomcliente);
+      this.angForm.controls.eDireccion.setValue(orden.direccion);
       this.angForm.controls.eValTotal.setValue(orden.valorTotal);
       this.angForm.controls.eCantidad.setValue(orden.cantidadProductos);
       this.angForm.controls.eFechaSol.setValue(orden.fechaSolicitud);
@@ -376,6 +376,7 @@ export class OrdenesComponent implements OnInit {
         this.panelBuscarCliente = false;
         this.userCliente = value.cliente.usuario;
         this.idCliente = value.cliente.idCliente;
+        console.log("cliente " + this.idCliente);
       }, 200),
       error => {
         this.mostrarNotificacion('Consulta Cliente', 'Se presento un error, por favor notifique al administrador', 'danger');
@@ -409,11 +410,12 @@ export class OrdenesComponent implements OnInit {
     this.idDireccion = dir.iddireccion;
     this.textDireccion = dir.direccion;
     this.panelBuscarDireccion = false;
-    console.log('direccion '+dir.iddireccion);
+    console.log("direccion "+this.idDireccion);
   }
 
   
   crearOrden(): void {
+    console.log("cliente "+this.idCliente+" direccion "+this.idDireccion);
     let orden: OrdenM = {};
     let today = new Date();
     let dd = String(today.getDate());
@@ -428,13 +430,12 @@ export class OrdenesComponent implements OnInit {
     orden.origen = "OMS";
     orden.comentario = "Comentario Generico";
     orden.estado = 1;
-    console.log(orden);
+    this.listOrdenes = [];
     this.ordenesApi.registrarOrden('1', '1', orden).subscribe(
       value => setTimeout(() => {
         const prd = value;
-        //this.consultaEspecifica(value.productos[0].idProducto);
-        console.log(value);
-        this.procesarResponse(value);
+        //this.procesarResponse(value);
+        this.colsultarOrdenXid(value.datosBasicos.ordenes[0].idOrden);
         this.mostrarNotificacion('Creación de Orden', 'Se ha creado la orden correctamente', 'success');
       }, 200),
       error => {
@@ -444,11 +445,10 @@ export class OrdenesComponent implements OnInit {
       () => console.log('done')
     );
     this.tablaOrdenes=true;
-    
+    this.panelCrear = false;
   }
 
   mostrarPanelCrearDetalle():void{
-    console.log("ya entre");
     if(this.validarPermisos(5)){
       this.PanelCrearDetalle = true;
       this.panelDetOrden = false;
@@ -469,7 +469,6 @@ export class OrdenesComponent implements OnInit {
   }
 
   buscarProducto():void{
-    console.log("entre a busqueda producto "+this.angForm.controls.pNombre.value);
     this.productoApi.conultarProductoPorNombre('1', '1', this.angForm.controls.pNombre.value).subscribe(
       value => setTimeout(() => {
         const prd = value;
@@ -507,8 +506,10 @@ export class OrdenesComponent implements OnInit {
     this.detalleApi.registrarDetalleOrden('1', '1', detalle).subscribe(
     value => setTimeout(() => {
       //const prd = value;
-      console.log(value);
+      //console.log(value);
       this.panelDetOrden = false;
+      this.PanelCrearDetalle = false;
+      this.mostrarNotificacion('Creación del detalle', 'Se ha creado exitosamente', 'success');
     }, 200),
     error => {
       this.mostrarNotificacion('Creación del detalle', 'Se presento un error, por favor notifique al administrador', 'danger');
@@ -544,7 +545,7 @@ export class OrdenesComponent implements OnInit {
       value => setTimeout(() => {
         var roles = value.datosBasicos;
         this.listaRoles = roles;
-        console.log("permisos "+ this.listaRoles);
+        //console.log("permisos "+ this.listaRoles);
       }, 200),
       error => {
       },
@@ -557,12 +558,34 @@ export class OrdenesComponent implements OnInit {
     let per: number;
         for (let index = 0; index < this.listaRoles.length; index++) {
           per = this.listaRoles[index].idrol;
-          console.log("permisos " + per);
+          //console.log("permisos " + per);
           if(per == id){
-            console.log('son iguales ');
+            //console.log('son iguales ');
             return true;
           }
         }
         return false;
+  }
+
+  mapearEstados(est: number): string{
+    console.log("estado ");
+    switch (est) {
+      case 1:
+          return "Creada";
+      case 2:
+        return "Por Validar";
+      case 3:
+        return "Aprobada";
+      case 4:
+        return "Procesada";
+      case 5:
+        return  "Entregada";
+      case 6:
+        return "Cancelada";
+      case 7:
+        return "Rechazada";
+      default:
+        return "Sin estado";
+    }
   }
 }

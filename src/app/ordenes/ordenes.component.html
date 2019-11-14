@@ -91,20 +91,24 @@
                                         <th>Fecha Aprobación</th>
                                         <th>Fecha Cierre</th>
                                         <th>Estado</th>
+                                        <th>Proveedor</th>
+                                        <th>Mensajeria</th>
                                         <th>Ver Detalle</th>
                                         <th>Editar Orden</th>
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let ord of listOrdenes">
                                             <td>{{ord.idOrden}}</td>
-                                            <td>{{ord.idCliente}}</td>
-                                            <td>{{ord.idDireccion}}</td>
+                                            <td>{{ord.nomcliente}}</td>
+                                            <td>{{ord.direccion}}</td>
                                             <td>{{ord.valorTotal}}</td>
                                             <td>{{ord.cantidadProductos}}</td>
                                             <td>{{ord.fechaSolicitud}}</td>
                                             <td>{{ord.fechaAprobacion}}</td>
                                             <td>{{ord.fechaCierre}}</td>
-                                            <td>{{ord.estado}}</td>
+                                            <td>{{mapearEstados(ord.estado)}}</td>
+                                            <td>{{ord.nomproveedor}}</td>
+                                            <td>{{ord.nomdespachador}}</td>
                                             <td><i class="material-icons" style="cursor: pointer;"
                                                     (click)="$event.stopPropagation();verDetalle(ord)">done</i>
                                             <td><i class="material-icons" style="cursor: pointer;"
@@ -209,7 +213,7 @@
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let det of listaDetalle">
-                                            <td>{{det.idProducto}}</td>
+                                            <td>{{det.nomproducto}}</td>
                                             <td>{{det.cantidad}}</td>
                                             <td>{{det.valorUnidad}}</td>
                                             <td>{{det.idProveedor}}</td>

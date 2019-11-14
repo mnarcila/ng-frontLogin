@@ -22,4 +22,5 @@ export interface DetalleOrden {
     valorUnidad?: number;
     idProveedor?: number;
     estado?: string;
+    nomproducto?: string;
 }
