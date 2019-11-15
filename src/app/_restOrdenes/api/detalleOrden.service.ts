@@ -29,6 +29,7 @@ import { DetalleOrden } from '../model/detalleOrden';
 export class DetalleOrdenService {
 
     protected basePath = 'http://10.39.1.149:8096/OMS/Ordenes/v1';
+    //protected basePath = 'http://localhost:8096/OMS/Ordenes/v1';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
