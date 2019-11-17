@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material';
 import { AuthService } from 'app/auth.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ReporteService, OrdenRsType, ProductoRsType, CategoriaRsType, Orden2RsType } from 'app/_restReportes';
+import { ReporteService, OrdenRsType, ProductoRsType, CategoriaRsType, Orden2RsType, Orden3RsType, ClienteRsType } from 'app/_restReportes';
 
 declare var $: any;
 
@@ -29,6 +29,9 @@ export class ReportesComponent implements OnInit {
   panelTablaCategorias:boolean = false ;
   tablaCategorias: CategoriaRsType;
   tablaOrdAbiertas: Orden2RsType;
+  tablaOrdCerDinero: Orden3RsType;
+  panelTablaClienteFac: boolean = false;
+  tablaClientesFac: ClienteRsType;
   
   constructor(
     public dialog: MatDialog,
@@ -83,6 +86,7 @@ export class ReportesComponent implements OnInit {
     this.panelMasVendidos = false;
     this.panelTablaOrdenesCerradas = false;
     this.panelCategoriasMasVendidos = false;
+    this.panelOrdenesAbiertas = false;
   }
 
   mostrarPanelMasVendidos(){
@@ -90,12 +94,22 @@ export class ReportesComponent implements OnInit {
     this.panelMasVendidos = true;
     this.panelTablaOrdenesCerradas = false;
     this.panelCategoriasMasVendidos = false;
+    this.panelOrdenesAbiertas = false;
   }
 
   mostrarPanelCategorias(){
     this.panelOrdenesCerradas = false;
     this.panelMasVendidos = false;
     this.panelCategoriasMasVendidos = true;
+    this.panelOrdenesAbiertas = false;
+  }
+
+  mostrarPanelClientesFacturados(){
+    this.panelOrdenesCerradas = false;
+    this.panelMasVendidos = false;
+    this.panelCategoriasMasVendidos = true;
+    this.panelOrdenesAbiertas = false;
+    this.panelClientesFacturados = true;
   }
 
   mostrarPanelOrdAbiertas(){
@@ -108,6 +122,26 @@ export class ReportesComponent implements OnInit {
     this.reportesapi.ordenesAbiertas('1', '1').subscribe(
       value2 => setTimeout(() => {
        this.tablaOrdAbiertas = value2.ordenes;
+      }, 200),
+      error => {
+        this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
+        console.error(JSON.stringify(error))
+      },
+      () => console.log('done')
+    );
+  }
+
+  mostrarPanelOrdCerrDinero(){
+    this.panelOrdenesCerradas = false;
+    this.panelMasVendidos = false;
+    this.panelCategoriasMasVendidos = false;
+    this.panelOrdenesAbiertas = false;
+    this.panelOrdDinero = true;
+
+    this.tablaOrdCerDinero = {};
+    this.reportesapi.ordenesCerradas('1', '1').subscribe(
+      value2 => setTimeout(() => {
+       this.tablaOrdCerDinero = value2.ordenes;
       }, 200),
       error => {
         this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
@@ -171,4 +205,22 @@ export class ReportesComponent implements OnInit {
       () => console.log('done')
     );
   }
+
+  buscarClientesFacturados(){
+    this.panelTablaClienteFac = true;
+    let fechaInicio = this.angForm.controls.fechaInicioOC;
+    let fechaFin = this.angForm.controls.fechaFinOC;
+    this.tablaClientesFac = {};
+    this.reportesapi.clientesFacturados('1', '1',fechaInicio.value,fechaFin.value).subscribe(
+      value2 => setTimeout(() => {
+       this.tablaClientesFac = value2.clientes;
+      }, 200),
+      error => {
+        this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
+        console.error(JSON.stringify(error))
+      },
+      () => console.log('done')
+    );
+  }
+  
 }
