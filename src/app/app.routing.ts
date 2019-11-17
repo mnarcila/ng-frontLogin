@@ -17,6 +17,7 @@ import { OrdenesComponent } from './ordenes/ordenes.component';
 import {ClientesComponent} from './clientes/clientes.component';
 import {UsuarioComponent} from './usuario/usuario.component';
 import {CampanasComponent} from './campanas/campanas.component';
+import { ReportesComponent } from './reportes/reportes.component';
 const menuRoutes: Routes = [
 
   { path: 'dashboard', component: DashboardComponent },
@@ -28,6 +29,7 @@ const menuRoutes: Routes = [
   { path: 'maps', component: MapsComponent },
   { path: 'notifications', component: NotificationsComponent },
   { path: 'ordenes', component: OrdenesComponent},
+  { path: 'reportes', component: ReportesComponent}
 ];
 const childrenRoutes: Routes = [
   { path: 'home', component: AdminLayoutComponent, children: menuRoutes },
@@ -48,7 +50,7 @@ const routes: Routes = [
   { path: 'typography', component: TypographyComponent },
   { path: 'campanas', component: CampanasComponent },
   { path: 'maps', component: MapsComponent },
-  { path: 'notifications', component: NotificationsComponent },
+  { path: 'reportes', component: ReportesComponent },
 
 ];
 

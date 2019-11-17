@@ -1,0 +1,172 @@
+<div class="main-content">
+  <form [formGroup]="angForm">
+    <div class="container-fluid">
+      <div class="card">
+        <div class="card-header card-header">
+          <h4 class="card-title">REPORTES</h4>
+          <p class="card-category"></p>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <button mat-raised-button class="btn btn-rose pull" (click)="mostrarPanelOrdenesCerradas()">
+              Ordenes Cerradas
+            </button>
+            <button mat-raised-button class="btn btn-rose pull" (click)="mostrarPanelMasVendidos()">
+              Productos mas Vendidos
+            </button>
+            <button mat-raised-button class="btn btn-rose pull" (click)="mostrarPanelCategorias()">
+              Categorías mas Vendidas
+            </button>
+            <button mat-raised-button class="btn btn-rose pull" (click) = "mostrarPanelOrdAbiertas()">
+              Ordenes Abiertas
+            </button>
+            <button mat-raised-button class="btn btn-rose pull ">
+
+              Ordenes Cerradas Con Dinero
+            </button>
+            <button mat-raised-button class="btn btn-rose pull ">
+
+              Clientes Facturados
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header card-header-rose">
+          <h4 class="card-title ">FILTRO</h4>
+          <p class="card-category">Diligencie la siguiente información</p>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Fecha de Inicio" formControlName="fechaInicioOC" type="date" required>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Fecha de Fin" formControlName="fechaFinOC" type="date" required>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4" *ngIf="panelOrdenesCerradas">
+            <button class="btn btn-danger pull-left" (click)="buscarOrdenesCerradas()">Ordenes Cerradas</button>
+          </div>
+          <div class="col-md-4" *ngIf="panelMasVendidos">
+            <button class="btn btn-danger pull-left" (click)="buscarProductosMasVendidos()">Productos Mas
+              Vendidos</button>
+          </div>
+          <div class="col-md-4" *ngIf="panelCategoriasMasVendidos">
+            <button class="btn btn-danger pull-left" (click)="buscarCategorias()">Categorías Mas Vendidas</button>
+          </div>
+          <div class="col-md-4" *ngIf="panelClientesFacturados">
+            <button class="btn btn-danger pull-left">Clientes Facturados</button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div *ngIf="panelTablaOrdenesCerradas" class="row">
+          <strong *ngIf="tablaOrdenesCerradas.length == 0">Sin datos..</strong>
+          <div *ngIf="tablaOrdenesCerradas.length > 0" class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead class=" text-primary">
+                  <th>Cantidad Ordenes</th>
+                  <th>Valor Total</th>
+                  <th>Mes</th>
+                  <th>Año</th>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let ord of tablaOrdenesCerradas">
+                    <td>{{ord.cantidad}}</td>
+                    <td>{{ord.total}}</td>
+                    <td>{{ord.mesCierre}}</td>
+                    <td>{{ord.anioCierre}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div *ngIf="panelTablaMasVendidos" class="row">
+          <strong *ngIf="tablaProductosMasVendidos.length == 0">Sin datos..</strong>
+          <div *ngIf="tablaProductosMasVendidos.length > 0" class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead class=" text-primary">
+                  <th>ID Producto</th>
+                  <th>Prodcuto</th>
+                  <th>Cantidad</th>
+                  <th>Mes</th>
+                  <th>Año</th>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let ord of tablaProductosMasVendidos">
+                    <td>{{ord.idProducto}}</td>
+                    <td>{{ord.producto}}</td>
+                    <td>{{ord.cantidad}}</td>
+                    <td>{{ord.mes}}</td>
+                    <td>{{ord.anio}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div *ngIf="panelTablaCategorias" class="row">
+          <strong *ngIf="tablaCategorias.length == 0">Sin datos..</strong>
+          <div *ngIf="tablaCategorias.length > 0" class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead class=" text-primary">
+                  <th>ID Categoria</th>
+                  <th>Categoría</th>
+                  <th>Cantidad</th>
+                  <th>Mes</th>
+                  <th>Año</th>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let ord of tablaCategorias">
+                    <td>{{ord.idCategoria}}</td>
+                    <td>{{ord.categoria}}</td>
+                    <td>{{ord.cantidad}}</td>
+                    <td>{{ord.mes}}</td>
+                    <td>{{ord.anio}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+          <div *ngIf="panelOrdenesAbiertas" class="row">
+            <strong *ngIf="tablaOrdAbiertas.length == 0">Sin datos..</strong>
+            <div *ngIf="tablaOrdAbiertas.length > 0" class="card-body">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead class=" text-primary">
+                    <th>ID Orden</th>
+                    <th>días</th>
+                    <th>fecha Solicitud</th>
+                    <th>Estado</th>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let ord of tablaCategorias">
+                      <td>{{ord.idOrden}}</td>
+                      <td>{{ord.dias}}</td>
+                      <td>{{ord.cantidad}}</td>
+                      <td>{{ord.fechaSolicitud}}</td>
+                      <td>{{ord.estado}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </form>
+</div>

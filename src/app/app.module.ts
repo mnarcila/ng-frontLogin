@@ -27,6 +27,7 @@ import { Cliente, ClienteService, ClientesRsType } from './_restClientes';
 import { ReqCategoria, CategoriaService, CategoriaRsType } from './_restCategoria';
 import { BrowserModule } from '@angular/platform-browser';
 import { RolesService} from './_restRoles';
+import {ReporteService } from './_restReportes';
 //componentes de seguridad 
 import { AuthService } from './auth.service'
 //componentes visuales
@@ -51,6 +52,7 @@ import { CampanasComponent } from './campanas/campanas.component';
 import { ClientesComponent } from './clientes/clientes.component';
 import { UsuarioComponent } from './usuario/usuario.component';
 import { CampanaService } from './_restCampanas';
+import { ReportesComponent } from './reportes/reportes.component';
 
 
 @NgModule({
@@ -93,6 +95,7 @@ import { CampanaService } from './_restCampanas';
     ClientesComponent,
     UsuarioComponent,
     CampanasComponent,
+    ReportesComponent,
   ],
   providers: [
     AuthService,
@@ -109,6 +112,7 @@ import { CampanaService } from './_restCampanas';
     ClienteService,
     CampanaService,
     RolesService,
+    ReporteService,
   ],
   entryComponents: [DialogOverviewExampleDialog],
   bootstrap: [AppComponent]
