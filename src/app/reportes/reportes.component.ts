@@ -4,6 +4,7 @@ import { AuthService } from 'app/auth.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReporteService, OrdenRsType, ProductoRsType, CategoriaRsType, Orden2RsType, Orden3RsType, ClienteRsType } from 'app/_restReportes';
+import { formatDate } from "@angular/common";
 
 declare var $: any;
 
@@ -152,12 +153,14 @@ export class ReportesComponent implements OnInit {
   }
 
   buscarOrdenesCerradas(){
-    let fechaInicio = this.angForm.controls.fechaInicioOC;
-    let fechaFin = this.angForm.controls.fechaFinOC;
+    let fechaInicio = formatDate(this.angForm.controls.fechaInicioOC.value,'dd/MM/yyyy','en');
+    let fechaFin = formatDate(this.angForm.controls.fechaFinOC.value,'dd/MM/yyyy','en');
     this.panelTablaOrdenesCerradas = true;
+    console.log(fechaInicio);
+    console.log(fechaFin);
     this.tablaOrdenesCerradas = {};
-    if(fechaInicio == null || fechaFin == null){
-    this.reportesapi.noOrdenes('1', '1', fechaInicio.value, fechaFin.value).subscribe(
+    if((fechaInicio != null && fechaFin != null)||(fechaInicio != '' && fechaFin != '')){
+    this.reportesapi.noOrdenes('1', '1', '01/05/2019', '01/06/2019').subscribe(
       value2 => setTimeout(() => {
        this.tablaOrdenesCerradas = value2.ordenes;
       }, 200),

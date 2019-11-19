@@ -32,7 +32,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class ReporteService {
 
-    protected basePath = 'http://localhost/OMS/Reportes/v1';
+    protected basePath = 'http://10.39.1.149:9010/OMS/Reportes/v1';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

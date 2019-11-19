@@ -7,6 +7,7 @@ import { Listas, Estados, tipoIdentificacion, ListaProveedores } from '../Parame
 import { ClienteService, Direccion} from '../_restClientes';
 import { ProductoService, Producto } from '../_restProducto';
 import { RolesService, Roles } from 'app/_restRoles';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 declare var $: any;
@@ -55,6 +56,7 @@ export class OrdenesComponent implements OnInit {
     private clienteApi: ClienteService,
     private productoApi: ProductoService,
     private rolesServices: RolesService,
+    public spinner: NgxSpinnerService,
   ) { }
 
 
@@ -172,18 +174,24 @@ export class OrdenesComponent implements OnInit {
    * @param ordenId id de la orden a consultar
    */
   colsultarOrdenXid(id: number): void {
-      this.tablaOrdenes = true;
-      this.ordenesApi.conultarOrdenPorId('1', '1', id).subscribe(
-        value => setTimeout(() => {
-          const prd = value;
-          this.procesarResponse(value);
-        }, 200),
-        error => {
-          this.mostrarNotificacion('Consulta de Ordenes', 'se presento un error, por favor notifique al administrador', 'danger');
-          console.error(JSON.stringify(error))
-        },
-        () => console.log('done')
-      );
+      if(id != null ){
+        this.spinner.show();
+        this.tablaOrdenes = true;
+        this.ordenesApi.conultarOrdenPorId('1', '1', id).subscribe(
+          value => setTimeout(() => {
+            const prd = value;
+            this.procesarResponse(value);
+          }, 200),
+          error => {
+            this.mostrarNotificacion('Consulta de Ordenes', 'se presento un error, por favor notifique al administrador', 'danger');
+            console.error(JSON.stringify(error))
+          },
+          () => console.log('done')
+          );
+          this.spinner.hide();
+      }else{
+        this.mostrarNotificacion('Error de datos','Por favor verifique los datos ingresados','danger');
+      }
   }
 
   colsultarOrdenEstado(idEstado: number): void {
@@ -204,7 +212,7 @@ export class OrdenesComponent implements OnInit {
 
   colsultarOrdenXCliente(cliente: string ): void {
     this.listOrdenes = [];
-    if (cliente != '' && cliente != null) {
+    if (cliente != '' || cliente != null) {
       this.tablaOrdenes = true;
       this.ordenesApi.conultarOrdenPorCliente('1', '1', cliente).subscribe(
         value => setTimeout(() => {
@@ -217,6 +225,8 @@ export class OrdenesComponent implements OnInit {
         },
         () => console.log('done')
       );
+    }else{
+      this.mostrarNotificacion('Error de datos','Por favor verifique los datos ingresados','danger');
     }
   }
 
@@ -237,6 +247,8 @@ export class OrdenesComponent implements OnInit {
         },
         () => console.log('done')
       );
+    }else{
+      this.mostrarNotificacion('Error de datos','Por favor verifique los datos ingresados','danger');
     }
   }
 
@@ -244,7 +256,8 @@ export class OrdenesComponent implements OnInit {
     this.panelDetOrden = false;
     this.listOrdenes = [];
     this.consultaTip =  this.angForm.controls.tipoConsulta.value;
-    if (this.consultaTip != '' && this.consultaTip != null && this.consultaTip != '' && this.consultaTip != null) {
+    let parametro = this.angForm.controls.paramConsulta.value;
+    if (this.consultaTip != '' && this.consultaTip != null && parametro != '' && parametro != null) {
       //console.log('valor:' + this.angForm.controls.paramConsulta.value);
       switch (this.angForm.controls.tipoConsulta.value) {
         case '1': {
@@ -276,6 +289,8 @@ export class OrdenesComponent implements OnInit {
           break;
         }
       }
+    }else{
+      this.mostrarNotificacion('Error de datos','Por favor verifique los datos ingresados','danger');
     }
 
   }
@@ -368,22 +383,26 @@ export class OrdenesComponent implements OnInit {
   ConsultaCliente():void{
     let tipoID = this.angForm.controls.cTipoId.value;
     let identi = this.angForm.controls.cIdentificacion.value;
-    console.log(tipoID+' '+identi);
-    this.clienteApi.consultarClientePorIdentificacion('1', '1', tipoID, identi).subscribe(
-      value => setTimeout(() => {
-        const prd = value;
-        this.nombreCliente = value.cliente.nombre +' '+value.cliente.apellido;
-        this.panelBuscarCliente = false;
-        this.userCliente = value.cliente.usuario;
-        this.idCliente = value.cliente.idCliente;
-        console.log("cliente " + this.idCliente);
-      }, 200),
-      error => {
-        this.mostrarNotificacion('Consulta Cliente', 'Se presento un error, por favor notifique al administrador', 'danger');
-        console.error(JSON.stringify(error))
-      },
-      () => console.log('done')
-    );
+    //console.log(tipoID+' '+identi);
+    if(tipoID != null || tipoID != '' || identi != null || identi != ''){
+      this.clienteApi.consultarClientePorIdentificacion('1', '1', tipoID, identi).subscribe(
+        value => setTimeout(() => {
+          const prd = value;
+          this.nombreCliente = value.cliente.nombre +' '+value.cliente.apellido;
+          this.panelBuscarCliente = false;
+          this.userCliente = value.cliente.usuario;
+          this.idCliente = value.cliente.idCliente;
+          console.log("cliente " + this.idCliente);
+        }, 200),
+        error => {
+          this.mostrarNotificacion('Consulta Cliente', 'Se presento un error, por favor notifique al administrador', 'danger');
+          console.error(JSON.stringify(error))
+        },
+        () => console.log('done')
+      );
+    }else{
+      this.mostrarNotificacion('Error de datos','Por favor verifique los datos ingresados','danger');
+    }
   }
 
   mostrarPanelDireccion():void{
@@ -392,60 +411,68 @@ export class OrdenesComponent implements OnInit {
   }
 
   consultaDireccion():void{
-    this.clienteApi.direccionesCliente('1', '1', this.userCliente).subscribe(
-      value => setTimeout(() => {
-        const prd = value;
-        //console.log(value);
-        this.direcciones = value.direcciones;
-      }, 200),
-      error => {
-        this.mostrarNotificacion('Consulta Dirección', 'Se presento un error, por favor notifique al administrador', 'danger');
-        console.error(JSON.stringify(error))
-      },
-      () => console.log('done')
-    );
+    if(this.userCliente != null || this.userCliente != ''){
+      this.clienteApi.direccionesCliente('1', '1', this.userCliente).subscribe(
+        value => setTimeout(() => {
+          const prd = value;
+          //console.log(value);
+          this.direcciones = value.direcciones;
+        }, 200),
+        error => {
+          this.mostrarNotificacion('Consulta Dirección', 'Se presento un error, por favor notifique al administrador', 'danger');
+          console.error(JSON.stringify(error))
+        },
+        () => console.log('done')
+      );
+    }else{
+      this.mostrarNotificacion('Error de datos','Por favor verifique los datos ingresados','danger');
+    }
   }
 
   verDireccion(dir:Direccion):void{
     this.idDireccion = dir.iddireccion;
     this.textDireccion = dir.direccion;
     this.panelBuscarDireccion = false;
-    console.log("direccion "+this.idDireccion);
+    //console.log("direccion "+this.idDireccion);
   }
 
   
   crearOrden(): void {
-    console.log("cliente "+this.idCliente+" direccion "+this.idDireccion);
-    let orden: OrdenM = {};
-    let today = new Date();
-    let dd = String(today.getDate());
-    let mm = String(today.getMonth() + 1); 
-    let yyyy = today.getFullYear();
-    let fecha = dd + '/' + mm + '/' + yyyy;
-    orden.idCliente = this.idCliente;
-    orden.idDireccion = this.idDireccion;
-    orden.valorTotal = 0;
-    orden.cantidadProductos = 0;
-    orden.fechaSolicitud = fecha;
-    orden.origen = "OMS";
-    orden.comentario = "Comentario Generico";
-    orden.estado = 1;
-    this.listOrdenes = [];
-    this.ordenesApi.registrarOrden('1', '1', orden).subscribe(
-      value => setTimeout(() => {
-        const prd = value;
-        //this.procesarResponse(value);
-        this.colsultarOrdenXid(value.datosBasicos.ordenes[0].idOrden);
-        this.mostrarNotificacion('Creación de Orden', 'Se ha creado la orden correctamente', 'success');
-      }, 200),
-      error => {
-        this.mostrarNotificacion('Creación de Orden', 'Se presento un error, por favor notifique al administrador', 'danger');
-        console.error(JSON.stringify(error))
-      },
-      () => console.log('done')
-    );
-    this.tablaOrdenes=true;
-    this.panelCrear = false;
+    //console.log("cliente "+this.idCliente+" direccion "+this.idDireccion);
+    if(this.idCliente != null || this.idDireccion != null){
+      let orden: OrdenM = {};
+      let today = new Date();
+      let dd = String(today.getDate());
+      let mm = String(today.getMonth() + 1); 
+      let yyyy = today.getFullYear();
+      let fecha = dd + '/' + mm + '/' + yyyy;
+      orden.idCliente = this.idCliente;
+      orden.idDireccion = this.idDireccion;
+      orden.valorTotal = 0;
+      orden.cantidadProductos = 0;
+      orden.fechaSolicitud = fecha;
+      orden.origen = "OMS";
+      orden.comentario = "Comentario Generico";
+      orden.estado = 1;
+      this.listOrdenes = [];
+      this.ordenesApi.registrarOrden('1', '1', orden).subscribe(
+        value => setTimeout(() => {
+          const prd = value;
+          //this.procesarResponse(value);
+          this.colsultarOrdenXid(value.datosBasicos.ordenes[0].idOrden);
+          this.mostrarNotificacion('Creación de Orden', 'Se ha creado la orden correctamente', 'success');
+        }, 200),
+        error => {
+          this.mostrarNotificacion('Creación de Orden', 'Se presento un error, por favor notifique al administrador', 'danger');
+          console.error(JSON.stringify(error))
+        },
+        () => console.log('done')
+      );
+      this.tablaOrdenes=true;
+      this.panelCrear = false;
+    }else{
+      this.mostrarNotificacion('Error de datos','Por favor verifique los datos ingresados','danger');
+    }
   }
 
   mostrarPanelCrearDetalle():void{
@@ -469,20 +496,25 @@ export class OrdenesComponent implements OnInit {
   }
 
   buscarProducto():void{
-    this.productoApi.conultarProductoPorNombre('1', '1', this.angForm.controls.pNombre.value).subscribe(
-      value => setTimeout(() => {
-        const prd = value;
-        //this.consultaEspecifica(value.productos[0].idProducto);
-        console.log(value);
-        this.panelSeleccionProducto = true;
-        this.tablaProductos = value.productos;
-      }, 200),
-      error => {
-        this.mostrarNotificacion('Busqueda de Producto', 'Se presento un error, por favor notifique al administrador', 'danger');
-        console.error(JSON.stringify(error))
-      },
-      () => console.log('done')
-    );
+    let nombre =  this.angForm.controls.pNombre.value;
+    if(nombre != null || nombre != ''){
+      this.productoApi.conultarProductoPorNombre('1', '1', this.angForm.controls.pNombre.value).subscribe(
+        value => setTimeout(() => {
+          const prd = value;
+          //this.consultaEspecifica(value.productos[0].idProducto);
+          console.log(value);
+          this.panelSeleccionProducto = true;
+          this.tablaProductos = value.productos;
+        }, 200),
+        error => {
+          this.mostrarNotificacion('Busqueda de Producto', 'Se presento un error, por favor notifique al administrador', 'danger');
+          console.error(JSON.stringify(error))
+        },
+        () => console.log('done')
+      );
+    }else{
+      this.mostrarNotificacion('Error de datos','Por favor verifique los datos ingresados','danger');
+    }
   }
 
   seleccionarProducto(productoz: Producto): void{
@@ -495,28 +527,46 @@ export class OrdenesComponent implements OnInit {
   }
 
   crearDetalle(): void{
-    let detalle: DetalleOrden = {};
-    detalle.cantidad = this.angForm.controls.dtCantidad.value;
-    detalle.estado = 'ACTIVA';
-    detalle.idOrden = this.angForm.controls.dtIdOrden.value;
-    detalle.idProducto = this.pIdProducto;
-    detalle.idProveedor = this.angForm.controls.dtProveedor.value;
-    detalle.valorUnidad = this.angForm.controls.pValorUnitario.value;
-    console.log('crear detalle '+ detalle);
-    this.detalleApi.registrarDetalleOrden('1', '1', detalle).subscribe(
-    value => setTimeout(() => {
-      //const prd = value;
-      //console.log(value);
-      this.panelDetOrden = false;
-      this.PanelCrearDetalle = false;
-      this.mostrarNotificacion('Creación del detalle', 'Se ha creado exitosamente', 'success');
-    }, 200),
-    error => {
-      this.mostrarNotificacion('Creación del detalle', 'Se presento un error, por favor notifique al administrador', 'danger');
-      console.error(JSON.stringify(error))
-    },
-    () => console.log('done')
-  );
+    let flag = true;
+    if(this.angForm.controls.dtCantidad.value == null || this.angForm.controls.dtCantidad.value == ''){
+      flag = false;
+    }if(this.angForm.controls.dtIdOrden.value == null || this.angForm.controls.dtIdOrden.value == ''){
+      flag = false;
+    }if(this.angForm.controls.pIdProducto.value == null || this.angForm.controls.pIdProducto.value == ''){
+      flag = false;
+    }if(this.angForm.controls.dtProveedor.value == null || this.angForm.controls.dtProveedor.value == ''){
+      flag = false;
+    }if(this.angForm.controls.pValorUnitario.value == null || this.angForm.controls.pValorUnitario.value == ''){
+      flag = false;
+    }
+
+    if(flag){
+      let detalle: DetalleOrden = {};
+      detalle.cantidad = this.angForm.controls.dtCantidad.value;
+      detalle.estado = 'ACTIVA';
+      detalle.idOrden = this.angForm.controls.dtIdOrden.value;
+      detalle.idProducto = this.pIdProducto;
+      detalle.idProveedor = this.angForm.controls.dtProveedor.value;
+      detalle.valorUnidad = this.angForm.controls.pValorUnitario.value;
+      //console.log('crear detalle '+ detalle);
+      this.detalleApi.registrarDetalleOrden('1', '1', detalle).subscribe(
+      value => setTimeout(() => {
+        //const prd = value;
+        //console.log(value);
+        this.panelDetOrden = false;
+        this.PanelCrearDetalle = false;
+        this.mostrarNotificacion('Creación del detalle', 'Se ha creado exitosamente', 'success');
+          }, 200),
+          error => {
+            this.mostrarNotificacion('Creación del detalle', 'Se presento un error, por favor notifique al administrador', 'danger');
+            console.error(JSON.stringify(error))
+          },
+          () => console.log('done')
+        );
+    }else{
+      this.mostrarNotificacion('Error de datos','Por favor verifique los datos ingresados','danger');
+    }
+    
   }
 
   mostrarNotificacion(pTitulo: String, pTexto: String, pTipo: String) {

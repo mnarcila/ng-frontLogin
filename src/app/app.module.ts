@@ -53,7 +53,7 @@ import { ClientesComponent } from './clientes/clientes.component';
 import { UsuarioComponent } from './usuario/usuario.component';
 import { CampanaService } from './_restCampanas';
 import { ReportesComponent } from './reportes/reportes.component';
-
+import { NgxSpinnerModule } from "ngx-spinner"; 
 
 @NgModule({
   imports: [
@@ -74,6 +74,7 @@ import { ReportesComponent } from './reportes/reportes.component';
     MatSelectModule,
     MatTooltipModule,
     MatDialogModule,
+    NgxSpinnerModule, 
     AgmCoreModule.forRoot({
       apiKey: 'YOUR_GOOGLE_MAPS_API_KEY'
     })
