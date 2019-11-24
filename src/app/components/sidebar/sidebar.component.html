@@ -1,25 +1,23 @@
 <div class="logo">
-   
-        <div class="logo-img">
-            <img src="/assets/img/logokallsony.png"/>           
-        </div>   
+
+    <div class="logo-img">
+        <img src="/assets/img/logokallsony.png" />
+    </div>
 </div>
 <div class="sidebar-wrapper">
-  <div *ngIf="isMobileMenu()">
-    
-    <ul class="nav navbar-nav nav-mobile-menu">
-      
-      
-        <li class="nav-item">
-            <a class="nav-link" href="javascript:void(0)">
-                <i class="material-icons">person</i>
-                <p>
-                    <span class="d-lg-none d-md-block">Account</span>
-                </p>
-            </a>
-        </li>
-    </ul>
-  </div>
+    <div *ngIf="isMobileMenu()">
+
+        <ul class="nav navbar-nav nav-mobile-menu">
+
+
+            <li class="nav-item">
+                <a class="nav-link" href="javascript:void(0)">
+                    <i class="material-icons" matTooltip="Cerrar Sesión" style="cursor: pointer;"
+                        (click)="$event.stopPropagation();cerrarSesion()">close</i>
+                </a>
+            </li>
+        </ul>
+    </div>
     <ul class="nav">
         <li routerLinkActive="active" *ngFor="let menuItem of menuItems" class="{{menuItem.class}} nav-item">
             <a class="nav-link" [routerLink]="[menuItem.path]">

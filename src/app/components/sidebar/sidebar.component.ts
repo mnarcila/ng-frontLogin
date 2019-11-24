@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { RolesService, Roles, RolRsType} from '../../_restRoles';
-import {AuthService} from '../../auth.service';
+import { RolesService, Roles, RolRsType } from '../../_restRoles';
+import { AuthService } from '../../auth.service';
+import { Router } from '@angular/router';
 
 declare const $: any;
 declare interface RouteInfo {
@@ -32,10 +33,20 @@ export class SidebarComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private rolesServices: RolesService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
     this.menuItems = ROUTES.filter(menuItem => menuItem);
+  }
+
+
+  cerrarSesion() {
+    //console.log("hola mundo");
+    this.auth.setLoggedIn(false);
+    this.auth.setLoggedName('')
+    //console.log("mensaje de session:"+this.auth.getLoggedName());
+    this.router.navigate(["login"]);
   }
   isMobileMenu() {
     if ($(window).width() > 991) {
