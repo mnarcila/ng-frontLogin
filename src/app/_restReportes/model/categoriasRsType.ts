@@ -19,4 +19,5 @@ import { StatusType } from './statusType';
 export interface CategoriasRsType { 
     status?: StatusType;
     categorias?: CategoriaRsType;
+    categoria?: CategoriaRsType[];
 }

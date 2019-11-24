@@ -29,7 +29,7 @@
           </div>
         </div>
       </div>
-      <div class="card">
+      <div class="card" *ngIf="panelFiltro">
         <div class="card-header card-header-rose">
           <h4 class="card-title ">FILTRO</h4>
           <p class="card-category">Diligencie la siguiente información</p>
@@ -58,10 +58,17 @@
           <div class="col-md-4" *ngIf="panelClientesFacturados">
             <button class="btn btn-danger pull-left" (click)="buscarClientesFacturados()">Clientes Facturados</button>
           </div>
+          <div class="col-md-4" *ngIf="panelOrdCerradasDinero">
+            <button class="btn btn-danger pull-left" (click)="buscarOrdCerradasDinero()">Ordenes Cerradas Dinero</button>
+          </div>
         </div>
       </div>
-      <div class="card-body">
-        <div *ngIf="panelTablaOrdenesCerradas" class="row">
+      <div class="row">
+        <div *ngIf="panelTablaOrdenesCerradas" class="card">
+          <div class="card-header card-header-rose">
+            <h4 class="card-title ">Ordenes Cerradas</h4>
+            <p class="card-category">Lista de ordenes cerradas</p>
+          </div>
           <strong *ngIf="tablaOrdenesCerradas.length == 0">Sin datos..</strong>
           <div *ngIf="tablaOrdenesCerradas.length > 0" class="card-body">
             <div class="table-responsive">
@@ -76,8 +83,8 @@
                   <tr *ngFor="let ord of tablaOrdenesCerradas">
                     <td>{{ord.cantidad}}</td>
                     <td>{{ord.total}}</td>
-                    <td>{{ord.mesCierre}}</td>
-                    <td>{{ord.anioCierre}}</td>
+                    <td>{{ord.mescierre}}</td>
+                    <td>{{ord.aniocierre}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -85,135 +92,145 @@
           </div>
         </div>
       </div>
-      <div class="card-body">
-        <div *ngIf="panelTablaMasVendidos" class="row">
-          <strong *ngIf="tablaProductosMasVendidos.length == 0">Sin datos..</strong>
-          <div *ngIf="tablaProductosMasVendidos.length > 0" class="card-body">
-            <div class="table-responsive">
-              <table class="table">
-                <thead class=" text-primary">
-                  <th>ID Producto</th>
-                  <th>Prodcuto</th>
-                  <th>Cantidad</th>
-                  <th>Mes</th>
-                  <th>Año</th>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let ord of tablaProductosMasVendidos">
-                    <td>{{ord.idProducto}}</td>
-                    <td>{{ord.producto}}</td>
-                    <td>{{ord.cantidad}}</td>
-                    <td>{{ord.mes}}</td>
-                    <td>{{ord.anio}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+      <div *ngIf="panelTablaMasVendidos" class="card">
+        <div class="card-header card-header-rose">
+          <h4 class="card-title ">Productos Mas vendidos</h4>
+          <p class="card-category">Lista de productos mas vendidos</p>
+        </div>
+        <strong *ngIf="tablaProductosMasVendidos.length == 0">Sin datos..</strong>
+        <div *ngIf="tablaProductosMasVendidos.length > 0" class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>ID Producto</th>
+                <th>Prodcuto</th>
+                <th>Cantidad</th>
+                <th>Mes</th>
+                <th>Año</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let ord of tablaProductosMasVendidos">
+                  <td>{{ord.idproducto}}</td>
+                  <td>{{ord.producto}}</td>
+                  <td>{{ord.cantidad}}</td>
+                  <td>{{ord.mes}}</td>
+                  <td>{{ord.anio}}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-      <div class="card-body">
-        <div *ngIf="panelTablaCategorias" class="row">
-          <strong *ngIf="tablaCategorias.length == 0">Sin datos..</strong>
-          <div *ngIf="tablaCategorias.length > 0" class="card-body">
-            <div class="table-responsive">
-              <table class="table">
-                <thead class=" text-primary">
-                  <th>ID Categoria</th>
-                  <th>Categoría</th>
-                  <th>Cantidad</th>
-                  <th>Mes</th>
-                  <th>Año</th>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let ord of tablaCategorias">
-                    <td>{{ord.idCategoria}}</td>
-                    <td>{{ord.categoria}}</td>
-                    <td>{{ord.cantidad}}</td>
-                    <td>{{ord.mes}}</td>
-                    <td>{{ord.anio}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+      <div *ngIf="panelTablaCategorias" class="card">
+        <div class="card-header card-header-rose">
+          <h4 class="card-title ">Categorias mas Vendidas</h4>
+          <p class="card-category">Lista Categorias mas vendidas</p>
+        </div>
+        <strong *ngIf="tablaCategorias.length == 0">Sin datos..</strong>
+        <div *ngIf="tablaCategorias.length > 0" class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>ID Categoria</th>
+                <th>Categoría</th>
+                <th>Cantidad</th>
+                <th>Mes</th>
+                <th>Año</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let ord of tablaCategorias">
+                  <td>{{ord.idcategoria}}</td>
+                  <td>{{ord.categoria}}</td>
+                  <td>{{ord.cantidad}}</td>
+                  <td>{{ord.mes}}</td>
+                  <td>{{ord.anio}}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-      <div class="card-body">
-        <div *ngIf="panelOrdenesAbiertas" class="row">
-          <strong *ngIf="tablaOrdAbiertas.length == 0">Sin datos..</strong>
-          <div *ngIf="tablaOrdAbiertas.length > 0" class="card-body">
-            <div class="table-responsive">
-              <table class="table">
-                <thead class=" text-primary">
-                  <th>ID Orden</th>
-                  <th>días</th>
-                  <th>fecha Solicitud</th>
-                  <th>Estado</th>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let ord of tablaOrdAbiertas">
-                    <td>{{ord.idOrden}}</td>
-                    <td>{{ord.dias}}</td>
-                    <td>{{ord.cantidad}}</td>
-                    <td>{{ord.fechaSolicitud}}</td>
-                    <td>{{ord.estado}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+      <div *ngIf="panelOrdenesAbiertas" class="card">
+        <div class="card-header card-header-rose">
+          <h4 class="card-title ">Ordenes Abiertas</h4>
+          <p class="card-category">Lista de ordenes abiertas</p>
+        </div>
+        <strong *ngIf="tablaOrdAbiertas.length == 0">Sin datos..</strong>
+        <div *ngIf="tablaOrdAbiertas.length > 0" class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>ID Orden</th>
+                <th>días</th>
+                <th>fecha Solicitud</th>
+                <th>Estado</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let ord of tablaOrdAbiertas">
+                  <td>{{ord.idorden}}</td>
+                  <td>{{ord.dias}}</td>
+                  <td>{{ord.fechasolicitud}}</td>
+                  <td>{{ord.estado}}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-      <div class="card-body">
-        <div *ngIf="panelOrdDinero" class="row">
-          <strong *ngIf="tablaOrdCerDinero.length == 0">Sin datos..</strong>
-          <div *ngIf="tablaOrdCerDinero.length > 0" class="card-body">
-            <div class="table-responsive">
-              <table class="table">
-                <thead class=" text-primary">
-                  <th>ID Orden</th>
-                  <th>Valor Total</th>
-                  <th>Mes</th>
-                  <th>Año</th>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let ord of tablaOrdCerDinero">
-                    <td>{{ord.idOrden}}</td>
-                    <td>{{ord.valorTotal}}</td>
-                    <td>{{ord.mes}}</td>
-                    <td>{{ord.anio}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+      
+      <div *ngIf="panelOrdDinero" class="card">
+          <div class="card-header card-header-rose">
+                    <h4 class="card-title ">Ordenes Cerradas con mas Dinero</h4>
+                    <p class="card-category">Lista de ordenes con dinero</p>
+                  </div>
+                <strong *ngIf="tablaOrdCerDinero.length == 0">Sin datos..</strong>
+                <div *ngIf="tablaOrdCerDinero.length > 0" class="card-body">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead class=" text-primary">
+                        <th>ID Orden</th>
+                        <th>Valor Total</th>
+                        <th>Mes</th>
+                        <th>Año</th>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let ord of tablaOrdCerDinero">
+                          <td>{{ord.idorden}}</td>
+                          <td>{{ord.valortotal}}</td>
+                          <td>{{ord.mes}}</td>
+                          <td>{{ord.anio}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>      
+      <div *ngIf="panelTablaClienteFac" class="card">
+        <div class="card-header card-header-rose">
+          <h4 class="card-title ">Clientes factura</h4>
+          <p class="card-category">Lista de Clientes Facturados</p>
         </div>
-      </div>
-      <div class="card-body">
-        <div *ngIf="panelTablaClienteFac" class="row">
-          <strong *ngIf="tablaClientesFac.length == 0">Sin datos..</strong>
-          <div *ngIf="tablaClientesFac.length > 0" class="card-body">
-            <div class="table-responsive">
-              <table class="table">
-                <thead class=" text-primary">
-                  <th>ID Cliente</th>
-                  <th>Nombre</th>
-                  <th>Valor Total</th>
-                  <th>Mes</th>
-                  <th>Año</th>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let ord of tablaOrdCerDinero">
-                    <td>{{ord.idCliente}}</td>
-                    <td>{{ord.nombre}}</td>
-                    <td>{{ord.valorTotal}}</td>
-                    <td>{{ord.mes}}</td>
-                    <td>{{ord.anio}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+        <strong *ngIf="tablaClientesFac.length == 0">Sin datos..</strong>
+        <div *ngIf="tablaClientesFac.length > 0" class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>ID Cliente</th>
+                <th>Nombre</th>
+                <th>Valor Total</th>
+                <th>Mes</th>
+                <th>Año</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let ord of tablaClientesFac">
+                  <td>{{ord.idcliente}}</td>
+                  <td>{{ord.nombres}}</td>
+                  <td>{{ord.valortotal}}</td>
+                  <td>{{ord.mes}}</td>
+                  <td>{{ord.anio}}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

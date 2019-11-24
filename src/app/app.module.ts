@@ -54,6 +54,7 @@ import { UsuarioComponent } from './usuario/usuario.component';
 import { CampanaService } from './_restCampanas';
 import { ReportesComponent } from './reportes/reportes.component';
 import { NgxSpinnerModule } from "ngx-spinner"; 
+import {DatePipe} from '@angular/common';
 import { tarjetaService } from './_tarjetaCredito/tarjeta.service';
 import { envioPagoService } from './_restEnvioPago/envioPago.Service';
 
@@ -118,6 +119,7 @@ import { envioPagoService } from './_restEnvioPago/envioPago.Service';
     CampanaService,
     RolesService,
     ReporteService,
+    DatePipe,
   ],
   entryComponents: [DialogOverviewExampleDialog],
   bootstrap: [AppComponent]

@@ -4,7 +4,7 @@ import { AuthService } from 'app/auth.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReporteService, OrdenRsType, ProductoRsType, CategoriaRsType, Orden2RsType, Orden3RsType, ClienteRsType } from 'app/_restReportes';
-import { formatDate } from "@angular/common";
+import { formatDate, DatePipe } from "@angular/common";
 
 declare var $: any;
 
@@ -18,21 +18,22 @@ export class ReportesComponent implements OnInit {
   angForm: FormGroup;
   panelFiltro:boolean = false;
   panelOrdenesCerradas:boolean = false;
-  tablaOrdenesCerradas: OrdenRsType ;
+  tablaOrdenesCerradas: OrdenRsType[] ;
   panelTablaOrdenesCerradas:boolean = false;
   panelMasVendidos: boolean = false;
   panelTablaMasVendidos: boolean = false;
-  tablaProductosMasVendidos: ProductoRsType;
+  tablaProductosMasVendidos: ProductoRsType[];
   panelCategoriasMasVendidos: boolean = false;
   panelOrdenesAbiertas: boolean = false;
   panelOrdDinero: boolean = false;
   panelClientesFacturados: boolean = false;
   panelTablaCategorias:boolean = false ;
-  tablaCategorias: CategoriaRsType;
-  tablaOrdAbiertas: Orden2RsType;
-  tablaOrdCerDinero: Orden3RsType;
+  tablaCategorias: CategoriaRsType[];
+  tablaOrdAbiertas: Orden2RsType[];
+  tablaOrdCerDinero: Orden3RsType[];
   panelTablaClienteFac: boolean = false;
-  tablaClientesFac: ClienteRsType;
+  tablaClientesFac: ClienteRsType[];
+  panelOrdCerradasDinero = false;
   
   constructor(
     public dialog: MatDialog,
@@ -40,6 +41,7 @@ export class ReportesComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder,
     private reportesapi: ReporteService,
+    private datePipe: DatePipe,
   ) { }
 
   ngOnInit() {
@@ -82,47 +84,106 @@ export class ReportesComponent implements OnInit {
   }
 
   mostrarPanelOrdenesCerradas(){
-    //this.panelFiltro = true;
-    this.panelOrdenesCerradas = true;
-    this.panelMasVendidos = false;
+    this.panelFiltro = true;
+
+    this.panelOrdenesCerradas        = true;
+    this.panelMasVendidos            = false;
+    this.panelCategoriasMasVendidos  = false;
+    this.panelClientesFacturados     = false;
+    this.panelOrdCerradasDinero      = false;
+
     this.panelTablaOrdenesCerradas = false;
-    this.panelCategoriasMasVendidos = false;
-    this.panelOrdenesAbiertas = false;
+    this.panelTablaMasVendidos     = false;
+    this.panelTablaCategorias      = false;
+    this.panelOrdenesAbiertas      = false;
+    this.panelOrdDinero            = false;
+    this.panelTablaClienteFac      = false;
   }
 
   mostrarPanelMasVendidos(){
-    this.panelOrdenesCerradas = false;
-    this.panelMasVendidos = true;
+
+    this.panelOrdenesCerradas        = false;
+    this.panelMasVendidos            = true;
+    this.panelCategoriasMasVendidos  = false;
+    this.panelClientesFacturados     = false;
+    this.panelOrdCerradasDinero      = false;
+
     this.panelTablaOrdenesCerradas = false;
-    this.panelCategoriasMasVendidos = false;
-    this.panelOrdenesAbiertas = false;
+    this.panelTablaMasVendidos     = false;
+    this.panelTablaCategorias      = false;
+    this.panelOrdenesAbiertas      = false;
+    this.panelOrdDinero            = false;
+    this.panelTablaClienteFac      = false;
   }
 
   mostrarPanelCategorias(){
-    this.panelOrdenesCerradas = false;
-    this.panelMasVendidos = false;
-    this.panelCategoriasMasVendidos = true;
-    this.panelOrdenesAbiertas = false;
+    this.panelOrdenesCerradas        = false;
+    this.panelMasVendidos            = false;
+    this.panelCategoriasMasVendidos  = true;
+    this.panelClientesFacturados     = false;
+    this.panelOrdCerradasDinero      = false;
+
+    this.panelTablaOrdenesCerradas = false;
+    this.panelTablaMasVendidos     = false;
+    this.panelTablaCategorias      = false;
+    this.panelOrdenesAbiertas      = false;
+    this.panelOrdDinero            = false;
+    this.panelTablaClienteFac      = false;
   }
 
   mostrarPanelClientesFacturados(){
-    this.panelOrdenesCerradas = false;
-    this.panelMasVendidos = false;
-    this.panelCategoriasMasVendidos = true;
-    this.panelOrdenesAbiertas = false;
-    this.panelClientesFacturados = true;
+    this.panelFiltro = true;
+    this.panelOrdenesCerradas        = false;
+    this.panelMasVendidos            = false;
+    this.panelCategoriasMasVendidos  = false;
+    this.panelClientesFacturados     = true;
+    this.panelOrdCerradasDinero      = false;
+
+    this.panelTablaOrdenesCerradas = false;
+    this.panelTablaMasVendidos     = false;
+    this.panelTablaCategorias      = false;
+    this.panelOrdenesAbiertas      = false;
+    this.panelOrdDinero            = false;
+    this.panelTablaClienteFac      = false;
+  }
+
+  mostrarPanelOrdCerrDinero(){
+    this.panelFiltro = true;
+
+    this.panelOrdenesCerradas        = false;
+    this.panelMasVendidos            = false;
+    this.panelCategoriasMasVendidos  = false;
+    this.panelClientesFacturados     = false;
+    this.panelOrdCerradasDinero      = true;
+
+    this.panelTablaOrdenesCerradas = false;
+    this.panelTablaMasVendidos     = false;
+    this.panelTablaCategorias      = false;
+    this.panelOrdenesAbiertas      = false;
+    this.panelOrdDinero            = false;
+    this.panelTablaClienteFac      = false;
   }
 
   mostrarPanelOrdAbiertas(){
-    this.panelOrdenesCerradas = false;
-    this.panelMasVendidos = false;
-    this.panelCategoriasMasVendidos = false;
-    this.panelOrdenesAbiertas = true;
+    this.panelFiltro = false;
+    this.panelOrdenesCerradas        = false;
+    this.panelMasVendidos            = false;
+    this.panelCategoriasMasVendidos  = false;
+    this.panelClientesFacturados     = false;
+    this.panelOrdCerradasDinero      = false;
 
-    this.tablaOrdAbiertas = {};
+    this.panelTablaOrdenesCerradas = false;
+    this.panelTablaMasVendidos     = false;
+    this.panelTablaCategorias      = false;
+    this.panelOrdenesAbiertas      = true;
+    this.panelOrdDinero            = false;
+    this.panelTablaClienteFac      = false;
+
+    this.tablaOrdAbiertas = [];
     this.reportesapi.ordenesAbiertas('1', '1').subscribe(
       value2 => setTimeout(() => {
-       this.tablaOrdAbiertas = value2.ordenes;
+       this.tablaOrdAbiertas  = value2.orden;
+       //console.log(this.tablaOrdAbiertas.length);
       }, 200),
       error => {
         this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
@@ -130,19 +191,32 @@ export class ReportesComponent implements OnInit {
       },
       () => console.log('done')
     );
+    this.panelOrdenesAbiertas = true;
   }
 
-  mostrarPanelOrdCerrDinero(){
-    this.panelOrdenesCerradas = false;
-    this.panelMasVendidos = false;
-    this.panelCategoriasMasVendidos = false;
-    this.panelOrdenesAbiertas = false;
-    this.panelOrdDinero = true;
+  buscarOrdCerradasDinero(){
+    
 
-    this.tablaOrdCerDinero = {};
-    this.reportesapi.ordenesCerradas('1', '1').subscribe(
+    this.panelOrdenesCerradas        = false;
+    this.panelMasVendidos            = false;
+    this.panelCategoriasMasVendidos  = false;
+    this.panelClientesFacturados     = false;
+    this.panelOrdCerradasDinero      = false;
+    
+    let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
+    let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
+
+    this.panelTablaOrdenesCerradas = false;
+    this.panelTablaMasVendidos     = false;
+    this.panelTablaCategorias      = false;
+    this.panelOrdenesAbiertas      = false;
+    this.panelOrdDinero            = true;
+    this.panelTablaClienteFac      = false;
+
+    this.tablaOrdCerDinero = [];
+    this.reportesapi.ordenesCerradas('1', '1',fechaInicio,fechaFin).subscribe(
       value2 => setTimeout(() => {
-       this.tablaOrdCerDinero = value2.ordenes;
+       this.tablaOrdCerDinero = value2.orden;
       }, 200),
       error => {
         this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
@@ -153,16 +227,19 @@ export class ReportesComponent implements OnInit {
   }
 
   buscarOrdenesCerradas(){
-    let fechaInicio = formatDate(this.angForm.controls.fechaInicioOC.value,'dd/MM/yyyy','en');
-    let fechaFin = formatDate(this.angForm.controls.fechaFinOC.value,'dd/MM/yyyy','en');
+    let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
+    let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
+    //console.log(fechaInicio);
+    //console.log(fechaFin);
     this.panelTablaOrdenesCerradas = true;
-    console.log(fechaInicio);
-    console.log(fechaFin);
-    this.tablaOrdenesCerradas = {};
+    this.tablaOrdenesCerradas = [];
     if((fechaInicio != null && fechaFin != null)||(fechaInicio != '' && fechaFin != '')){
-    this.reportesapi.noOrdenes('1', '1', '01/05/2019', '01/06/2019').subscribe(
+    this.reportesapi.noOrdenes('1', '1',fechaInicio,fechaFin).subscribe(
       value2 => setTimeout(() => {
-       this.tablaOrdenesCerradas = value2.ordenes;
+       this.tablaOrdenesCerradas = value2.orden;
+       console.log(value2);
+       console.log(value2.orden);
+       console.log(this.tablaOrdenesCerradas);
       }, 200),
       error => {
         this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
@@ -177,12 +254,13 @@ export class ReportesComponent implements OnInit {
 
   buscarProductosMasVendidos(){
     this.panelTablaMasVendidos = true;
-    let fechaInicio = this.angForm.controls.fechaInicioOC;
-    let fechaFin = this.angForm.controls.fechaFinOC;
-    this.tablaProductosMasVendidos = {};
-    this.reportesapi.productosVendidos('1', '1', fechaInicio.value, fechaFin.value).subscribe(
+    let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
+    //console.log(fechaInicio);
+    let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
+    this.tablaProductosMasVendidos = [];
+    this.reportesapi.productosVendidos('1', '1', fechaInicio, fechaFin).subscribe(
       value2 => setTimeout(() => {
-       this.tablaProductosMasVendidos = value2.productos;
+       this.tablaProductosMasVendidos = value2.producto;
       }, 200),
       error => {
         this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
@@ -194,12 +272,12 @@ export class ReportesComponent implements OnInit {
 
   buscarCategorias(){
     this.panelTablaCategorias = true;
-    let fechaInicio = this.angForm.controls.fechaInicioOC;
-    let fechaFin = this.angForm.controls.fechaFinOC;
-    this.tablaCategorias = {};
-    this.reportesapi.categoriasVendidas('1', '1', fechaInicio.value, fechaFin.value).subscribe(
+    let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
+    let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
+    this.tablaCategorias = [] ;
+    this.reportesapi.categoriasVendidas('1', '1', fechaInicio, fechaFin).subscribe(
       value2 => setTimeout(() => {
-       this.tablaCategorias = value2.categorias;
+       this.tablaCategorias = value2.categoria;
       }, 200),
       error => {
         this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
@@ -211,12 +289,12 @@ export class ReportesComponent implements OnInit {
 
   buscarClientesFacturados(){
     this.panelTablaClienteFac = true;
-    let fechaInicio = this.angForm.controls.fechaInicioOC;
-    let fechaFin = this.angForm.controls.fechaFinOC;
-    this.tablaClientesFac = {};
-    this.reportesapi.clientesFacturados('1', '1',fechaInicio.value,fechaFin.value).subscribe(
+    let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
+    let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
+    this.tablaClientesFac = [];
+    this.reportesapi.clientesFacturados('1', '1',fechaInicio,fechaFin).subscribe(
       value2 => setTimeout(() => {
-       this.tablaClientesFac = value2.clientes;
+       this.tablaClientesFac = value2.cliente;
       }, 200),
       error => {
         this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
@@ -226,4 +304,14 @@ export class ReportesComponent implements OnInit {
     );
   }
   
+  // recibe un string de fecha en formato dd/mm/yyyy y retorna el formato dd-mm-yyyy
+  formatFecha(fecha: string):string {
+    //console.log(fecha);
+    let ano = fecha.substr(0,4);
+    let mes = fecha.substr(5,2);
+    let dia = fecha.substr(8,2);
+    let result = dia+'-'+mes+'-'+ano;
+    console.log(result);
+    return result;
+  }
 }

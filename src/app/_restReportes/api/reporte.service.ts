@@ -32,7 +32,8 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class ReporteService {
 
-    protected basePath = 'http://10.39.1.149:9010/OMS/Reportes/v1';
+    protected basePath = 'http://localhost:9010/OMS/Reportes/v1';
+    //protected basePath = 'http://10.39.1.149:9010/OMS/Reportes/v1';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -66,8 +67,8 @@ export class ReporteService {
      * 
      * @param headerRq Cabecera estandar
      * @param serviceID Service Id Kallsonys
-     * @param fechaDesde Fecha desde
-     * @param fechaHasta Fecha hasta
+     * @param fechaDesde Fecha desde (dd/mm/yyyy)
+     * @param fechaHasta Fecha hasta (dd/mm/yyyy)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -92,13 +93,21 @@ export class ReporteService {
             throw new Error('Required parameter fechaHasta was null or undefined when calling categoriasVendidas.');
         }
 
-        let headers = this.defaultHeaders;
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (headerRq !== undefined && headerRq !== null) {
-            headers = headers.set('headerRq', String(headerRq));
+            queryParameters = queryParameters.set('headerRq', <any>headerRq);
         }
         if (serviceID !== undefined && serviceID !== null) {
-            headers = headers.set('serviceID', String(serviceID));
+            queryParameters = queryParameters.set('serviceID', <any>serviceID);
         }
+        if (fechaDesde !== undefined && fechaDesde !== null) {
+            queryParameters = queryParameters.set('fechaDesde', <any>fechaDesde);
+        }
+        if (fechaHasta !== undefined && fechaHasta !== null) {
+            queryParameters = queryParameters.set('fechaHasta', <any>fechaHasta);
+        }
+
+        let headers = this.defaultHeaders;
 
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
@@ -115,6 +124,7 @@ export class ReporteService {
 
         return this.httpClient.get<CategoriasRsType>(`${this.basePath}/reporte/categoriasVendidas`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -128,8 +138,8 @@ export class ReporteService {
      * 
      * @param headerRq Cabecera estandar
      * @param serviceID Service Id Kallsonys
-     * @param fechaDesde Fecha desde
-     * @param fechaHasta Fecha hasta
+     * @param fechaDesde Fecha desde (dd/mm/yyyy)
+     * @param fechaHasta Fecha hasta (dd/mm/yyyy)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -154,13 +164,21 @@ export class ReporteService {
             throw new Error('Required parameter fechaHasta was null or undefined when calling clientesFacturados.');
         }
 
-        let headers = this.defaultHeaders;
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (headerRq !== undefined && headerRq !== null) {
-            headers = headers.set('headerRq', String(headerRq));
+            queryParameters = queryParameters.set('headerRq', <any>headerRq);
         }
         if (serviceID !== undefined && serviceID !== null) {
-            headers = headers.set('serviceID', String(serviceID));
+            queryParameters = queryParameters.set('serviceID', <any>serviceID);
         }
+        if (fechaDesde !== undefined && fechaDesde !== null) {
+            queryParameters = queryParameters.set('fechaDesde', <any>fechaDesde);
+        }
+        if (fechaHasta !== undefined && fechaHasta !== null) {
+            queryParameters = queryParameters.set('fechaHasta', <any>fechaHasta);
+        }
+
+        let headers = this.defaultHeaders;
 
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
@@ -177,6 +195,7 @@ export class ReporteService {
 
         return this.httpClient.get<ClientesRsType>(`${this.basePath}/reporte/clientesFacturados`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -190,8 +209,8 @@ export class ReporteService {
      * 
      * @param headerRq Cabecera estandar
      * @param serviceID Service Id Kallsonys
-     * @param fechaDesde Fecha desde
-     * @param fechaHasta Fecha hasta
+     * @param fechaDesde Fecha desde (dd/mm/yyyy)
+     * @param fechaHasta Fecha hasta (dd/mm/yyyy)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -216,13 +235,21 @@ export class ReporteService {
             throw new Error('Required parameter fechaHasta was null or undefined when calling noOrdenes.');
         }
 
-        let headers = this.defaultHeaders;
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (headerRq !== undefined && headerRq !== null) {
-            headers = headers.set('headerRq', String(headerRq));
+            queryParameters = queryParameters.set('headerRq', <any>headerRq);
         }
         if (serviceID !== undefined && serviceID !== null) {
-            headers = headers.set('serviceID', String(serviceID));
+            queryParameters = queryParameters.set('serviceID', <any>serviceID);
         }
+        if (fechaDesde !== undefined && fechaDesde !== null) {
+            queryParameters = queryParameters.set('fechaDesde', <any>fechaDesde);
+        }
+        if (fechaHasta !== undefined && fechaHasta !== null) {
+            queryParameters = queryParameters.set('fechaHasta', <any>fechaHasta);
+        }
+
+        let headers = this.defaultHeaders;
 
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
@@ -239,6 +266,7 @@ export class ReporteService {
 
         return this.httpClient.get<OrdenesRsType>(`${this.basePath}/reporte/noOrdenes`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -268,13 +296,15 @@ export class ReporteService {
             throw new Error('Required parameter serviceID was null or undefined when calling ordenesAbiertas.');
         }
 
-        let headers = this.defaultHeaders;
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (headerRq !== undefined && headerRq !== null) {
-            headers = headers.set('headerRq', String(headerRq));
+            queryParameters = queryParameters.set('headerRq', <any>headerRq);
         }
         if (serviceID !== undefined && serviceID !== null) {
-            headers = headers.set('serviceID', String(serviceID));
+            queryParameters = queryParameters.set('serviceID', <any>serviceID);
         }
+
+        let headers = this.defaultHeaders;
 
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
@@ -291,6 +321,7 @@ export class ReporteService {
 
         return this.httpClient.get<Ordenes2RsType>(`${this.basePath}/reporte/ordenesAbiertas`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -304,13 +335,15 @@ export class ReporteService {
      * 
      * @param headerRq Cabecera estandar
      * @param serviceID Service Id Kallsonys
+     * @param fechaDesde Fecha desde (dd/mm/yyyy)
+     * @param fechaHasta Fecha hasta (dd/mm/yyyy)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public ordenesCerradas(headerRq: string, serviceID: string, observe?: 'body', reportProgress?: boolean): Observable<Ordenes3RsType>;
-    public ordenesCerradas(headerRq: string, serviceID: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Ordenes3RsType>>;
-    public ordenesCerradas(headerRq: string, serviceID: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Ordenes3RsType>>;
-    public ordenesCerradas(headerRq: string, serviceID: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public ordenesCerradas(headerRq: string, serviceID: string, fechaDesde: string, fechaHasta: string, observe?: 'body', reportProgress?: boolean): Observable<Ordenes3RsType>;
+    public ordenesCerradas(headerRq: string, serviceID: string, fechaDesde: string, fechaHasta: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Ordenes3RsType>>;
+    public ordenesCerradas(headerRq: string, serviceID: string, fechaDesde: string, fechaHasta: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Ordenes3RsType>>;
+    public ordenesCerradas(headerRq: string, serviceID: string, fechaDesde: string, fechaHasta: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (headerRq === null || headerRq === undefined) {
             throw new Error('Required parameter headerRq was null or undefined when calling ordenesCerradas.');
@@ -320,13 +353,29 @@ export class ReporteService {
             throw new Error('Required parameter serviceID was null or undefined when calling ordenesCerradas.');
         }
 
-        let headers = this.defaultHeaders;
+        if (fechaDesde === null || fechaDesde === undefined) {
+            throw new Error('Required parameter fechaDesde was null or undefined when calling ordenesCerradas.');
+        }
+
+        if (fechaHasta === null || fechaHasta === undefined) {
+            throw new Error('Required parameter fechaHasta was null or undefined when calling ordenesCerradas.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (headerRq !== undefined && headerRq !== null) {
-            headers = headers.set('headerRq', String(headerRq));
+            queryParameters = queryParameters.set('headerRq', <any>headerRq);
         }
         if (serviceID !== undefined && serviceID !== null) {
-            headers = headers.set('serviceID', String(serviceID));
+            queryParameters = queryParameters.set('serviceID', <any>serviceID);
         }
+        if (fechaDesde !== undefined && fechaDesde !== null) {
+            queryParameters = queryParameters.set('fechaDesde', <any>fechaDesde);
+        }
+        if (fechaHasta !== undefined && fechaHasta !== null) {
+            queryParameters = queryParameters.set('fechaHasta', <any>fechaHasta);
+        }
+
+        let headers = this.defaultHeaders;
 
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
@@ -343,6 +392,7 @@ export class ReporteService {
 
         return this.httpClient.get<Ordenes3RsType>(`${this.basePath}/reporte/ordenesCerradas`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -356,8 +406,8 @@ export class ReporteService {
      * 
      * @param headerRq Cabecera estandar
      * @param serviceID Service Id Kallsonys
-     * @param fechaDesde Fecha desde
-     * @param fechaHasta Fecha hasta
+     * @param fechaDesde Fecha desde (dd/mm/yyyy)
+     * @param fechaHasta Fecha hasta (dd/mm/yyyy)
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
@@ -382,13 +432,21 @@ export class ReporteService {
             throw new Error('Required parameter fechaHasta was null or undefined when calling productosVendidos.');
         }
 
-        let headers = this.defaultHeaders;
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (headerRq !== undefined && headerRq !== null) {
-            headers = headers.set('headerRq', String(headerRq));
+            queryParameters = queryParameters.set('headerRq', <any>headerRq);
         }
         if (serviceID !== undefined && serviceID !== null) {
-            headers = headers.set('serviceID', String(serviceID));
+            queryParameters = queryParameters.set('serviceID', <any>serviceID);
         }
+        if (fechaDesde !== undefined && fechaDesde !== null) {
+            queryParameters = queryParameters.set('fechaDesde', <any>fechaDesde);
+        }
+        if (fechaHasta !== undefined && fechaHasta !== null) {
+            queryParameters = queryParameters.set('fechaHasta', <any>fechaHasta);
+        }
+
+        let headers = this.defaultHeaders;
 
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
@@ -405,6 +463,7 @@ export class ReporteService {
 
         return this.httpClient.get<ProductosRsType>(`${this.basePath}/reporte/productosVendidos`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
