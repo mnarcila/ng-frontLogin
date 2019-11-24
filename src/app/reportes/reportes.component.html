@@ -29,7 +29,7 @@
           </div>
         </div>
       </div>
-      <div class="card">
+      <div class="card" *ngIf="panelFiltro">
         <div class="card-header card-header-rose">
           <h4 class="card-title ">FILTRO</h4>
           <p class="card-category">Diligencie la siguiente información</p>
@@ -57,6 +57,9 @@
           </div>
           <div class="col-md-4" *ngIf="panelClientesFacturados">
             <button class="btn btn-danger pull-left" (click)="buscarClientesFacturados()">Clientes Facturados</button>
+          </div>
+          <div class="col-md-4" *ngIf="panelOrdCerradasDinero">
+            <button class="btn btn-danger pull-left" (click)="buscarOrdCerradasDinero()">Ordenes Cerradas Dinero</button>
           </div>
         </div>
       </div>

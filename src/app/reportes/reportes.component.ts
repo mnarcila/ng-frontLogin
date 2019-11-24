@@ -33,6 +33,7 @@ export class ReportesComponent implements OnInit {
   tablaOrdCerDinero: Orden3RsType[];
   panelTablaClienteFac: boolean = false;
   tablaClientesFac: ClienteRsType[];
+  panelOrdCerradasDinero = false;
   
   constructor(
     public dialog: MatDialog,
@@ -83,42 +84,100 @@ export class ReportesComponent implements OnInit {
   }
 
   mostrarPanelOrdenesCerradas(){
-    //this.panelFiltro = true;
-    this.panelOrdenesCerradas = true;
-    this.panelMasVendidos = false;
+    this.panelFiltro = true;
+
+    this.panelOrdenesCerradas        = true;
+    this.panelMasVendidos            = false;
+    this.panelCategoriasMasVendidos  = false;
+    this.panelClientesFacturados     = false;
+    this.panelOrdCerradasDinero      = false;
+
     this.panelTablaOrdenesCerradas = false;
-    this.panelCategoriasMasVendidos = false;
-    this.panelOrdenesAbiertas = false;
+    this.panelTablaMasVendidos     = false;
+    this.panelTablaCategorias      = false;
+    this.panelOrdenesAbiertas      = false;
+    this.panelOrdDinero            = false;
+    this.panelTablaClienteFac      = false;
   }
 
   mostrarPanelMasVendidos(){
-    this.panelOrdenesCerradas = false;
-    this.panelMasVendidos = true;
+
+    this.panelOrdenesCerradas        = false;
+    this.panelMasVendidos            = true;
+    this.panelCategoriasMasVendidos  = false;
+    this.panelClientesFacturados     = false;
+    this.panelOrdCerradasDinero      = false;
+
     this.panelTablaOrdenesCerradas = false;
-    this.panelCategoriasMasVendidos = false;
-    this.panelOrdenesAbiertas = false;
+    this.panelTablaMasVendidos     = false;
+    this.panelTablaCategorias      = false;
+    this.panelOrdenesAbiertas      = false;
+    this.panelOrdDinero            = false;
+    this.panelTablaClienteFac      = false;
   }
 
   mostrarPanelCategorias(){
-    this.panelOrdenesCerradas = false;
-    this.panelMasVendidos = false;
-    this.panelCategoriasMasVendidos = true;
-    this.panelOrdenesAbiertas = false;
+    this.panelOrdenesCerradas        = false;
+    this.panelMasVendidos            = false;
+    this.panelCategoriasMasVendidos  = true;
+    this.panelClientesFacturados     = false;
+    this.panelOrdCerradasDinero      = false;
+
+    this.panelTablaOrdenesCerradas = false;
+    this.panelTablaMasVendidos     = false;
+    this.panelTablaCategorias      = false;
+    this.panelOrdenesAbiertas      = false;
+    this.panelOrdDinero            = false;
+    this.panelTablaClienteFac      = false;
   }
 
   mostrarPanelClientesFacturados(){
-    this.panelOrdenesCerradas = false;
-    this.panelMasVendidos = false;
-    this.panelCategoriasMasVendidos = true;
-    this.panelOrdenesAbiertas = false;
-    this.panelClientesFacturados = true;
+    this.panelFiltro = true;
+    this.panelOrdenesCerradas        = false;
+    this.panelMasVendidos            = false;
+    this.panelCategoriasMasVendidos  = false;
+    this.panelClientesFacturados     = true;
+    this.panelOrdCerradasDinero      = false;
+
+    this.panelTablaOrdenesCerradas = false;
+    this.panelTablaMasVendidos     = false;
+    this.panelTablaCategorias      = false;
+    this.panelOrdenesAbiertas      = false;
+    this.panelOrdDinero            = false;
+    this.panelTablaClienteFac      = false;
+  }
+
+  mostrarPanelOrdCerrDinero(){
+    this.panelFiltro = true;
+
+    this.panelOrdenesCerradas        = false;
+    this.panelMasVendidos            = false;
+    this.panelCategoriasMasVendidos  = false;
+    this.panelClientesFacturados     = false;
+    this.panelOrdCerradasDinero      = true;
+
+    this.panelTablaOrdenesCerradas = false;
+    this.panelTablaMasVendidos     = false;
+    this.panelTablaCategorias      = false;
+    this.panelOrdenesAbiertas      = false;
+    this.panelOrdDinero            = false;
+    this.panelTablaClienteFac      = false;
   }
 
   mostrarPanelOrdAbiertas(){
-    this.panelOrdenesCerradas = false;
-    this.panelMasVendidos = false;
-    this.panelCategoriasMasVendidos = false;
-    this.panelOrdenesAbiertas = true;
+    this.panelFiltro = false;
+    this.panelOrdenesCerradas        = false;
+    this.panelMasVendidos            = false;
+    this.panelCategoriasMasVendidos  = false;
+    this.panelClientesFacturados     = false;
+    this.panelOrdCerradasDinero      = false;
+
+    this.panelTablaOrdenesCerradas = false;
+    this.panelTablaMasVendidos     = false;
+    this.panelTablaCategorias      = false;
+    this.panelOrdenesAbiertas      = true;
+    this.panelOrdDinero            = false;
+    this.panelTablaClienteFac      = false;
 
     this.tablaOrdAbiertas = [];
     this.reportesapi.ordenesAbiertas('1', '1').subscribe(
@@ -135,15 +194,24 @@ export class ReportesComponent implements OnInit {
     this.panelOrdenesAbiertas = true;
   }
 
-  mostrarPanelOrdCerrDinero(){
-    this.panelOrdenesCerradas = false;
-    this.panelMasVendidos = false;
-    this.panelCategoriasMasVendidos = false;
-    this.panelOrdenesAbiertas = false;
-    this.panelOrdDinero = true;
+  buscarOrdCerradasDinero(){
+    
+
+    this.panelOrdenesCerradas        = false;
+    this.panelMasVendidos            = false;
+    this.panelCategoriasMasVendidos  = false;
+    this.panelClientesFacturados     = false;
+    this.panelOrdCerradasDinero      = false;
+    
     let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
     let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
 
+    this.panelTablaOrdenesCerradas = false;
+    this.panelTablaMasVendidos     = false;
+    this.panelTablaCategorias      = false;
+    this.panelOrdenesAbiertas      = false;
+    this.panelOrdDinero            = true;
+    this.panelTablaClienteFac      = false;
 
     this.tablaOrdCerDinero = [];
     this.reportesapi.ordenesCerradas('1', '1',fechaInicio,fechaFin).subscribe(
