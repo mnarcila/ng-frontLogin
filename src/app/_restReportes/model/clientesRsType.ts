@@ -19,4 +19,5 @@ import { StatusType } from './statusType';
 export interface ClientesRsType { 
     status?: StatusType;
     clientes?: ClienteRsType;
+    cliente?: ClienteRsType[];
 }

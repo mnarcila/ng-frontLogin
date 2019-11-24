@@ -118,30 +118,32 @@
           </div>
         </div>
       </div>
-      <div class="card-body">
-        <div *ngIf="panelTablaCategorias" class="row">
-          <strong *ngIf="tablaCategorias.length == 0">Sin datos..</strong>
-          <div *ngIf="tablaCategorias.length > 0" class="card-body">
-            <div class="table-responsive">
-              <table class="table">
-                <thead class=" text-primary">
-                  <th>ID Categoria</th>
-                  <th>Categoría</th>
-                  <th>Cantidad</th>
-                  <th>Mes</th>
-                  <th>Año</th>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let ord of tablaCategorias">
-                    <td>{{ord.idCategoria}}</td>
-                    <td>{{ord.categoria}}</td>
-                    <td>{{ord.cantidad}}</td>
-                    <td>{{ord.mes}}</td>
-                    <td>{{ord.anio}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+      <div *ngIf="panelTablaCategorias" class="card">
+        <div class="card-header card-header-rose">
+          <h4 class="card-title ">Categorias mas Vendidas</h4>
+          <p class="card-category">Lista Categorias mas vendidas</p>
+        </div>
+        <strong *ngIf="tablaCategorias.length == 0">Sin datos..</strong>
+        <div *ngIf="tablaCategorias.length > 0" class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>ID Categoria</th>
+                <th>Categoría</th>
+                <th>Cantidad</th>
+                <th>Mes</th>
+                <th>Año</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let ord of tablaCategorias">
+                  <td>{{ord.idcategoria}}</td>
+                  <td>{{ord.categoria}}</td>
+                  <td>{{ord.cantidad}}</td>
+                  <td>{{ord.mes}}</td>
+                  <td>{{ord.anio}}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -172,55 +174,60 @@
           </div>
         </div>
       </div>
-      <div class="card-body">
-        <div *ngIf="panelOrdDinero" class="row">
-          <strong *ngIf="tablaOrdCerDinero.length == 0">Sin datos..</strong>
-          <div *ngIf="tablaOrdCerDinero.length > 0" class="card-body">
-            <div class="table-responsive">
-              <table class="table">
-                <thead class=" text-primary">
-                  <th>ID Orden</th>
-                  <th>Valor Total</th>
-                  <th>Mes</th>
-                  <th>Año</th>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let ord of tablaOrdCerDinero">
-                    <td>{{ord.idOrden}}</td>
-                    <td>{{ord.valorTotal}}</td>
-                    <td>{{ord.mes}}</td>
-                    <td>{{ord.anio}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+      
+      <div *ngIf="panelOrdDinero" class="card">
+          <div class="card-header card-header-rose">
+                    <h4 class="card-title ">Ordenes Cerradas con mas Dinero</h4>
+                    <p class="card-category">Lista de ordenes con dinero</p>
+                  </div>
+                <strong *ngIf="tablaOrdCerDinero.length == 0">Sin datos..</strong>
+                <div *ngIf="tablaOrdCerDinero.length > 0" class="card-body">
+                  <div class="table-responsive">
+                    <table class="table">
+                      <thead class=" text-primary">
+                        <th>ID Orden</th>
+                        <th>Valor Total</th>
+                        <th>Mes</th>
+                        <th>Año</th>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let ord of tablaOrdCerDinero">
+                          <td>{{ord.idorden}}</td>
+                          <td>{{ord.valortotal}}</td>
+                          <td>{{ord.mes}}</td>
+                          <td>{{ord.anio}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>      
+      <div *ngIf="panelTablaClienteFac" class="card">
+        <div class="card-header card-header-rose">
+          <h4 class="card-title ">Clientes factura</h4>
+          <p class="card-category">Lista de Clientes Facturados</p>
         </div>
-      </div>
-      <div class="card-body">
-        <div *ngIf="panelTablaClienteFac" class="row">
-          <strong *ngIf="tablaClientesFac.length == 0">Sin datos..</strong>
-          <div *ngIf="tablaClientesFac.length > 0" class="card-body">
-            <div class="table-responsive">
-              <table class="table">
-                <thead class=" text-primary">
-                  <th>ID Cliente</th>
-                  <th>Nombre</th>
-                  <th>Valor Total</th>
-                  <th>Mes</th>
-                  <th>Año</th>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let ord of tablaOrdCerDinero">
-                    <td>{{ord.idCliente}}</td>
-                    <td>{{ord.nombre}}</td>
-                    <td>{{ord.valorTotal}}</td>
-                    <td>{{ord.mes}}</td>
-                    <td>{{ord.anio}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+        <strong *ngIf="tablaClientesFac.length == 0">Sin datos..</strong>
+        <div *ngIf="tablaClientesFac.length > 0" class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>ID Cliente</th>
+                <th>Nombre</th>
+                <th>Valor Total</th>
+                <th>Mes</th>
+                <th>Año</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let ord of tablaClientesFac">
+                  <td>{{ord.idcliente}}</td>
+                  <td>{{ord.nombres}}</td>
+                  <td>{{ord.valortotal}}</td>
+                  <td>{{ord.mes}}</td>
+                  <td>{{ord.anio}}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

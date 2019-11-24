@@ -28,11 +28,11 @@ export class ReportesComponent implements OnInit {
   panelOrdDinero: boolean = false;
   panelClientesFacturados: boolean = false;
   panelTablaCategorias:boolean = false ;
-  tablaCategorias: CategoriaRsType;
+  tablaCategorias: CategoriaRsType[];
   tablaOrdAbiertas: Orden2RsType[];
-  tablaOrdCerDinero: Orden3RsType;
+  tablaOrdCerDinero: Orden3RsType[];
   panelTablaClienteFac: boolean = false;
-  tablaClientesFac: ClienteRsType;
+  tablaClientesFac: ClienteRsType[];
   
   constructor(
     public dialog: MatDialog,
@@ -145,10 +145,10 @@ export class ReportesComponent implements OnInit {
     let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
 
 
-    this.tablaOrdCerDinero = {};
+    this.tablaOrdCerDinero = [];
     this.reportesapi.ordenesCerradas('1', '1',fechaInicio,fechaFin).subscribe(
       value2 => setTimeout(() => {
-       this.tablaOrdCerDinero = value2.ordenes;
+       this.tablaOrdCerDinero = value2.orden;
       }, 200),
       error => {
         this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
@@ -204,12 +204,12 @@ export class ReportesComponent implements OnInit {
 
   buscarCategorias(){
     this.panelTablaCategorias = true;
-    let fechaInicio = this.angForm.controls.fechaInicioOC;
-    let fechaFin = this.angForm.controls.fechaFinOC;
-    this.tablaCategorias = {};
-    this.reportesapi.categoriasVendidas('1', '1', fechaInicio.value, fechaFin.value).subscribe(
+    let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
+    let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
+    this.tablaCategorias = [] ;
+    this.reportesapi.categoriasVendidas('1', '1', fechaInicio, fechaFin).subscribe(
       value2 => setTimeout(() => {
-       this.tablaCategorias = value2.categorias;
+       this.tablaCategorias = value2.categoria;
       }, 200),
       error => {
         this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
@@ -221,12 +221,12 @@ export class ReportesComponent implements OnInit {
 
   buscarClientesFacturados(){
     this.panelTablaClienteFac = true;
-    let fechaInicio = this.angForm.controls.fechaInicioOC;
-    let fechaFin = this.angForm.controls.fechaFinOC;
-    this.tablaClientesFac = {};
-    this.reportesapi.clientesFacturados('1', '1',fechaInicio.value,fechaFin.value).subscribe(
+    let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
+    let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
+    this.tablaClientesFac = [];
+    this.reportesapi.clientesFacturados('1', '1',fechaInicio,fechaFin).subscribe(
       value2 => setTimeout(() => {
-       this.tablaClientesFac = value2.clientes;
+       this.tablaClientesFac = value2.cliente;
       }, 200),
       error => {
         this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
