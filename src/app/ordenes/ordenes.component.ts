@@ -4,10 +4,13 @@ import { FormBuilder, FormGroup, Validators, FormsModule, ReactiveFormsModule } 
 import { OrdenRsType, OrdenService, StatusType, DetalleOrdenService, OrdenM, DetalleOrden } from '../_restOrdenes';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Listas, Estados, tipoIdentificacion, ListaProveedores } from '../Paramentricos/Listas';
-import { ClienteService, Direccion} from '../_restClientes';
+import { ClienteService, Direccion, Cliente } from '../_restClientes';
 import { ProductoService, Producto } from '../_restProducto';
 import { RolesService, Roles } from 'app/_restRoles';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { envioPagoService } from 'app/_restEnvioPago/envioPago.Service';
+import { tarjetaService } from 'app/_tarjetaCredito/tarjeta.service';
+import { environment } from 'environments/environment.prod';
 
 
 declare var $: any;
@@ -27,16 +30,16 @@ export class OrdenesComponent implements OnInit {
   habilitaCrear: boolean;
   panelConsultar: boolean = false;
   panelCrear: boolean = false;
-  panelActualizar:boolean = false;
-  panelDetOrden:boolean = false;
+  panelActualizar: boolean = false;
+  panelDetOrden: boolean = false;
   listaEstados2: Estados[] = new Listas().estados;
   panelBuscarCliente: boolean = false;
   listaTipoId: tipoIdentificacion[] = new Listas().listaTipoId;
-  nombreCliente:string ;
+  nombreCliente: string;
   idCliente: number;
-  userCliente:string ;
+  userCliente: string;
   panelBuscarDireccion: boolean = false;
-  direcciones: Direccion[] ;
+  direcciones: Direccion[];
   idDireccion: number;
   textDireccion: string;
   PanelCrearDetalle: boolean = false;
@@ -48,6 +51,8 @@ export class OrdenesComponent implements OnInit {
   listaRoles: Roles[];
 
   constructor(
+    private envioPagoApi: envioPagoService,
+    private tarjetaApi: tarjetaService,
     private ordenesApi: OrdenService,
     private detalleApi: DetalleOrdenService,
     private auth: AuthService,
@@ -88,7 +93,7 @@ export class OrdenesComponent implements OnInit {
       fechaSol: ['', Validators.required],
       fechaAprob: ['', Validators.required],
       fechaCierre: ['', Validators.required],
-      eIdOrden: ['',Validators.required],
+      eIdOrden: ['', Validators.required],
       eCliente: ['', Validators.required],
       eDireccion: ['', Validators.required],
       eValTotal: ['', Validators.required],
@@ -107,34 +112,39 @@ export class OrdenesComponent implements OnInit {
       cFechaCierre: ['', Validators.required],
       cEstado: ['', Validators.required],
       cIdentificacion: ['', Validators.required],
-      cTipoId: ['',Validators.required],
-      dtIdOrden: ['',Validators.required],
-      dtCantidad: ['',Validators.required],
+      cTipoId: ['', Validators.required],
+      dtIdOrden: ['', Validators.required],
+      dtCantidad: ['', Validators.required],
       dtProveedor: ['', Validators.required],
-      pNombre: ['',Validators.required],
-      pValorUnitario: ['',Validators.required],
+      pNombre: ['', Validators.required],
+      pValorUnitario: ['', Validators.required],
+      coutas: ['', Validators.required],
+      tcNum: ['', Validators.required],
+      tcFec: ['', Validators.required],
+      tcCvc: ['', Validators.required],
+      cuotas: ['', Validators.required],
     });
   }
 
   mostrarPanelConsulta(): void {
     //cuatro es el rol para consulta de ordenes
-    if(this.validarPermisos(4) || this.validarPermisos(5)){
-      if(!this.panelConsultar){
-          this.panelConsultar = true;
-          this.panelActualizar = false;
-          this.panelCrear = false;
-          this.panelBuscarCliente = false;
-          this.panelBuscarDireccion = false;
-          this.PanelCrearDetalle = false;
-          this.panelBuscarProducto = false;
+    if (this.validarPermisos(4) || this.validarPermisos(5)) {
+      if (!this.panelConsultar) {
+        this.panelConsultar = true;
+        this.panelActualizar = false;
+        this.panelCrear = false;
+        this.panelBuscarCliente = false;
+        this.panelBuscarDireccion = false;
+        this.PanelCrearDetalle = false;
+        this.panelBuscarProducto = false;
       }
-    }else{
+    } else {
       this.mostrarNotificacion('Acceso Denegado', 'No tiene permiso para esta función', 'danger');
     }
   }
 
   mostrarPanelActualizar(): void {
-    if(!this.panelActualizar){
+    if (!this.panelActualizar) {
       this.panelConsultar = false;
       this.panelActualizar = true;
       this.panelCrear = false;
@@ -144,18 +154,18 @@ export class OrdenesComponent implements OnInit {
   }
 
   mostrarPanelCrear(): void {
-    if(this.validarPermisos(5)){
-      if(!this.panelCrear){
+    if (this.validarPermisos(5)) {
+      if (!this.panelCrear) {
         this.panelConsultar = false;
         this.panelActualizar = false;
         this.panelCrear = true;
         this.tablaOrdenes = false;
-        this.listaDetalle  = [];
+        this.listaDetalle = [];
         this.panelDetOrden = false;
         this.PanelCrearDetalle = false;
         this.panelBuscarProducto = false;
       }
-    }else{
+    } else {
       this.mostrarNotificacion('Acceso denegado', 'No tiene permiso para esta función', 'danger');
     }
   }
@@ -165,7 +175,7 @@ export class OrdenesComponent implements OnInit {
     console.log('procesarResponse ordenResponse');
     console.log(pValue);
     this.listOrdenes.push(...pValue.datosBasicos.ordenes);
-    
+
   }
 
 
@@ -174,24 +184,24 @@ export class OrdenesComponent implements OnInit {
    * @param ordenId id de la orden a consultar
    */
   colsultarOrdenXid(id: number): void {
-      if(id != null ){
-        this.spinner.show();
-        this.tablaOrdenes = true;
-        this.ordenesApi.conultarOrdenPorId('1', '1', id).subscribe(
-          value => setTimeout(() => {
-            const prd = value;
-            this.procesarResponse(value);
-          }, 200),
-          error => {
-            this.mostrarNotificacion('Consulta de Ordenes', 'se presento un error, por favor notifique al administrador', 'danger');
-            console.error(JSON.stringify(error))
-          },
-          () => console.log('done')
-          );
-          this.spinner.hide();
-      }else{
-        this.mostrarNotificacion('Error de datos','Por favor verifique los datos ingresados','danger');
-      }
+    if (id != null) {
+      this.spinner.show();
+      this.tablaOrdenes = true;
+      this.ordenesApi.conultarOrdenPorId('1', '1', id).subscribe(
+        value => setTimeout(() => {
+          const prd = value;
+          this.procesarResponse(value);
+        }, 200),
+        error => {
+          this.mostrarNotificacion('Consulta de Ordenes', 'se presento un error, por favor notifique al administrador', 'danger');
+          console.error(JSON.stringify(error))
+        },
+        () => console.log('done')
+      );
+      this.spinner.hide();
+    } else {
+      this.mostrarNotificacion('Error de datos', 'Por favor verifique los datos ingresados', 'danger');
+    }
   }
 
   colsultarOrdenEstado(idEstado: number): void {
@@ -210,7 +220,7 @@ export class OrdenesComponent implements OnInit {
     );
   }
 
-  colsultarOrdenXCliente(cliente: string ): void {
+  colsultarOrdenXCliente(cliente: string): void {
     this.listOrdenes = [];
     if (cliente != '' || cliente != null) {
       this.tablaOrdenes = true;
@@ -225,13 +235,13 @@ export class OrdenesComponent implements OnInit {
         },
         () => console.log('done')
       );
-    }else{
-      this.mostrarNotificacion('Error de datos','Por favor verifique los datos ingresados','danger');
+    } else {
+      this.mostrarNotificacion('Error de datos', 'Por favor verifique los datos ingresados', 'danger');
     }
   }
 
   colsultarOrdenXProducto(producto: string): void {
-    console.log('valor producto '+ producto);
+    console.log('valor producto ' + producto);
     this.listOrdenes = [];
     if (producto != '' && producto != null) {
       console.log('pase el if');
@@ -247,22 +257,22 @@ export class OrdenesComponent implements OnInit {
         },
         () => console.log('done')
       );
-    }else{
-      this.mostrarNotificacion('Error de datos','Por favor verifique los datos ingresados','danger');
+    } else {
+      this.mostrarNotificacion('Error de datos', 'Por favor verifique los datos ingresados', 'danger');
     }
   }
 
   consultaGenerica(): void {
     this.panelDetOrden = false;
     this.listOrdenes = [];
-    this.consultaTip =  this.angForm.controls.tipoConsulta.value;
+    this.consultaTip = this.angForm.controls.tipoConsulta.value;
     let parametro = this.angForm.controls.paramConsulta.value;
     if (this.consultaTip != '' && this.consultaTip != null && parametro != '' && parametro != null) {
       //console.log('valor:' + this.angForm.controls.paramConsulta.value);
       switch (this.angForm.controls.tipoConsulta.value) {
         case '1': {
-          console.log("entre 1: "+ this.angForm.controls.paramConsulta.value);
-          this.colsultarOrdenEstado(this.angForm.controls.paramConsulta.value); 
+          console.log("entre 1: " + this.angForm.controls.paramConsulta.value);
+          this.colsultarOrdenEstado(this.angForm.controls.paramConsulta.value);
           break;
         }
         case '2': {
@@ -275,7 +285,7 @@ export class OrdenesComponent implements OnInit {
           break;
         }
         case '4': {
-          console.log('consulta generica'); 
+          console.log('consulta generica');
           this.colsultarOrdenXProducto(this.angForm.controls.paramConsulta.value);
           break;
         }
@@ -289,22 +299,22 @@ export class OrdenesComponent implements OnInit {
           break;
         }
       }
-    }else{
-      this.mostrarNotificacion('Error de datos','Por favor verifique los datos ingresados','danger');
+    } else {
+      this.mostrarNotificacion('Error de datos', 'Por favor verifique los datos ingresados', 'danger');
     }
 
   }
 
   crearOrdPanel(): void {
-    if(this.habilitaCrear){
+    if (this.habilitaCrear) {
       this.habilitaCrear = false;
-    }else {
+    } else {
       this.habilitaCrear = true;
-      this.tablaOrdenes =false;
+      this.tablaOrdenes = false;
     }
   }
 
-  verDetalle(orden: OrdenM):void{
+  verDetalle(orden: OrdenM): void {
     console.log("entre al detalle");
     this.panelDetOrden = true;
     this.panelActualizar = false;
@@ -317,7 +327,7 @@ export class OrdenesComponent implements OnInit {
       error => console.error(JSON.stringify(error)),
       () => console.log('done')
     );
-    
+
   }
 
   procesarResponseDetalle(object: OrdenRsType) {
@@ -325,8 +335,8 @@ export class OrdenesComponent implements OnInit {
     this.listaDetalle.push(...object.datosBasicos.detalles);
   }
 
-  editarOrden(orden:OrdenM):void{
-    if(this.validarPermisos(5)){
+  editarOrden(orden: OrdenM): void {
+    if (this.validarPermisos(5)) {
       this.panelActualizar = true;
       this.panelDetOrden = false;
       this.tablaOrdenes = false;
@@ -339,13 +349,13 @@ export class OrdenesComponent implements OnInit {
       this.angForm.controls.eFechaAprob.setValue(orden.fechaAprobacion);
       this.angForm.controls.eFechaCierre.setValue(orden.fechaCierre);
       this.angForm.controls.eEstado.setValue(orden.estado);
-    }else{
+    } else {
       this.mostrarNotificacion('Acceso Denegado', 'No tiene permiso para esta función', 'danger');
     }
   }
 
-  ActualizarOrden():void{
-    let orden:OrdenM ={};
+  ActualizarOrden(): void {
+    let orden: OrdenM = {};
     orden.idOrden = this.angForm.controls.eIdOrden.value;
     console.log("eIdOrden: " + orden.idOrden);
     orden.idCliente = this.angForm.controls.eCliente.value;
@@ -376,19 +386,19 @@ export class OrdenesComponent implements OnInit {
     this.listOrdenes = [];
   }
 
-  mostrarPanelBuscarCliente():void {
+  mostrarPanelBuscarCliente(): void {
     this.panelBuscarCliente = true;
   }
 
-  ConsultaCliente():void{
+  ConsultaCliente(): void {
     let tipoID = this.angForm.controls.cTipoId.value;
     let identi = this.angForm.controls.cIdentificacion.value;
     //console.log(tipoID+' '+identi);
-    if(tipoID != null || tipoID != '' || identi != null || identi != ''){
+    if ((tipoID != null && tipoID != '') && (identi != null && identi != '')) {
       this.clienteApi.consultarClientePorIdentificacion('1', '1', tipoID, identi).subscribe(
         value => setTimeout(() => {
           const prd = value;
-          this.nombreCliente = value.cliente.nombre +' '+value.cliente.apellido;
+          this.nombreCliente = value.cliente.nombre + ' ' + value.cliente.apellido;
           this.panelBuscarCliente = false;
           this.userCliente = value.cliente.usuario;
           this.idCliente = value.cliente.idCliente;
@@ -400,18 +410,18 @@ export class OrdenesComponent implements OnInit {
         },
         () => console.log('done')
       );
-    }else{
-      this.mostrarNotificacion('Error de datos','Por favor verifique los datos ingresados','danger');
+    } else {
+      this.mostrarNotificacion('Error de datos', 'Por favor verifique los datos ingresados', 'danger');
     }
   }
 
-  mostrarPanelDireccion():void{
+  mostrarPanelDireccion(): void {
     this.panelBuscarDireccion = true;
     this.consultaDireccion();
   }
 
-  consultaDireccion():void{
-    if(this.userCliente != null || this.userCliente != ''){
+  consultaDireccion(): void {
+    if (this.userCliente != null || this.userCliente != '') {
       this.clienteApi.direccionesCliente('1', '1', this.userCliente).subscribe(
         value => setTimeout(() => {
           const prd = value;
@@ -424,26 +434,26 @@ export class OrdenesComponent implements OnInit {
         },
         () => console.log('done')
       );
-    }else{
-      this.mostrarNotificacion('Error de datos','Por favor verifique los datos ingresados','danger');
+    } else {
+      this.mostrarNotificacion('Error de datos', 'Por favor verifique los datos ingresados', 'danger');
     }
   }
 
-  verDireccion(dir:Direccion):void{
+  verDireccion(dir: Direccion): void {
     this.idDireccion = dir.iddireccion;
     this.textDireccion = dir.direccion;
     this.panelBuscarDireccion = false;
     //console.log("direccion "+this.idDireccion);
   }
 
-  
+
   crearOrden(): void {
     //console.log("cliente "+this.idCliente+" direccion "+this.idDireccion);
-    if(this.idCliente != null || this.idDireccion != null){
+    if (this.idCliente != null || this.idDireccion != null) {
       let orden: OrdenM = {};
       let today = new Date();
       let dd = String(today.getDate());
-      let mm = String(today.getMonth() + 1); 
+      let mm = String(today.getMonth() + 1);
       let yyyy = today.getFullYear();
       let fecha = dd + '/' + mm + '/' + yyyy;
       orden.idCliente = this.idCliente;
@@ -468,15 +478,15 @@ export class OrdenesComponent implements OnInit {
         },
         () => console.log('done')
       );
-      this.tablaOrdenes=true;
+      this.tablaOrdenes = true;
       this.panelCrear = false;
-    }else{
-      this.mostrarNotificacion('Error de datos','Por favor verifique los datos ingresados','danger');
+    } else {
+      this.mostrarNotificacion('Error de datos', 'Por favor verifique los datos ingresados', 'danger');
     }
   }
 
-  mostrarPanelCrearDetalle():void{
-    if(this.validarPermisos(5)){
+  mostrarPanelCrearDetalle(): void {
+    if (this.validarPermisos(5)) {
       this.PanelCrearDetalle = true;
       this.panelDetOrden = false;
       this.listaDetalle = [];
@@ -486,18 +496,18 @@ export class OrdenesComponent implements OnInit {
       this.panelCrear = false;
       this.tablaOrdenes = false;
       this.panelActualizar = false;
-    }else{
+    } else {
       this.mostrarNotificacion('Acceso denegado', 'No tiene permiso para esta función', 'danger');
     }
   }
 
-  mostrarPanelProducto():void{
+  mostrarPanelProducto(): void {
     this.panelBuscarProducto = true;
   }
 
-  buscarProducto():void{
-    let nombre =  this.angForm.controls.pNombre.value;
-    if(nombre != null || nombre != ''){
+  buscarProducto(): void {
+    let nombre = this.angForm.controls.pNombre.value;
+    if (nombre != null || nombre != '') {
       this.productoApi.conultarProductoPorNombre('1', '1', this.angForm.controls.pNombre.value).subscribe(
         value => setTimeout(() => {
           const prd = value;
@@ -512,13 +522,13 @@ export class OrdenesComponent implements OnInit {
         },
         () => console.log('done')
       );
-    }else{
-      this.mostrarNotificacion('Error de datos','Por favor verifique los datos ingresados','danger');
+    } else {
+      this.mostrarNotificacion('Error de datos', 'Por favor verifique los datos ingresados', 'danger');
     }
   }
 
-  seleccionarProducto(productoz: Producto): void{
-    console.log("impirmir productoz "+productoz);
+  seleccionarProducto(productoz: Producto): void {
+    console.log("impirmir productoz " + productoz);
     this.angForm.controls.pNombre.setValue(productoz.nombre);
     this.angForm.controls.pValorUnitario.setValue(productoz.valorBase);
     this.pIdProducto = productoz.idProducto;
@@ -526,21 +536,21 @@ export class OrdenesComponent implements OnInit {
     this.panelBuscarProducto = false;
   }
 
-  crearDetalle(): void{
+  crearDetalle(): void {
     let flag = true;
-    if(this.angForm.controls.dtCantidad.value == null || this.angForm.controls.dtCantidad.value == ''){
+    if (this.angForm.controls.dtCantidad.value == null || this.angForm.controls.dtCantidad.value == '') {
       flag = false;
-    }if(this.angForm.controls.dtIdOrden.value == null || this.angForm.controls.dtIdOrden.value == ''){
+    } if (this.angForm.controls.dtIdOrden.value == null || this.angForm.controls.dtIdOrden.value == '') {
       flag = false;
-    }if(this.angForm.controls.pIdProducto.value == null || this.angForm.controls.pIdProducto.value == ''){
+    } if (this.angForm.controls.pIdProducto.value == null || this.angForm.controls.pIdProducto.value == '') {
       flag = false;
-    }if(this.angForm.controls.dtProveedor.value == null || this.angForm.controls.dtProveedor.value == ''){
+    } if (this.angForm.controls.dtProveedor.value == null || this.angForm.controls.dtProveedor.value == '') {
       flag = false;
-    }if(this.angForm.controls.pValorUnitario.value == null || this.angForm.controls.pValorUnitario.value == ''){
+    } if (this.angForm.controls.pValorUnitario.value == null || this.angForm.controls.pValorUnitario.value == '') {
       flag = false;
     }
 
-    if(flag){
+    if (flag) {
       let detalle: DetalleOrden = {};
       detalle.cantidad = this.angForm.controls.dtCantidad.value;
       detalle.estado = 'ACTIVA';
@@ -550,23 +560,23 @@ export class OrdenesComponent implements OnInit {
       detalle.valorUnidad = this.angForm.controls.pValorUnitario.value;
       //console.log('crear detalle '+ detalle);
       this.detalleApi.registrarDetalleOrden('1', '1', detalle).subscribe(
-      value => setTimeout(() => {
-        //const prd = value;
-        //console.log(value);
-        this.panelDetOrden = false;
-        this.PanelCrearDetalle = false;
-        this.mostrarNotificacion('Creación del detalle', 'Se ha creado exitosamente', 'success');
-          }, 200),
-          error => {
-            this.mostrarNotificacion('Creación del detalle', 'Se presento un error, por favor notifique al administrador', 'danger');
-            console.error(JSON.stringify(error))
-          },
-          () => console.log('done')
-        );
-    }else{
-      this.mostrarNotificacion('Error de datos','Por favor verifique los datos ingresados','danger');
+        value => setTimeout(() => {
+          //const prd = value;
+          //console.log(value);
+          this.panelDetOrden = false;
+          this.PanelCrearDetalle = false;
+          this.mostrarNotificacion('Creación del detalle', 'Se ha creado exitosamente', 'success');
+        }, 200),
+        error => {
+          this.mostrarNotificacion('Creación del detalle', 'Se presento un error, por favor notifique al administrador', 'danger');
+          console.error(JSON.stringify(error))
+        },
+        () => console.log('done')
+      );
+    } else {
+      this.mostrarNotificacion('Error de datos', 'Por favor verifique los datos ingresados', 'danger');
     }
-    
+
   }
 
   mostrarNotificacion(pTitulo: String, pTexto: String, pTipo: String) {
@@ -604,24 +614,24 @@ export class OrdenesComponent implements OnInit {
     //return false;
   }
 
-  validarPermisos(id:number ):boolean {
+  validarPermisos(id: number): boolean {
     let per: number;
-        for (let index = 0; index < this.listaRoles.length; index++) {
-          per = this.listaRoles[index].idrol;
-          //console.log("permisos " + per);
-          if(per == id){
-            //console.log('son iguales ');
-            return true;
-          }
-        }
-        return false;
+    for (let index = 0; index < this.listaRoles.length; index++) {
+      per = this.listaRoles[index].idrol;
+      //console.log("permisos " + per);
+      if (per == id) {
+        //console.log('son iguales ');
+        return true;
+      }
+    }
+    return false;
   }
 
-  mapearEstados(est: number): string{
+  mapearEstados(est: number): string {
     console.log("estado ");
     switch (est) {
       case 1:
-          return "Creada";
+        return "Creada";
       case 2:
         return "Por Validar";
       case 3:
@@ -629,7 +639,7 @@ export class OrdenesComponent implements OnInit {
       case 4:
         return "Procesada";
       case 5:
-        return  "Entregada";
+        return "Entregada";
       case 6:
         return "Cancelada";
       case 7:
@@ -638,4 +648,204 @@ export class OrdenesComponent implements OnInit {
         return "Sin estado";
     }
   }
+  renderPreEnvio = false;
+  editarPreEnvio(pOrden: OrdenM) {
+    this.renderPreEnvio = true;
+    this.ordenEnvio = pOrden;
+    //consultar cliente y direcciones 
+
+    this.clienteApi.consultarClientePorId('1', '1', pOrden.idCliente).subscribe(
+      value1 => setTimeout(() => {
+        this.clienteEnvio = value1.cliente;
+        this.clienteApi.direccionesCliente('1', '1', value1.cliente.usuario).subscribe(
+          value2 => setTimeout(() => {
+            value2.direcciones.forEach(element => {
+              if (element.iddireccion = pOrden.idDireccion) {
+                this.direccionEnvio = element;
+              }
+            });
+          }, 200),
+          error => {
+            this.mostrarNotificacion('Consulta Dirección', 'Se presento un error, por favor notifique al administrador', 'danger');
+            console.error(JSON.stringify(error))
+          },
+          () => console.log('done')
+        );
+      }, 200),
+      error => {
+        this.mostrarNotificacion('Consulta Cliente', 'Se presento un error, por favor notifique al administrador', 'danger');
+        console.error(JSON.stringify(error))
+      },
+      () => console.log('done')
+    );
+  }
+  clienteEnvio: Cliente;
+  ordenEnvio: OrdenM;
+  direccionEnvio: Direccion;
+  enviarEnvio() {
+    var tcNUmero = this.angForm.controls.tcNum.value;
+    var tcFecha = this.angForm.controls.tcFec.value;
+    var tcCvc = this.angForm.controls.tcCvc.value;
+    var cuotas: string = this.angForm.controls.cuotas.value;
+    if (cuotas == null || cuotas == " ") {
+      cuotas = "1";
+    }
+    this.verificarTC(tcCvc, tcFecha, tcNUmero, cuotas);
+
+  }
+
+  verificarTC(cvc, fecha, tc, cuotas) {
+    this.spinner.show();
+    //validar aqui
+    let cabecera: CabeceraEntrada = {
+      clienteId: environment.tcClientId,
+      ip: '127.0.0.1'
+    }
+    let cuerpo: CuerpoMensajeVerificar = {
+      cvc: cvc,
+      fechaVence: fecha,
+      numeroTarjeta: tc
+    }
+    this.tarjetaApi.verificarTS(cabecera, cuerpo).subscribe(
+      (response) => {
+        let res: RootVerifyResponse = response;
+        if (res.creditcardverifyresponse.cabeceraSalida.tipoRespuesta) {
+          this.realizarPagoTC(cvc, fecha, tc, cuotas);
+
+        } else {
+          this.mostrarNotificacion('Error de datos', 'Error validando TC intente con una diferente.', 'warn');
+          this.spinner.hide();
+        }
+        //si todo sale bien debe ir a consultar el otro servicio 
+      }, (error) => {
+        this.mostrarNotificacion('Error de datos', "Error validando TC:" + error, 'danger');
+        this.spinner.hide();
+      });
+  }
+
+
+  realizarPagoTC(cvc, fecha, tc, cuotas): void {
+    let cabecera: CabeceraEntrada = {
+      clienteId: environment.tcClientId,
+      ip: '127.0.0.1'
+    }
+    let cuerpo: CuerpoMensajePago = {
+      numeroTarjeta: tc,
+      fechaVence: fecha,
+      cvc: cvc,
+      numeroCuotas: cuotas,
+      valorPago: this.ordenEnvio.valorTotal
+    }
+    console.log(cuerpo)
+    this.tarjetaApi.realizarCompra(cabecera, cuerpo).subscribe(
+      response => {
+        let res: RealizarPagoResponse = response;
+        if (res.creditcardpaymentresponse.cabaceraSalida.tipoRespuesta) {
+
+
+          this.enviarProcesoPago1(this.ordenEnvio.idOrden);
+
+        } else {
+          this.mostrarNotificacion('Error de datos', 'No se pudo realizar el pago, intente con otra TC', 'danger');
+          this.spinner.hide();
+        }
+
+      }, error => {
+        // this.mostrarNotiicacion('Error validando TC:' + error, 'error')
+        this.mostrarNotificacion('Error de datos', 'Error realizando compra con la tarjeta', 'danger');
+        this.spinner.hide();
+      });
+  }
+
+  enviarProcesoPago1(idOrden: number) {
+    console.log("enviarProcesoPago1::" + idOrden);
+    var items: Item[] = [];
+    this.detalleApi.conultarDetalleOrdenPorIdOrden('1', '1', idOrden).subscribe(
+      value => {
+        value.datosBasicos.detalles.forEach(element => {
+          let tmpItem: Item = {
+            nombreProducto: '',
+            cantidad: element.cantidad,
+            idOrden: element.idOrden,
+            idProducto: '' + element.idProducto,
+            iddetorden: element.idDetOrden,
+            valorUnidad: element.valorUnidad
+          };
+          items.push(tmpItem)
+        });
+        this.enviarProcesoPago2(idOrden, items)
+      }, error => {
+        console.log("error enviarprocesopago1");
+        this.spinner.hide();
+      }
+    );
+  }
+  enviarProcesoPago2(idOrden: number, items: Item[]) {
+    console.log("enviarProcesoPago2::" + idOrden + "|" + items);
+
+    var nomCategoria = () => {
+      switch (this.clienteEnvio.idCategoria) {
+        case 1: {
+          return 'Dorado'
+        }
+        case 2: {
+          return 'Plateado'
+        }
+        case 3: {
+          return 'Platino'
+        }
+      }
+    }
+    let ordenTrRequest: ordenTrRequest = {
+      mail: this.clienteEnvio.email,
+      nomCat: nomCategoria(),
+      proveedor: '',
+      nombre: this.clienteEnvio.nombre,
+      apellido: this.clienteEnvio.apellido,
+      cantidadProductos: this.ordenEnvio.cantidadProductos,
+      ciudad: this.direccionEnvio.ciudad,
+      direccion: this.direccionEnvio.direccion,
+      estado: this.direccionEnvio.ciudad,
+      pais: this.direccionEnvio.pais,
+      valorTotal: this.ordenEnvio.valorTotal,
+      idCategoria: this.clienteEnvio.idCategoria,
+      idOrden: idOrden,
+      items: items
+    };
+    this.spinner.hide();
+    this.envioPagoApi.enviarPago(ordenTrRequest).subscribe(
+      value => {
+        if (value.status.statusCode == 200) {
+          console.log("final Proceso:200")
+          this.renderPreEnvio = false;
+          this.mostrarNotificacion('Envio exitoso', 'Envio realizado', 'success');
+          // this.ordenEnvio.estado = 1;
+          // this.ordenesApi.actualizarOrdenPorId('1', '1', this.ordenEnvio.idOrden, this.ordenEnvio).subscribe(
+          //   value => setTimeout(() => {
+          //     const prd = value;
+          //     this.procesarResponseDetalle(value);
+          //     this.mostrarNotificacion('Actualizar Orden', 'Se ha actualizado la orden correctamente', 'success');
+          //   }, 200),
+          //   error => {
+          //     this.mostrarNotificacion('Actualizar Orden', 'Se presento un error, por favor notifique al administrador', 'danger');
+          //     console.error(JSON.stringify(error))
+          //   },
+          //   () => console.log('done')
+          // );
+
+        } else if (value.status.statusCode == 201) {
+          console.log("final Proceso:201")
+          this.renderPreEnvio = false;
+          this.mostrarNotificacion('Envio exitoso', 'Envio realizado', 'success');
+
+        } else {
+          console.log("erro")
+        }
+      }
+
+    );
+  }
+
+
+
 }

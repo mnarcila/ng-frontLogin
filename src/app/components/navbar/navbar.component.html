@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-transparent  navbar-absolute fixed-top">
     <div class="container-fluid">
         <div class="navbar-wrapper">
-            <a class="navbar-brand" href="javascript:void(0)">{{getTitle()}}</a>
+            <a class="navbar-brand" href="javascript:void(0)">OMS - KALLSONYS </a>
         </div>
         <button mat-raised-button class="navbar-toggler" type="button" (click)="sidebarToggle()">
             <span class="sr-only">Toggle navigation</span>
@@ -12,8 +12,8 @@
         <div class="collapse navbar-collapse justify-content-end" id="navigation">
 
             <ul class="navbar-nav">
-               
-                <li class="nav-item dropdown">
+
+                <!-- <li class="nav-item dropdown">
                     <a class="nav-link" href="javascript:void(0)" id="navbarDropdownMenuLink" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                         <i class="material-icons">notifications</i>
@@ -37,8 +37,11 @@
                             <span class="d-lg-none d-md-block">Account</span>
                         </p>
                     </a>
-                </li>
-                <button mat-icon-button="person" (click)="holamundo()">Cerrar Sesión</button>
+                </li> -->
+
+                <i class="material-icons" matTooltip="Cerrar Sesión" style="cursor: pointer;"
+                    (click)="$event.stopPropagation();cerrarSesion()">close</i>
+
             </ul>
         </div>
     </div>

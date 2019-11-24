@@ -129,7 +129,7 @@ export class NavbarComponent implements OnInit {
       return 'Dashboard';
     }
 
-    holamundo(){
+    cerrarSesion(){
         //console.log("hola mundo");
         this.auth.setLoggedIn(false);
         this.auth.setLoggedName('')
