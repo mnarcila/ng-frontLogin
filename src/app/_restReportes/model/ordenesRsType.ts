@@ -19,4 +19,5 @@ import { StatusType } from './statusType';
 export interface OrdenesRsType { 
     status?: StatusType;
     ordenes?: OrdenRsType;
+    orden?: OrdenRsType[];
 }

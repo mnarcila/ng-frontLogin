@@ -4,7 +4,7 @@ import { AuthService } from 'app/auth.service';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReporteService, OrdenRsType, ProductoRsType, CategoriaRsType, Orden2RsType, Orden3RsType, ClienteRsType } from 'app/_restReportes';
-import { formatDate } from "@angular/common";
+import { formatDate, DatePipe } from "@angular/common";
 
 declare var $: any;
 
@@ -18,18 +18,18 @@ export class ReportesComponent implements OnInit {
   angForm: FormGroup;
   panelFiltro:boolean = false;
   panelOrdenesCerradas:boolean = false;
-  tablaOrdenesCerradas: OrdenRsType ;
+  tablaOrdenesCerradas: OrdenRsType[] ;
   panelTablaOrdenesCerradas:boolean = false;
   panelMasVendidos: boolean = false;
   panelTablaMasVendidos: boolean = false;
-  tablaProductosMasVendidos: ProductoRsType;
+  tablaProductosMasVendidos: ProductoRsType[];
   panelCategoriasMasVendidos: boolean = false;
   panelOrdenesAbiertas: boolean = false;
   panelOrdDinero: boolean = false;
   panelClientesFacturados: boolean = false;
   panelTablaCategorias:boolean = false ;
   tablaCategorias: CategoriaRsType;
-  tablaOrdAbiertas: Orden2RsType;
+  tablaOrdAbiertas: Orden2RsType[];
   tablaOrdCerDinero: Orden3RsType;
   panelTablaClienteFac: boolean = false;
   tablaClientesFac: ClienteRsType;
@@ -40,6 +40,7 @@ export class ReportesComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder,
     private reportesapi: ReporteService,
+    private datePipe: DatePipe,
   ) { }
 
   ngOnInit() {
@@ -119,10 +120,11 @@ export class ReportesComponent implements OnInit {
     this.panelCategoriasMasVendidos = false;
     this.panelOrdenesAbiertas = true;
 
-    this.tablaOrdAbiertas = {};
+    this.tablaOrdAbiertas = [];
     this.reportesapi.ordenesAbiertas('1', '1').subscribe(
       value2 => setTimeout(() => {
-       this.tablaOrdAbiertas = value2.ordenes;
+       this.tablaOrdAbiertas  = value2.orden;
+       //console.log(this.tablaOrdAbiertas.length);
       }, 200),
       error => {
         this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
@@ -130,6 +132,7 @@ export class ReportesComponent implements OnInit {
       },
       () => console.log('done')
     );
+    this.panelOrdenesAbiertas = true;
   }
 
   mostrarPanelOrdCerrDinero(){
@@ -138,9 +141,12 @@ export class ReportesComponent implements OnInit {
     this.panelCategoriasMasVendidos = false;
     this.panelOrdenesAbiertas = false;
     this.panelOrdDinero = true;
+    let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
+    let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
+
 
     this.tablaOrdCerDinero = {};
-    this.reportesapi.ordenesCerradas('1', '1').subscribe(
+    this.reportesapi.ordenesCerradas('1', '1',fechaInicio,fechaFin).subscribe(
       value2 => setTimeout(() => {
        this.tablaOrdCerDinero = value2.ordenes;
       }, 200),
@@ -153,16 +159,19 @@ export class ReportesComponent implements OnInit {
   }
 
   buscarOrdenesCerradas(){
-    let fechaInicio = formatDate(this.angForm.controls.fechaInicioOC.value,'dd/MM/yyyy','en');
-    let fechaFin = formatDate(this.angForm.controls.fechaFinOC.value,'dd/MM/yyyy','en');
+    let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
+    let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
+    //console.log(fechaInicio);
+    //console.log(fechaFin);
     this.panelTablaOrdenesCerradas = true;
-    console.log(fechaInicio);
-    console.log(fechaFin);
-    this.tablaOrdenesCerradas = {};
+    this.tablaOrdenesCerradas = [];
     if((fechaInicio != null && fechaFin != null)||(fechaInicio != '' && fechaFin != '')){
-    this.reportesapi.noOrdenes('1', '1', '01/05/2019', '01/06/2019').subscribe(
+    this.reportesapi.noOrdenes('1', '1',fechaInicio,fechaFin).subscribe(
       value2 => setTimeout(() => {
-       this.tablaOrdenesCerradas = value2.ordenes;
+       this.tablaOrdenesCerradas = value2.orden;
+       console.log(value2);
+       console.log(value2.orden);
+       console.log(this.tablaOrdenesCerradas);
       }, 200),
       error => {
         this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
@@ -177,12 +186,13 @@ export class ReportesComponent implements OnInit {
 
   buscarProductosMasVendidos(){
     this.panelTablaMasVendidos = true;
-    let fechaInicio = this.angForm.controls.fechaInicioOC;
-    let fechaFin = this.angForm.controls.fechaFinOC;
-    this.tablaProductosMasVendidos = {};
-    this.reportesapi.productosVendidos('1', '1', fechaInicio.value, fechaFin.value).subscribe(
+    let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
+    //console.log(fechaInicio);
+    let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
+    this.tablaProductosMasVendidos = [];
+    this.reportesapi.productosVendidos('1', '1', fechaInicio, fechaFin).subscribe(
       value2 => setTimeout(() => {
-       this.tablaProductosMasVendidos = value2.productos;
+       this.tablaProductosMasVendidos = value2.producto;
       }, 200),
       error => {
         this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
@@ -226,4 +236,14 @@ export class ReportesComponent implements OnInit {
     );
   }
   
+  // recibe un string de fecha en formato dd/mm/yyyy y retorna el formato dd-mm-yyyy
+  formatFecha(fecha: string):string {
+    //console.log(fecha);
+    let ano = fecha.substr(0,4);
+    let mes = fecha.substr(5,2);
+    let dia = fecha.substr(8,2);
+    let result = dia+'-'+mes+'-'+ano;
+    console.log(result);
+    return result;
+  }
 }

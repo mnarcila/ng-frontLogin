@@ -19,4 +19,5 @@ import { StatusType } from './statusType';
 export interface ProductosRsType { 
     status?: StatusType;
     productos?: ProductoRsType;
+    producto?: ProductoRsType[];
 }

@@ -54,6 +54,7 @@ import { UsuarioComponent } from './usuario/usuario.component';
 import { CampanaService } from './_restCampanas';
 import { ReportesComponent } from './reportes/reportes.component';
 import { NgxSpinnerModule } from "ngx-spinner"; 
+import {DatePipe} from '@angular/common';
 
 @NgModule({
   imports: [
@@ -114,6 +115,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
     CampanaService,
     RolesService,
     ReporteService,
+    DatePipe,
   ],
   entryComponents: [DialogOverviewExampleDialog],
   bootstrap: [AppComponent]
