@@ -16,10 +16,10 @@ declare var $: any;
 export class ReportesComponent implements OnInit {
 
   angForm: FormGroup;
-  panelFiltro:boolean = false;
-  panelOrdenesCerradas:boolean = false;
-  tablaOrdenesCerradas: OrdenRsType[] ;
-  panelTablaOrdenesCerradas:boolean = false;
+  panelFiltro: boolean = false;
+  panelOrdenesCerradas: boolean = false;
+  tablaOrdenesCerradas: OrdenRsType[];
+  panelTablaOrdenesCerradas: boolean = false;
   panelMasVendidos: boolean = false;
   panelTablaMasVendidos: boolean = false;
   tablaProductosMasVendidos: ProductoRsType[];
@@ -27,14 +27,14 @@ export class ReportesComponent implements OnInit {
   panelOrdenesAbiertas: boolean = false;
   panelOrdDinero: boolean = false;
   panelClientesFacturados: boolean = false;
-  panelTablaCategorias:boolean = false ;
+  panelTablaCategorias: boolean = false;
   tablaCategorias: CategoriaRsType[];
   tablaOrdAbiertas: Orden2RsType[];
   tablaOrdCerDinero: Orden3RsType[];
   panelTablaClienteFac: boolean = false;
   tablaClientesFac: ClienteRsType[];
   panelOrdCerradasDinero = false;
-  
+
   constructor(
     public dialog: MatDialog,
     private auth: AuthService,
@@ -83,107 +83,107 @@ export class ReportesComponent implements OnInit {
     });
   }
 
-  mostrarPanelOrdenesCerradas(){
+  mostrarPanelOrdenesCerradas() {
     this.panelFiltro = true;
 
-    this.panelOrdenesCerradas        = true;
-    this.panelMasVendidos            = false;
-    this.panelCategoriasMasVendidos  = false;
-    this.panelClientesFacturados     = false;
-    this.panelOrdCerradasDinero      = false;
+    this.panelOrdenesCerradas = true;
+    this.panelMasVendidos = false;
+    this.panelCategoriasMasVendidos = false;
+    this.panelClientesFacturados = false;
+    this.panelOrdCerradasDinero = false;
 
     this.panelTablaOrdenesCerradas = false;
-    this.panelTablaMasVendidos     = false;
-    this.panelTablaCategorias      = false;
-    this.panelOrdenesAbiertas      = false;
-    this.panelOrdDinero            = false;
-    this.panelTablaClienteFac      = false;
+    this.panelTablaMasVendidos = false;
+    this.panelTablaCategorias = false;
+    this.panelOrdenesAbiertas = false;
+    this.panelOrdDinero = false;
+    this.panelTablaClienteFac = false;
   }
 
-  mostrarPanelMasVendidos(){
+  mostrarPanelMasVendidos() {
 
-    this.panelOrdenesCerradas        = false;
-    this.panelMasVendidos            = true;
-    this.panelCategoriasMasVendidos  = false;
-    this.panelClientesFacturados     = false;
-    this.panelOrdCerradasDinero      = false;
+    this.panelOrdenesCerradas = false;
+    this.panelMasVendidos = true;
+    this.panelCategoriasMasVendidos = false;
+    this.panelClientesFacturados = false;
+    this.panelOrdCerradasDinero = false;
 
     this.panelTablaOrdenesCerradas = false;
-    this.panelTablaMasVendidos     = false;
-    this.panelTablaCategorias      = false;
-    this.panelOrdenesAbiertas      = false;
-    this.panelOrdDinero            = false;
-    this.panelTablaClienteFac      = false;
+    this.panelTablaMasVendidos = false;
+    this.panelTablaCategorias = false;
+    this.panelOrdenesAbiertas = false;
+    this.panelOrdDinero = false;
+    this.panelTablaClienteFac = false;
   }
 
-  mostrarPanelCategorias(){
-    this.panelOrdenesCerradas        = false;
-    this.panelMasVendidos            = false;
-    this.panelCategoriasMasVendidos  = true;
-    this.panelClientesFacturados     = false;
-    this.panelOrdCerradasDinero      = false;
+  mostrarPanelCategorias() {
+    this.panelOrdenesCerradas = false;
+    this.panelMasVendidos = false;
+    this.panelCategoriasMasVendidos = true;
+    this.panelClientesFacturados = false;
+    this.panelOrdCerradasDinero = false;
 
     this.panelTablaOrdenesCerradas = false;
-    this.panelTablaMasVendidos     = false;
-    this.panelTablaCategorias      = false;
-    this.panelOrdenesAbiertas      = false;
-    this.panelOrdDinero            = false;
-    this.panelTablaClienteFac      = false;
+    this.panelTablaMasVendidos = false;
+    this.panelTablaCategorias = false;
+    this.panelOrdenesAbiertas = false;
+    this.panelOrdDinero = false;
+    this.panelTablaClienteFac = false;
   }
 
-  mostrarPanelClientesFacturados(){
+  mostrarPanelClientesFacturados() {
     this.panelFiltro = true;
-    this.panelOrdenesCerradas        = false;
-    this.panelMasVendidos            = false;
-    this.panelCategoriasMasVendidos  = false;
-    this.panelClientesFacturados     = true;
-    this.panelOrdCerradasDinero      = false;
+    this.panelOrdenesCerradas = false;
+    this.panelMasVendidos = false;
+    this.panelCategoriasMasVendidos = false;
+    this.panelClientesFacturados = true;
+    this.panelOrdCerradasDinero = false;
 
     this.panelTablaOrdenesCerradas = false;
-    this.panelTablaMasVendidos     = false;
-    this.panelTablaCategorias      = false;
-    this.panelOrdenesAbiertas      = false;
-    this.panelOrdDinero            = false;
-    this.panelTablaClienteFac      = false;
+    this.panelTablaMasVendidos = false;
+    this.panelTablaCategorias = false;
+    this.panelOrdenesAbiertas = false;
+    this.panelOrdDinero = false;
+    this.panelTablaClienteFac = false;
   }
 
-  mostrarPanelOrdCerrDinero(){
+  mostrarPanelOrdCerrDinero() {
     this.panelFiltro = true;
 
-    this.panelOrdenesCerradas        = false;
-    this.panelMasVendidos            = false;
-    this.panelCategoriasMasVendidos  = false;
-    this.panelClientesFacturados     = false;
-    this.panelOrdCerradasDinero      = true;
+    this.panelOrdenesCerradas = false;
+    this.panelMasVendidos = false;
+    this.panelCategoriasMasVendidos = false;
+    this.panelClientesFacturados = false;
+    this.panelOrdCerradasDinero = true;
 
     this.panelTablaOrdenesCerradas = false;
-    this.panelTablaMasVendidos     = false;
-    this.panelTablaCategorias      = false;
-    this.panelOrdenesAbiertas      = false;
-    this.panelOrdDinero            = false;
-    this.panelTablaClienteFac      = false;
+    this.panelTablaMasVendidos = false;
+    this.panelTablaCategorias = false;
+    this.panelOrdenesAbiertas = false;
+    this.panelOrdDinero = false;
+    this.panelTablaClienteFac = false;
   }
 
-  mostrarPanelOrdAbiertas(){
+  mostrarPanelOrdAbiertas() {
     this.panelFiltro = false;
-    this.panelOrdenesCerradas        = false;
-    this.panelMasVendidos            = false;
-    this.panelCategoriasMasVendidos  = false;
-    this.panelClientesFacturados     = false;
-    this.panelOrdCerradasDinero      = false;
+    this.panelOrdenesCerradas = false;
+    this.panelMasVendidos = false;
+    this.panelCategoriasMasVendidos = false;
+    this.panelClientesFacturados = false;
+    this.panelOrdCerradasDinero = false;
 
     this.panelTablaOrdenesCerradas = false;
-    this.panelTablaMasVendidos     = false;
-    this.panelTablaCategorias      = false;
-    this.panelOrdenesAbiertas      = true;
-    this.panelOrdDinero            = false;
-    this.panelTablaClienteFac      = false;
+    this.panelTablaMasVendidos = false;
+    this.panelTablaCategorias = false;
+    this.panelOrdenesAbiertas = true;
+    this.panelOrdDinero = false;
+    this.panelTablaClienteFac = false;
 
     this.tablaOrdAbiertas = [];
     this.reportesapi.ordenesAbiertas('1', '1').subscribe(
       value2 => setTimeout(() => {
-       this.tablaOrdAbiertas  = value2.orden;
-       //console.log(this.tablaOrdAbiertas.length);
+        this.tablaOrdAbiertas = value2.orden;
+        //console.log(this.tablaOrdAbiertas.length);
       }, 200),
       error => {
         this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
@@ -194,123 +194,153 @@ export class ReportesComponent implements OnInit {
     this.panelOrdenesAbiertas = true;
   }
 
-  buscarOrdCerradasDinero(){
-    
+  buscarOrdCerradasDinero() {
 
-    this.panelOrdenesCerradas        = false;
-    this.panelMasVendidos            = false;
-    this.panelCategoriasMasVendidos  = false;
-    this.panelClientesFacturados     = false;
-    this.panelOrdCerradasDinero      = false;
-    
-    let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
-    let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
 
-    this.panelTablaOrdenesCerradas = false;
-    this.panelTablaMasVendidos     = false;
-    this.panelTablaCategorias      = false;
-    this.panelOrdenesAbiertas      = false;
-    this.panelOrdDinero            = true;
-    this.panelTablaClienteFac      = false;
+    this.panelOrdenesCerradas = false;
+    this.panelMasVendidos = false;
+    this.panelCategoriasMasVendidos = false;
+    this.panelClientesFacturados = false;
+    this.panelOrdCerradasDinero = false;
 
-    this.tablaOrdCerDinero = [];
-    this.reportesapi.ordenesCerradas('1', '1',fechaInicio,fechaFin).subscribe(
-      value2 => setTimeout(() => {
-       this.tablaOrdCerDinero = value2.orden;
-      }, 200),
-      error => {
-        this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
-        console.error(JSON.stringify(error))
-      },
-      () => console.log('done')
-    );
-  }
+    if (this.angForm.controls.fechaInicioOC.value != null || this.angForm.controls.fechaFinOC.value != null ||
+      this.angForm.controls.fechaInicioOC.value != '' || this.angForm.controls.fechaFinOC.value != '') {
+      let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
+      let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
 
-  buscarOrdenesCerradas(){
-    let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
-    let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
-    //console.log(fechaInicio);
-    //console.log(fechaFin);
-    this.panelTablaOrdenesCerradas = true;
-    this.tablaOrdenesCerradas = [];
-    if((fechaInicio != null && fechaFin != null)||(fechaInicio != '' && fechaFin != '')){
-    this.reportesapi.noOrdenes('1', '1',fechaInicio,fechaFin).subscribe(
-      value2 => setTimeout(() => {
-       this.tablaOrdenesCerradas = value2.orden;
-       console.log(value2);
-       console.log(value2.orden);
-       console.log(this.tablaOrdenesCerradas);
-      }, 200),
-      error => {
-        this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
-        console.error(JSON.stringify(error))
-      },
-      () => console.log('done')
-    );
-    }else{
-      this.mostrarNotificacion('Consulta Reporte', 'Existen datos vacios en el formulario', 'danger');
+      this.panelTablaOrdenesCerradas = false;
+      this.panelTablaMasVendidos = false;
+      this.panelTablaCategorias = false;
+      this.panelOrdenesAbiertas = false;
+      this.panelOrdDinero = true;
+      this.panelTablaClienteFac = false;
+
+      this.tablaOrdCerDinero = [];
+      this.reportesapi.ordenesCerradas('1', '1', fechaInicio, fechaFin).subscribe(
+        value2 => setTimeout(() => {
+          this.tablaOrdCerDinero = value2.orden;
+        }, 200),
+        error => {
+          this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
+          console.error(JSON.stringify(error))
+        },
+        () => console.log('done')
+      );
+    } else {
+      this.mostrarNotificacion('Consulta Reporte', 'Ingrese los datos por favor', 'danger');
     }
+
   }
 
-  buscarProductosMasVendidos(){
-    this.panelTablaMasVendidos = true;
-    let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
-    //console.log(fechaInicio);
-    let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
-    this.tablaProductosMasVendidos = [];
-    this.reportesapi.productosVendidos('1', '1', fechaInicio, fechaFin).subscribe(
-      value2 => setTimeout(() => {
-       this.tablaProductosMasVendidos = value2.producto;
-      }, 200),
-      error => {
-        this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
-        console.error(JSON.stringify(error))
-      },
-      () => console.log('done')
-    );
+  buscarOrdenesCerradas() {
+    if (this.angForm.controls.fechaInicioOC.value != null || this.angForm.controls.fechaFinOC.value != null ||
+      this.angForm.controls.fechaInicioOC.value != '' || this.angForm.controls.fechaFinOC.value != '') {
+      let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
+      let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
+      //console.log(fechaInicio);
+      //console.log(fechaFin);
+      this.panelTablaOrdenesCerradas = true;
+      this.tablaOrdenesCerradas = [];
+      if ((fechaInicio != null && fechaFin != null) || (fechaInicio != '' && fechaFin != '')) {
+        this.reportesapi.noOrdenes('1', '1', fechaInicio, fechaFin).subscribe(
+          value2 => setTimeout(() => {
+            this.tablaOrdenesCerradas = value2.orden;
+            console.log(value2);
+            console.log(value2.orden);
+            console.log(this.tablaOrdenesCerradas);
+          }, 200),
+          error => {
+            this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
+            console.error(JSON.stringify(error))
+          },
+          () => console.log('done')
+        );
+      } else {
+        this.mostrarNotificacion('Consulta Reporte', 'Existen datos vacios en el formulario', 'danger');
+      }
+    }else{
+      this.mostrarNotificacion('Consulta Reporte', 'Ingrese los datos por favor', 'danger');
+    }
+
   }
 
-  buscarCategorias(){
-    this.panelTablaCategorias = true;
-    let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
-    let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
-    this.tablaCategorias = [] ;
-    this.reportesapi.categoriasVendidas('1', '1', fechaInicio, fechaFin).subscribe(
-      value2 => setTimeout(() => {
-       this.tablaCategorias = value2.categoria;
-      }, 200),
-      error => {
-        this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
-        console.error(JSON.stringify(error))
-      },
-      () => console.log('done')
-    );
+  buscarProductosMasVendidos() {
+    if (this.angForm.controls.fechaInicioOC.value != null || this.angForm.controls.fechaFinOC.value != null ||
+      this.angForm.controls.fechaInicioOC.value != '' || this.angForm.controls.fechaFinOC.value != '') {
+        this.panelTablaMasVendidos = true;
+        let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
+        //console.log(fechaInicio);
+        let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
+        this.tablaProductosMasVendidos = [];
+        this.reportesapi.productosVendidos('1', '1', fechaInicio, fechaFin).subscribe(
+          value2 => setTimeout(() => {
+            this.tablaProductosMasVendidos = value2.producto;
+          }, 200),
+          error => {
+            this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
+            console.error(JSON.stringify(error))
+          },
+          () => console.log('done')
+        );
+    }else{
+      this.mostrarNotificacion('Consulta Reporte', 'Ingrese los datos por favor', 'danger');
+    }
+    
   }
 
-  buscarClientesFacturados(){
-    this.panelTablaClienteFac = true;
-    let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
-    let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
-    this.tablaClientesFac = [];
-    this.reportesapi.clientesFacturados('1', '1',fechaInicio,fechaFin).subscribe(
-      value2 => setTimeout(() => {
-       this.tablaClientesFac = value2.cliente;
-      }, 200),
-      error => {
-        this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
-        console.error(JSON.stringify(error))
-      },
-      () => console.log('done')
-    );
+  buscarCategorias() {
+    if(this.angForm.controls.fechaInicioOC.value != null || this.angForm.controls.fechaFinOC.value != null ||
+      this.angForm.controls.fechaInicioOC.value != '' || this.angForm.controls.fechaFinOC.value != ''){
+        this.panelTablaCategorias = true;
+        let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
+        let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
+        this.tablaCategorias = [];
+        this.reportesapi.categoriasVendidas('1', '1', fechaInicio, fechaFin).subscribe(
+          value2 => setTimeout(() => {
+            this.tablaCategorias = value2.categoria;
+          }, 200),
+          error => {
+            this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
+            console.error(JSON.stringify(error))
+          },
+          () => console.log('done')
+        );
+    }else{
+      this.mostrarNotificacion('Consulta Reporte', 'Ingrese los datos por favor', 'danger');
+    }
+    
   }
-  
+
+  buscarClientesFacturados() {
+    if(this.angForm.controls.fechaInicioOC.value != null || this.angForm.controls.fechaFinOC.value != null ||
+      this.angForm.controls.fechaInicioOC.value != '' || this.angForm.controls.fechaFinOC.value != ''){
+        this.panelTablaClienteFac = true;
+        let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
+        let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
+        this.tablaClientesFac = [];
+        this.reportesapi.clientesFacturados('1', '1', fechaInicio, fechaFin).subscribe(
+          value2 => setTimeout(() => {
+            this.tablaClientesFac = value2.cliente;
+          }, 200),
+          error => {
+            this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
+            console.error(JSON.stringify(error))
+          },
+          () => console.log('done')
+        );
+    }else{
+      this.mostrarNotificacion('Consulta Reporte', 'Ingrese los datos por favor', 'danger');
+    }
+    
+  }
+
   // recibe un string de fecha en formato dd/mm/yyyy y retorna el formato dd-mm-yyyy
-  formatFecha(fecha: string):string {
+  formatFecha(fecha: string): string {
     //console.log(fecha);
-    let ano = fecha.substr(0,4);
-    let mes = fecha.substr(5,2);
-    let dia = fecha.substr(8,2);
-    let result = dia+'-'+mes+'-'+ano;
+    let ano = fecha.substr(0, 4);
+    let mes = fecha.substr(5, 2);
+    let dia = fecha.substr(8, 2);
+    let result = dia + '-' + mes + '-' + ano;
     console.log(result);
     return result;
   }
