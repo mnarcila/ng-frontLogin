@@ -2,36 +2,36 @@
   <form [formGroup]="angForm">
     <div class="container-fluid">
       <div class="card">
-        <div class="card-header card-header">
-          <h4 class="card-title">REPORTES</h4>
+        <div class="card-header bg-primary">
+          <h4 class="card-title text-white p3 text-white p3">REPORTES</h4>
           <p class="card-category"></p>
         </div>
         <div class="card-body">
           <div class="row">
-            <button mat-raised-button class="btn btn-rose pull" (click)="mostrarPanelOrdenesCerradas()">
+            <button mat-raised-button class="btn btn-primary bg-primary" (click)="mostrarPanelOrdenesCerradas()">
               Ordenes Cerradas
             </button>
-            <button mat-raised-button class="btn btn-rose pull" (click)="mostrarPanelMasVendidos()">
+            <button mat-raised-button class="btn btn-primary bg-primary" (click)="mostrarPanelMasVendidos()">
               Productos mas Vendidos
             </button>
-            <button mat-raised-button class="btn btn-rose pull" (click)="mostrarPanelCategorias()">
+            <button mat-raised-button class="btn btn-primary bg-primary" (click)="mostrarPanelCategorias()">
               Categorías mas Vendidas
             </button>
-            <button mat-raised-button class="btn btn-rose pull" (click)="mostrarPanelOrdAbiertas()">
+            <button mat-raised-button class="btn btn-primary bg-primary" (click)="mostrarPanelOrdAbiertas()">
               Ordenes Abiertas
             </button>
-            <button mat-raised-button class="btn btn-rose pull" (click)="mostrarPanelOrdCerrDinero()">
+            <button mat-raised-button class="btn btn-primary bg-primary" (click)="mostrarPanelOrdCerrDinero()">
               Ordenes Cerradas Con Dinero
             </button>
-            <button mat-raised-button class="btn btn-rose pull" (click)="mostrarPanelClientesFacturados()">
+            <button mat-raised-button class="btn btn-primary bg-primary" (click)="mostrarPanelClientesFacturados()">
               Clientes Facturados
             </button>
           </div>
         </div>
       </div>
       <div class="card" *ngIf="panelFiltro">
-        <div class="card-header card-header-rose">
-          <h4 class="card-title ">FILTRO</h4>
+        <div class="card-header bg-primary">
+          <h4 class="card-title text-white p3 ">FILTRO</h4>
           <p class="card-category">Diligencie la siguiente información</p>
         </div>
         <div class="row">
@@ -46,27 +46,27 @@
             </mat-form-field>
           </div>
           <div class="col-md-4" *ngIf="panelOrdenesCerradas">
-            <button class="btn btn-danger pull-left" (click)="buscarOrdenesCerradas()">Ordenes Cerradas</button>
+            <button class="btn btn-primary bg-primary" (click)="buscarOrdenesCerradas()">Ordenes Cerradas</button>
           </div>
           <div class="col-md-4" *ngIf="panelMasVendidos">
-            <button class="btn btn-danger pull-left" (click)="buscarProductosMasVendidos()">Productos Mas
+            <button class="btn btn-primary bg-primary" (click)="buscarProductosMasVendidos()">Productos Mas
               Vendidos</button>
           </div>
           <div class="col-md-4" *ngIf="panelCategoriasMasVendidos">
-            <button class="btn btn-danger pull-left" (click)="buscarCategorias()">Categorías Mas Vendidas</button>
+            <button class="btn btn-primary bg-primary" (click)="buscarCategorias()">Categorías Mas Vendidas</button>
           </div>
           <div class="col-md-4" *ngIf="panelClientesFacturados">
-            <button class="btn btn-danger pull-left" (click)="buscarClientesFacturados()">Clientes Facturados</button>
+            <button class="btn btn-primary bg-primary" (click)="buscarClientesFacturados()">Clientes Facturados</button>
           </div>
           <div class="col-md-4" *ngIf="panelOrdCerradasDinero">
-            <button class="btn btn-danger pull-left" (click)="buscarOrdCerradasDinero()">Ordenes Cerradas Dinero</button>
+            <button class="btn btn-primary bg-primary" (click)="buscarOrdCerradasDinero()">Ordenes Cerradas Dinero</button>
           </div>
         </div>
       </div>
       <div class="row">
         <div *ngIf="panelTablaOrdenesCerradas" class="card">
-          <div class="card-header card-header-rose">
-            <h4 class="card-title ">Ordenes Cerradas</h4>
+          <div class="card-header bg-primary">
+            <h4 class="card-title text-white p3 ">Ordenes Cerradas</h4>
             <p class="card-category">Lista de ordenes cerradas</p>
           </div>
           <strong *ngIf="tablaOrdenesCerradas.length == 0">Sin datos..</strong>
@@ -93,8 +93,8 @@
         </div>
       </div>
       <div *ngIf="panelTablaMasVendidos" class="card">
-        <div class="card-header card-header-rose">
-          <h4 class="card-title ">Productos Mas vendidos</h4>
+        <div class="card-header bg-primary">
+          <h4 class="card-title text-white p3 ">Productos Mas vendidos</h4>
           <p class="card-category">Lista de productos mas vendidos</p>
         </div>
         <strong *ngIf="tablaProductosMasVendidos.length == 0">Sin datos..</strong>
@@ -122,8 +122,8 @@
         </div>
       </div>
       <div *ngIf="panelTablaCategorias" class="card">
-        <div class="card-header card-header-rose">
-          <h4 class="card-title ">Categorias mas Vendidas</h4>
+        <div class="card-header bg-primary">
+          <h4 class="card-title text-white p3 ">Categorias mas Vendidas</h4>
           <p class="card-category">Lista Categorias mas vendidas</p>
         </div>
         <strong *ngIf="tablaCategorias.length == 0">Sin datos..</strong>
@@ -151,8 +151,8 @@
         </div>
       </div>
       <div *ngIf="panelOrdenesAbiertas" class="card">
-        <div class="card-header card-header-rose">
-          <h4 class="card-title ">Ordenes Abiertas</h4>
+        <div class="card-header bg-primary">
+          <h4 class="card-title text-white p3 ">Ordenes Abiertas</h4>
           <p class="card-category">Lista de ordenes abiertas</p>
         </div>
         <strong *ngIf="tablaOrdAbiertas.length == 0">Sin datos..</strong>
@@ -179,8 +179,8 @@
       </div>
       
       <div *ngIf="panelOrdDinero" class="card">
-          <div class="card-header card-header-rose">
-                    <h4 class="card-title ">Ordenes Cerradas con mas Dinero</h4>
+          <div class="card-header bg-primary">
+                    <h4 class="card-title text-white p3 ">Ordenes Cerradas con mas Dinero</h4>
                     <p class="card-category">Lista de ordenes con dinero</p>
                   </div>
                 <strong *ngIf="tablaOrdCerDinero.length == 0">Sin datos..</strong>
@@ -206,8 +206,8 @@
                 </div>
               </div>      
       <div *ngIf="panelTablaClienteFac" class="card">
-        <div class="card-header card-header-rose">
-          <h4 class="card-title ">Clientes factura</h4>
+        <div class="card-header bg-primary">
+          <h4 class="card-title text-white p3 ">Clientes factura</h4>
           <p class="card-category">Lista de Clientes Facturados</p>
         </div>
         <strong *ngIf="tablaClientesFac.length == 0">Sin datos..</strong>
