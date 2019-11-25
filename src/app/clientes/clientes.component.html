@@ -2,392 +2,394 @@
     <form [formGroup]="angForm">
         <div class="container-fluid">
             <div class="card">
-                <div class="card-header card-header">
-                    <h4 class="card-title">Clientes</h4>
-                    <p class="card-category"></p>
+                <div class="card-header card-header bg-primary">
+                    <h4 class="card-title text-white">Clientes</h4>
+                    <p class="card-category text-black"></p>
                 </div>
                 <div class="card-body">
-                    <div class="form-group">
-                        <button mat-raised-button class="btn btn-rose pull " (click)="onClick()">
-                            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                            Consultar
-                        </button>
-                        <button mat-raised-button class="btn btn-rose pull " (click)="renderCrearDiv()">
-                            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                            Crear Clientes
-                        </button>
 
+                    <div class="row">
+                        <div class="form-group">
+                            <button mat-raised-button class="btn bg-primary pull " (click)="onClick()">
+                                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                                Consultar
+                            </button>
+                            <button mat-raised-button class="btn bg-primary pull " (click)="renderCrearDiv()">
+                                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                                Crear Clientes
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
                         <mat-radio-group formControlName="busquedaC">
-                            <mat-radio-button class="example-radio-button" [value]="1">
-                                Busqueda Por ID
-                            </mat-radio-button>
-                            <mat-radio-button class="example-radio-button" [value]="2">
-                                Busqueda Identificación
-                            </mat-radio-button>
-
+                            <div class="col-md-8">
+                                <mat-radio-button class="example-radio-button" [value]="1">
+                                    Busqueda Por ID
+                                </mat-radio-button>
+                            </div>
+                            <div class="col-md-8">
+                                <mat-radio-button class="example-radio-button" [value]="2">
+                                    Busqueda Identificación
+                                </mat-radio-button>
+                            </div>
                         </mat-radio-group>
-
-                        <input type="text" formControlName="bsc_cliente" class="form-control"
-                            placeholder="Busqueda cliente" />
                     </div>
+                    <input type="text" formControlName="bsc_cliente" class="form-control"
+                        placeholder="Busqueda cliente" />
                 </div>
+            </div>
 
 
-                <div class="container-fluid" *ngIf="renderEditar">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="card">
-                                <div class="card-header card-header-rose">
-                                    <h4 class="card-title mt-0"> EDITAR CLIENTES </h4>
-                                    <p class="card-category">Clientes registrados en el sistema</p>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <mat-form-field class="example-full-width">
-                                                <input matInput placeholder="id Cliente" formControlName="eclienteId"
-                                                    type="text" readonly="true">
-                                            </mat-form-field>
-
-                                            <mat-form-field class="example-full-width">
-                                                <input matInput placeholder="Usuario" formControlName="eiusuario"
-                                                    type="text">
-                                            </mat-form-field>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <mat-form-field class="example-full-width">
-                                                <input matInput placeholder="Clave" formControlName="eipassword"
-                                                    type="password">
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <mat-form-field class="example-full-width">
-                                                <input matInput placeholder="Nombre" formControlName="einombre"
-                                                    type="text">
-                                            </mat-form-field>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <mat-form-field class="example-full-width">
-                                                <input matInput placeholder="Apellido" formControlName="eiapellido"
-                                                    type="text">
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <mat-label>Tipo de Documento</mat-label>
-                                            <mat-select formControlName="eTipoDoc">
-                                                <mat-option *ngFor="let doc of listaTipoId" [value]="doc.value">
-                                                    {{doc.viewValue}}
-                                                </mat-option>
-                                            </mat-select>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <mat-form-field class="example-full-width">
-                                                <input matInput placeholder="Número de Documento"
-                                                    formControlName="eDocId" type="text">
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <mat-form-field class="example-full-width">
-                                                <input matInput placeholder="telefono" formControlName="eitelefono"
-                                                    type="text">
-                                            </mat-form-field>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <mat-form-field class="example-full-width">
-                                                <input matInput placeholder="email" formControlName="eiemail"
-                                                    type="text">
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <mat-label>Categoria</mat-label>
-                                            <mat-select formControlName="ecateProduct">
-                                                <mat-option *ngFor="let cat of categorias" [value]="cat.value">
-                                                    {{cat.viewValue}}
-                                                </mat-option>
-                                            </mat-select>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <mat-form-field>
-                                                <mat-label>Estado</mat-label>
-                                                <mat-select formControlName="eestadoProduct">
-                                                    <mat-option *ngFor="let est of estados" [value]="est.value">
-                                                        {{est.viewValue}}
-                                                    </mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-                                    <button mat-raised-button (click)="editarCliente()"
-                                        class="btn btn-rose pull-right">Editar Cliente</button>
-                                    <div class="clearfix"></div>
-
-                                </div>
+            <div class="container-fluid" *ngIf="renderEditar">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header bg-primary">
+                                <h4 class="card-title mt-0 text-white"> EDITAR CLIENTES </h4>
+                                <p class="card-category text-black">Clientes registrados en el sistema</p>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Render crear -->
-                <div class="container-fluid" *ngIf="renderCrear">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="card">
-                                <div class="card-header card-header-rose">
-                                    <h4 class="card-title mt-0"> CLIENTES </h4>
-                                    <p class="card-category">Clientes registrados en el sistema</p>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <mat-form-field class="example-full-width">
-                                                <input matInput placeholder="Usuario" formControlName="iusuario"
-                                                    type="text">
-                                            </mat-form-field>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <mat-form-field class="example-full-width">
-                                                <input matInput placeholder="Clave" formControlName="ipassword"
-                                                    type="password">
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <mat-form-field class="example-full-width">
-                                                <input matInput placeholder="Nombre" formControlName="inombre"
-                                                    type="text">
-                                            </mat-form-field>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <mat-form-field class="example-full-width">
-                                                <input matInput placeholder="Apellido" formControlName="iapellido"
-                                                    type="text">
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <mat-label>Tipo de Documento</mat-label>
-                                            <mat-select formControlName="tipoDoc">
-                                                <mat-option *ngFor="let doc of listaTipoId" [value]="doc.value">
-                                                    {{doc.viewValue}}
-                                                </mat-option>
-                                            </mat-select>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <mat-form-field class="example-full-width">
-                                                <input matInput placeholder="Número de Documento"
-                                                    formControlName="docId" type="text">
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <mat-form-field class="example-full-width">
-                                                <input matInput placeholder="telefono" formControlName="itelefono"
-                                                    type="text">
-                                            </mat-form-field>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <mat-form-field class="example-full-width">
-                                                <input matInput placeholder="email" formControlName="iemail"
-                                                    type="text">
-                                            </mat-form-field>
-                                        </div>
-                                    </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput placeholder="id Cliente" formControlName="eclienteId"
+                                                type="text" readonly="true">
+                                        </mat-form-field>
 
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <mat-label>Categoria</mat-label>
-                                            <mat-select formControlName="cateProduct">
-                                                <mat-option *ngFor="let cat of categorias" [value]="cat.value">
-                                                    {{cat.viewValue}}
-                                                </mat-option>
-                                            </mat-select>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <mat-form-field>
-                                                <mat-label>Estado</mat-label>
-                                                <mat-select formControlName="estadoProduct">
-                                                    <mat-option *ngFor="let est of estados" [value]="est.value">
-                                                        {{est.viewValue}}
-                                                    </mat-option>
-                                                </mat-select>
-                                            </mat-form-field>
-                                        </div>
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput placeholder="Usuario" formControlName="eiusuario"
+                                                type="text">
+                                        </mat-form-field>
                                     </div>
-                                    <button mat-raised-button (click)="crearCliente()"
-                                        class="btn btn-rose pull-right">Crear
-                                        Cliente</button>
-                                    <div class="clearfix"></div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- render consultar-->
-                <div class="container-fluid" *ngIf="renderConsulta">
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card">
-                                <div class="card-header card-header-rose">
-                                    <h4 class="card-title mt-0"> CLIENTES </h4>
-                                    <p class="card-category">Clientes registrados en el sistema</p>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <strong *ngIf="clienteTabla.length == 0">Cargando..</strong>
-                                        <table *ngIf="clienteTabla.length > 0" class="table table-hover">
-                                            <thead class="">
-                                                <th>ID Cliente</th>
-                                                <th>Nombre</th>
-                                                <th>Apellido</th>
-                                                <th>Usuario </th>
-                                                <th>tipo Identificación</th>
-                                                <th>num. Identificación</th>
-                                                <th>Categoria</th>
-                                                <th>Telefono</th>
-                                                <th>Email</th>
-                                                <th>Estado</th>
-                                                <th>Origen</th>
-                                            </thead>
-                                            <tbody>
-                                                <tr *ngFor="let cliente of clienteTabla">
-                                                    <td>{{ cliente.idCliente }}</td>
-                                                    <td>{{ cliente.nombre }}</td>
-                                                    <td>{{ cliente.apellido }}</td>
-                                                    <td>{{ cliente.usuario }}</td>
-                                                    <td>{{ cliente.tipoidentificacion }}</td>
-                                                    <td>{{ cliente.numidentificacion }}</td>
-                                                    <td>{{ consultarCategoria(cliente.idCategoria) }}</td>
-                                                    <td>{{ cliente.telefono }}</td>
-                                                    <td>{{ cliente.email }}</td>
-                                                    <td>{{ cliente.estado }}</td>
-                                                    <td>{{ cliente.origen }}</td>
-                                                    <td><i matTooltip="Editar registro" class="material-icons"
-                                                            style="cursor: pointer;"
-                                                            (click)="$event.stopPropagation();editar(cliente)">edit</i>
-                                                    </td>
-
-                                                    <td><i matTooltip="Editar direcciones" class="material-icons"
-                                                            style="cursor: pointer;"
-                                                            (click)="$event.stopPropagation();direccion(cliente.usuario)">home</i>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput placeholder="Clave" formControlName="eipassword"
+                                                type="password">
+                                        </mat-form-field>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card" *ngIf="panelBuscarDireccion">
-                    <div class="card-header card-header-rose">
-                        <h4 class="card-title ">Seleccionar Dirección</h4>
-                        <p class="card-category">Seleccione una dirección</p>
-                    </div>
-                    <div class="card-body">
-                        <strong *ngIf="direcciones.length == 0">Sin datos..</strong>
-                        <table *ngIf="direcciones.length > 0" class="table">
-                            <thead class=" text-primary">
-                                <th>Dirección</th>
-                                <th>País</th>
-                                <th>Ciudad</th>
-                                <th>Tipo de Dirección</th>
-                                <th>Estado</th>
-                                <th>Seleccionar</th>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let dir of direcciones">
-                                    <td hidden>{{dir.iddireccion}}</td>
-                                    <td>{{dir.direccion}}</td>
-                                    <td>{{dir.pais}}</td>
-                                    <td>{{dir.ciudad}}</td>
-                                    <td>{{dir.tipodireccion}}</td>
-                                    <td>{{dir.estado}}</td>
-                                    <td><i class="material-icons" style="cursor: pointer;"
-                                            (click)="$event.stopPropagation();verDireccion(dir)">done</i>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-md-4">
-                        <button mat-raised-button (click)="PanelDireccion()" class="btn btn-rose pull-right">Agregar Dirección</button>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-                <div class="container-fluid" *ngIf="crearDireccion">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="card">
-                                <div class="card-header card-header-rose">
-                                    <h4 class="card-title mt-0"> Dirección </h4>
-                                    <p class="card-category">Ingrese los siguiente datos</p>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput placeholder="Nombre" formControlName="einombre" type="text">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput placeholder="Apellido" formControlName="eiapellido"
+                                                type="text">
+                                        </mat-form-field>
+                                    </div>
                                 </div>
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <mat-form-field class="example-full-width">
-                                                <input matInput placeholder="Dirección" formControlName="dDirecion"
-                                                    type="text" required> 
-                                            </mat-form-field>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <mat-label>País</mat-label>
-                                            <mat-select formControlName="dPais" required>
-                                                <mat-option *ngFor="let p of listaPaises" [value]="p.value">
-                                                    {{p.viewValue}}
-                                                </mat-option>
-                                            </mat-select>
-                                        </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <mat-label>Tipo de Documento</mat-label>
+                                        <mat-select formControlName="eTipoDoc">
+                                            <mat-option *ngFor="let doc of listaTipoId" [value]="doc.value">
+                                                {{doc.viewValue}}
+                                            </mat-option>
+                                        </mat-select>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <mat-form-field class="example-full-width">
-                                                <input matInput placeholder="Ciudad" formControlName="dCiudad"
-                                                    type="text" required>
-                                            </mat-form-field>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <mat-form-field class="example-full-width">
-                                                <input matInput placeholder="Tipo Dirección" formControlName="dTipo"
-                                                    type="text" required>
-                                            </mat-form-field>
-                                        </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput placeholder="Número de Documento" formControlName="eDocId"
+                                                type="text">
+                                        </mat-form-field>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput placeholder="telefono" formControlName="eitelefono"
+                                                type="text">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput placeholder="email" formControlName="eiemail" type="text">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <mat-label>Categoria</mat-label>
+                                        <mat-select formControlName="ecateProduct">
+                                            <mat-option *ngFor="let cat of categorias" [value]="cat.value">
+                                                {{cat.viewValue}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field>
                                             <mat-label>Estado</mat-label>
-                                            <mat-select formControlName="dEstado" required>
+                                            <mat-select formControlName="eestadoProduct">
                                                 <mat-option *ngFor="let est of estados" [value]="est.value">
                                                     {{est.viewValue}}
                                                 </mat-option>
                                             </mat-select>
-                                        </div>
+                                        </mat-form-field>
                                     </div>
-                                    <button mat-raised-button (click)="crearDireccionCliente()"
-                                        class="btn btn-rose pull-right">Crear
-                                        Dirección</button>
-                                    <div class="clearfix"></div>
+                                </div>
+                                <button mat-raised-button (click)="editarCliente()"
+                                    class="btn bg-primary pull-right">Editar Cliente</button>
+                                <div class="clearfix"></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Render crear -->
+            <div class="container-fluid" *ngIf="renderCrear">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header bg-primary">
+                                <h4 class="card-title mt-0 text-white"> CLIENTES </h4>
+                                <p class="card-category text-black">Clientes registrados en el sistema</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput placeholder="Usuario" formControlName="iusuario"
+                                                type="text">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput placeholder="Clave" formControlName="ipassword"
+                                                type="password">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput placeholder="Nombre" formControlName="inombre" type="text">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput placeholder="Apellido" formControlName="iapellido"
+                                                type="text">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <mat-label>Tipo de Documento</mat-label>
+                                        <mat-select formControlName="tipoDoc">
+                                            <mat-option *ngFor="let doc of listaTipoId" [value]="doc.value">
+                                                {{doc.viewValue}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput placeholder="Número de Documento" formControlName="docId"
+                                                type="text">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput placeholder="telefono" formControlName="itelefono"
+                                                type="text">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput placeholder="email" formControlName="iemail" type="text">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <mat-label>Categoria</mat-label>
+                                        <mat-select formControlName="cateProduct">
+                                            <mat-option *ngFor="let cat of categorias" [value]="cat.value">
+                                                {{cat.viewValue}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field>
+                                            <mat-label>Estado</mat-label>
+                                            <mat-select formControlName="estadoProduct">
+                                                <mat-option *ngFor="let est of estados" [value]="est.value">
+                                                    {{est.viewValue}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <button mat-raised-button (click)="crearCliente()"
+                                    class="btn bg-primary pull-right">Crear
+                                    Cliente</button>
+                                <div class="clearfix"></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- render consultar-->
+            <div class="container-fluid" *ngIf="renderConsulta">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header bg-primary">
+                                <h4 class="card-title mt-0 text-white"> CLIENTES </h4>
+                                <p class="card-category text-black">Clientes registrados en el sistema</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <strong *ngIf="clienteTabla.length == 0">Cargando..</strong>
+                                    <table *ngIf="clienteTabla.length > 0" class="table table-hover">
+                                        <thead class="">
+                                            <th>ID Cliente</th>
+                                            <th>Nombre</th>
+                                            <th>Apellido</th>
+                                            <th>Usuario </th>
+                                            <th>tipo Identificación</th>
+                                            <th>num. Identificación</th>
+                                            <th>Categoria</th>
+                                            <th>Telefono</th>
+                                            <th>Email</th>
+                                            <th>Estado</th>
+                                            <th>Origen</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let cliente of clienteTabla">
+                                                <td>{{ cliente.idCliente }}</td>
+                                                <td>{{ cliente.nombre }}</td>
+                                                <td>{{ cliente.apellido }}</td>
+                                                <td>{{ cliente.usuario }}</td>
+                                                <td>{{ cliente.tipoidentificacion }}</td>
+                                                <td>{{ cliente.numidentificacion }}</td>
+                                                <td>{{ consultarCategoria(cliente.idCategoria) }}</td>
+                                                <td>{{ cliente.telefono }}</td>
+                                                <td>{{ cliente.email }}</td>
+                                                <td>{{ cliente.estado }}</td>
+                                                <td>{{ cliente.origen }}</td>
+                                                <td><i matTooltip="Editar registro" class="material-icons"
+                                                        style="cursor: pointer;"
+                                                        (click)="$event.stopPropagation();editar(cliente)">edit</i>
+                                                </td>
+
+                                                <td><i matTooltip="Editar direcciones" class="material-icons"
+                                                        style="cursor: pointer;"
+                                                        (click)="$event.stopPropagation();direccion(cliente.usuario)">home</i>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="card" *ngIf="panelBuscarDireccion">
+                <div class="card-header bg-primary">
+                    <h4 class="card-title text-white">Seleccionar Dirección</h4>
+                    <p class="card-category text-black">Seleccione una dirección</p>
+                </div>
+                <div class="card-body">
+                    <strong *ngIf="direcciones.length == 0">Sin datos..</strong>
+                    <table *ngIf="direcciones.length > 0" class="table">
+                        <thead class=" text-primary">
+                            <th>Dirección</th>
+                            <th>País</th>
+                            <th>Ciudad</th>
+                            <th>Tipo de Dirección</th>
+                            <th>Estado</th>
+                            <th>Seleccionar</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let dir of direcciones">
+                                <td hidden>{{dir.iddireccion}}</td>
+                                <td>{{dir.direccion}}</td>
+                                <td>{{dir.pais}}</td>
+                                <td>{{dir.ciudad}}</td>
+                                <td>{{dir.tipodireccion}}</td>
+                                <td>{{dir.estado}}</td>
+                                <td><i class="material-icons" style="cursor: pointer;"
+                                        (click)="$event.stopPropagation();verDireccion(dir)">done</i>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-4">
+                    <button mat-raised-button (click)="PanelDireccion()" class="btn bg-primary pull-right">Agregar
+                        Dirección</button>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="container-fluid" *ngIf="crearDireccion">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header bg-primary">
+                                <h4 class="card-title mt-0 text-white"> Dirección </h4>
+                                <p class="card-category text-black">Ingrese los siguiente datos</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput placeholder="Dirección" formControlName="dDirecion"
+                                                type="text" required>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-label>País</mat-label>
+                                        <mat-select formControlName="dPais" required>
+                                            <mat-option *ngFor="let p of listaPaises" [value]="p.value">
+                                                {{p.viewValue}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput placeholder="Ciudad" formControlName="dCiudad" type="text"
+                                                required>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <mat-form-field class="example-full-width">
+                                            <input matInput placeholder="Tipo Dirección" formControlName="dTipo"
+                                                type="text" required>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <mat-label>Estado</mat-label>
+                                        <mat-select formControlName="dEstado" required>
+                                            <mat-option *ngFor="let est of estados" [value]="est.value">
+                                                {{est.viewValue}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </div>
+                                </div>
+                                <button mat-raised-button (click)="crearDireccionCliente()"
+                                    class="btn bg-primary pull-right">Crear
+                                    Dirección</button>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
     </form>
 </div>

@@ -1,35 +1,27 @@
 <div class="main-content">
   <form [formGroup]="angForm">
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header card-header-rose">
-              <table class="table-responsive">
-                <tr>
-                  <td>
-                    <div class="example-full-width"><button class="btn btn-primary" (click)="mostrarPanelConsulta()">
-                        Consultar Campaña
-                      </button>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="example-full-width"><button class="btn btn-primary" (click)="mostrarPanelCrear()">
-                        Crear Campaña
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              </table>
-            </div>
+      <div class="card">
+        <div class="card-header bg-primary">
+          <h4 class="card-title text-white p3">Campañas</h4>
+        </div>
+        <div class="card-body ">
+          <div class="form-group">
+            <button class="btn bg-primary btn-primary" (click)="mostrarPanelConsulta()">
+              Consultar Campaña
+            </button>
+            <button class="btn bg-primary btn-primary" (click)="mostrarPanelCrear()">
+              Crear Campaña
+            </button>
           </div>
         </div>
       </div>
+
       <div class="col-md-12" *ngIf="panelFiltroCampanas">
         <div class="card">
-          <div class="card-header card-header-rose">
-            <h4 class="card-title">Filtar Campaña por ID</h4>
-            <p class="card-category">Ingrese el ID</p>
+          <div class="card-header bg-primary">
+            <h4 class="card-title text-white">Filtar Campaña por ID</h4>
+            <p class="card-category text-black">Ingrese el ID</p>
           </div>
           <div class="card-body">
             <div class="row">
@@ -38,15 +30,15 @@
                   <input matInput placeholder="ID Campana" formControlName="cId" type="text">
                 </mat-form-field>
               </div>
-              <button class="btn btn-danger pull-right" (click)="buscarCampanaID()">Buscar Campaña</button>
+              <button class="btn bg-primary pull-right" (click)="buscarCampanaID()">Buscar Campaña</button>
             </div>
           </div>
         </div>
       </div>
       <div class="card" *ngIf="panelListaCampanas">
-        <div class="card-header card-header-rose">
-          <h4 class="card-title ">Campañas</h4>
-          <p class="card-category">Lista de Campañas</p>
+        <div class="card-header bg-primary">
+          <h4 class="card-title text-white ">Campañas</h4>
+          <p class="card-category text-black">Lista de Campañas</p>
         </div>
         <strong *ngIf="listaCampanas.length == 0">Sin datos..</strong>
         <div class="card-body" *ngIf="listaCampanas.length > 0">
@@ -76,9 +68,8 @@
                   <td>{{cam.estado}}</td>
                   <td><i class="material-icons" style="cursor: pointer;"
                       (click)="$event.stopPropagation();mostrarPanelActualizar(cam)">update</i>
-                  <td><i class="material-icons" matTooltip="Ver imagen"
-                    style="cursor: pointer;"
-                    (click)="$event.stopPropagation();verImagen(cam.rutaBanner)">image</i></td>
+                  <td><i class="material-icons" matTooltip="Ver imagen" style="cursor: pointer;"
+                      (click)="$event.stopPropagation();verImagen(cam.rutaBanner)">image</i></td>
                 </tr>
               </tbody>
             </table>
@@ -86,9 +77,9 @@
         </div>
       </div>
       <div class="card" *ngIf="panelCrearCampanas">
-        <div class="card-header card-header-rose">
-          <h4 class="card-title ">Crear Campaña</h4>
-          <p class="card-category">Ingrese la siguiente información</p>
+        <div class="card-header bg-primary">
+          <h4 class="card-title text-white ">Crear Campaña</h4>
+          <p class="card-category text-black">Ingrese la siguiente información</p>
         </div>
         <div class="card-body">
           <div class="row">
@@ -100,14 +91,14 @@
             </div>
             <div class="col-md-4">
               <mat-form-field class="example-full-width">
-                <input matInput placeholder="Fecha de Inicio" formControlName="cFechaInicio" type="date"
-                  required="true" class="form-control">
+                <input matInput placeholder="Fecha de Inicio" formControlName="cFechaInicio" type="date" required="true"
+                  class="form-control">
               </mat-form-field>
             </div>
             <div class="col-md-4">
               <mat-form-field class="example-full-width">
-                <input matInput placeholder="Fecha de Fin" formControlName="cFechaFin" type="date" 
-                required="true" class="form-control">
+                <input matInput placeholder="Fecha de Fin" formControlName="cFechaFin" type="date" required="true"
+                  class="form-control">
               </mat-form-field>
             </div>
           </div>
@@ -118,37 +109,37 @@
               </mat-form-field>
             </div>
             <div class="col-md-4">
-              <button mat-raised-button (click)="mostrarPanelProducto()" class="btn btn-danger pull-left">Buscar
+              <button mat-raised-button (click)="mostrarPanelProducto()" class="btn bg-primary pull-left">Buscar
                 Producto</button>
             </div>
             <div class="col-md-4">
               <mat-form-field>
                 <mat-label>Estado</mat-label>
                 <mat-select formControlName="cEstado">
-                    <mat-option *ngFor="let est of estados" [value]="est.value">
-                        {{est.viewValue}}
-                    </mat-option>
+                  <mat-option *ngFor="let est of estados" [value]="est.value">
+                    {{est.viewValue}}
+                  </mat-option>
                 </mat-select>
-            </mat-form-field>
+              </mat-form-field>
             </div>
           </div>
           <div class="row">
             <div class="col-md-4">
-                <mat-label>Imagen del Banner</mat-label>
+              <mat-label>Imagen del Banner</mat-label>
             </div>
             <div class="col-md-2">
-                <input (change)="fileChange($event)" type="file" id="inputGroupFile01"
-                    aria-describedby="inputGroupFileAddon01">
+              <input (change)="fileChange($event)" type="file" id="inputGroupFile01"
+                aria-describedby="inputGroupFileAddon01">
             </div>
           </div>
-          <button mat-raised-button (click)="CrearCampana()" class="btn btn-danger pull-right">Crear Campaña</button>
+          <button mat-raised-button (click)="CrearCampana()" class="btn bg-primary pull-right">Crear Campaña</button>
           <div class="clearfix"></div>
         </div>
       </div>
       <div class="card" *ngIf="panelMostrarProducto">
-        <div class="card-header card-header-rose">
-          <h4 class="card-title ">Busqueda de Productos</h4>
-          <p class="card-category">Seleccione alguna de las siguientes opciones</p>
+        <div class="card-header bg-primary">
+          <h4 class="card-title text-white">Busqueda de Productos</h4>
+          <p class="card-category text-black">Seleccione alguna de las siguientes opciones</p>
         </div>
         <br />
         <div class="row">
@@ -172,16 +163,16 @@
               required />
           </div>
           <div class="col-md-6">
-            <button mat-raised-button (click)="panelProductos()" class="btn btn-danger pull-right">Buscar
+            <button mat-raised-button (click)="panelProductos()" class="btn bg-primary pull-right">Buscar
               Producto</button>
             <div class="clearfix"></div>
           </div>
         </div>
       </div>
       <div class="card" *ngIf="panelTablaProductos">
-        <div class="card-header card-header-rose">
-          <h4 class="card-title mt-0"> PRODUCTOS </h4>
-          <p class="card-category">Productos registrados en el sistema</p>
+        <div class="card-header bg-primary">
+          <h4 class="card-title mt-0 text-white"> PRODUCTOS </h4>
+          <p class="card-category text-black">Productos registrados en el sistema</p>
         </div>
         <div class="card-body">
           <div class="table-responsive">
@@ -212,58 +203,59 @@
         </div>
       </div>
       <div class="card" *ngIf="panelActualizaCampanas">
-          <div class="card-header card-header-rose">
-            <h4 class="card-title ">Actualizar Campaña</h4>
-            <p class="card-category">Ingrese la siguiente información</p>
-          </div>
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-4">
-                <mat-form-field class="example-full-width">
-                  <input matInput placeholder="ID Campaña" formControlName="ecIdCampana" type="text"
-                    class="form-control" readonly>
-                </mat-form-field>
-              </div>
-              <div class="col-md-4">
-                <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Descripción" formControlName="ecDescripcion" type="text"
-                    class="form-control" required>
-                </mat-form-field>
-              </div>
-              <div class="col-md-4">
-                <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Fecha de Inicio" formControlName="ecFechaInicio" type="date"
-                    required="true" class="form-control">
-                </mat-form-field>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-4">
-                <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Fecha de Fin" formControlName="ecFechaFin" type="date" 
-                  required="true" class="form-control">
-                </mat-form-field>
-              </div>
-              <div class="col-md-4">
-                <mat-form-field class="example-full-width">
-                  <input matInput placeholder="Producto" formControlName="epProd" type="text" required readonly>
-                </mat-form-field>
-              </div>
-              <div class="col-md-4">
-                <mat-form-field>
-                  <mat-label>Estado</mat-label>
-                  <mat-select formControlName="ecEstado">
-                      <mat-option *ngFor="let est of estados" [value]="est.value">
-                          {{est.viewValue}}
-                      </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-            </div>
-            <button mat-raised-button (click)="updateCampana()" class="btn btn-danger pull-right">Actualizar Campaña</button>
-            <div class="clearfix"></div>
-          </div>
+        <div class="card-header bg-primary">
+          <h4 class="card-title text-white">Actualizar Campaña</h4>
+          <p class="card-category text-black">Ingrese la siguiente información</p>
         </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="ID Campaña" formControlName="ecIdCampana" type="text" class="form-control"
+                  readonly>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Descripción" formControlName="ecDescripcion" type="text"
+                  class="form-control" required>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Fecha de Inicio" formControlName="ecFechaInicio" type="date"
+                  required="true" class="form-control">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Fecha de Fin" formControlName="ecFechaFin" type="date" required="true"
+                  class="form-control">
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Producto" formControlName="epProd" type="text" required readonly>
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field>
+                <mat-label>Estado</mat-label>
+                <mat-select formControlName="ecEstado">
+                  <mat-option *ngFor="let est of estados" [value]="est.value">
+                    {{est.viewValue}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <button mat-raised-button (click)="updateCampana()" class="btn bg-primary pull-right">Actualizar
+            Campaña</button>
+          <div class="clearfix"></div>
+        </div>
+      </div>
     </div>
   </form>
 </div>

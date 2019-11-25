@@ -4,32 +4,25 @@
       <div class="row">
         <div class="col-md-12">
           <div class="card">
-            <div class="card-header card-header-rose">
-              <table class="table-responsive">
-                <tr>
-                  <td>
-                    <div class="example-full-width"><button class="btn btn-primary" (click)="mostrarPanelConsulta()">
-                        Consultar Usuario
-                      </button>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="example-full-width"><button class="btn btn-primary" (click)="mostrarPanelCrear()">
-                        Crear Usuario
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              </table>
+            <div class="card-header bg-primary">
+              <h4 class="card-title text-white p3">Usuarios</h4>
+            </div>
+            <div class="card-body ">
+              <button class="btn bg-primary" (click)="mostrarPanelConsulta()">
+                Consultar Usuario
+              </button>
+              <button class="btn bg-primary" (click)="mostrarPanelCrear()">
+                Crear Usuario
+              </button>
             </div>
           </div>
         </div>
       </div>
       <div class="col-md-12" *ngIf="panelFiltroEmpleado">
         <div class="card">
-          <div class="card-header card-header-rose">
-            <h4 class="card-title">Filtar Usuario por ID</h4>
-            <p class="card-category">Ingrese el ID</p>
+          <div class="card-header bg-primary">
+            <h4 class="card-title text-white">Filtar Usuario por ID</h4>
+            <p class="card-category text-black">Ingrese el ID</p>
           </div>
           <div class="card-body">
             <div class="row">
@@ -38,15 +31,15 @@
                   <input matInput placeholder="ID Usuario" formControlName="uId" type="text">
                 </mat-form-field>
               </div>
-              <button class="btn btn-danger pull-right" (click)="buscarEmpleadoID()">Buscar Empleado</button>
+              <button class="btn bg-primary pull-right" (click)="buscarEmpleadoID()">Buscar Empleado</button>
             </div>
           </div>
         </div>
       </div>
       <div class="card" *ngIf="panelListaEmpleado">
-        <div class="card-header card-header-rose">
-          <h4 class="card-title ">Empleados</h4>
-          <p class="card-category">Lista de Empleados</p>
+        <div class="card-header bg-primary">
+          <h4 class="card-title text-white">Empleados</h4>
+          <p class="card-category text-black">Lista de Empleados</p>
         </div>
         <strong *ngIf="listaEmpleados.length == 0">Sin datos..</strong>
         <div class="card-body" *ngIf="listaEmpleados.length > 0">
@@ -76,49 +69,44 @@
         </div>
       </div>
       <div class="card" *ngIf="panelCrearEmpleado">
-          <div class="card-header card-header-rose">
-              <h4 class="card-title ">Crear Empleado</h4>
-              <p class="card-category">Ingrese la siguiente información</p>
+        <div class="card-header bg-primary">
+          <h4 class="card-title  text-white">Crear Empleado</h4>
+          <p class="card-category text-black">Ingrese la siguiente información</p>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Nombres" formControlName="uNombre" required="true" type="text"
+                  required="true">
+              </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Apellidos" formControlName="uApellido" type="text" required="true">
+              </mat-form-field>
+            </div>
           </div>
-          <div class="card-body">
-              <div class="row">
-                  <div class="col-md-6">
-                      <mat-form-field class="example-full-width">
-                          <input matInput placeholder="Nombres" formControlName="uNombre" required="true" type="text"
-                          required="true">
-                      </mat-form-field>
-                  </div>
-                  <div class="col-md-6">
-                      <mat-form-field class="example-full-width">
-                          <input matInput placeholder="Apellidos" formControlName="uApellido" type="text"
-                          required="true">
-                      </mat-form-field>
-                  </div>
-              </div>
-              <div class="row">
-                  <div class="col-md-4">
-                      <mat-form-field class="example-full-width">
-                          <input matInput placeholder="Usuario" formControlName="uUsuario"
-                              type="text" required="true">
-                      </mat-form-field>
-                  </div>
-                  <div class="col-md-4">
-                      <mat-form-field class="example-full-width">
-                          <input matInput placeholder="Clave" formControlName="uClave"
-                              type="password" required="true">
-                      </mat-form-field>
-                  </div>
-                  <div class="col-md-4">
-                    <mat-form-field class="example-full-width">
-                      <input matInput placeholder="Estado" formControlName="uEstado"
-                        type="text" value="Activo" readonly>
-                </mat-form-field>
-                  </div>
-              </div>
-              <button mat-raised-button (click)="CrearEmpleado()"
-                  class="btn btn-danger pull-right">Crear Empleado</button>
-              <div class="clearfix"></div>
+          <div class="row">
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Usuario" formControlName="uUsuario" type="text" required="true">
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Clave" formControlName="uClave" type="password" required="true">
+              </mat-form-field>
+            </div>
+            <div class="col-md-4">
+              <mat-form-field class="example-full-width">
+                <input matInput placeholder="Estado" formControlName="uEstado" type="text" value="Activo" readonly>
+              </mat-form-field>
+            </div>
           </div>
+          <button mat-raised-button (click)="CrearEmpleado()" class="btn bg-primary pull-right">Crear Empleado</button>
+          <div class="clearfix"></div>
+        </div>
       </div>
     </div>
   </form>

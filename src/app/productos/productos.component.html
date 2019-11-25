@@ -2,37 +2,49 @@
     <form [formGroup]="angForm">
         <div class="container-fluid">
             <div class="card">
-                <div class="card-header card-header">
-                    <h4 class="card-title">Producto</h4>
+                <div class="card-header card-header bg-primary">
+                    <h4 class="card-title  text-white">Producto</h4>
                     <p class="card-category"></p>
                 </div>
                 <div class="card-body">
                     <div class="form-group">
-                        <button mat-raised-button class="btn btn-rose pull " (click)="mostrarBusquedaRanking()">
-                            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                            Ranking de Productos
-                        </button>
-                        <button mat-raised-button class="btn btn-rose pull " (click)="onClick()">
-                            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                            Consultar
-                        </button>
-                        <button mat-raised-button class="btn btn-rose pull " (click)="renderCrearDiv()">
-                            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-                            Crear Producto
-                        </button>
+                        <div class="row">
 
-                        <mat-radio-group formControlName="busquedaC">
-                            <mat-radio-button class="example-radio-button" [value]="1">
-                                Busqueda Por ID
-                            </mat-radio-button>
-                            <mat-radio-button class="example-radio-button" [value]="2">
-                                Busqueda Nombre
-                            </mat-radio-button>
-                            <mat-radio-button class="example-radio-button" [value]="3">
-                                Busqueda Descripcion
-                            </mat-radio-button>
-                        </mat-radio-group>
 
+                            <button mat-raised-button class="btn bg-primary  pull " (click)="mostrarBusquedaRanking()">
+                                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                                Ranking de Productos
+                            </button>
+                            <button mat-raised-button class="btn bg-primary  pull " (click)="onClick()">
+                                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                                Consultar
+                            </button>
+                            <button mat-raised-button class="btn bg-primary  pull " (click)="renderCrearDiv()">
+                                <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                                Crear Producto
+                            </button>
+                        </div>
+                        <div class="row">
+
+                            <mat-radio-group formControlName="busquedaC">
+                                <div class="col-md-8">
+                                    <mat-radio-button class="example-radio-button" [value]="1">
+                                        Busqueda Por ID
+                                    </mat-radio-button>
+                                </div>
+                                <div class="col-md-8">
+                                    <mat-radio-button class="example-radio-button" [value]="2">
+                                        Busqueda Nombre
+                                    </mat-radio-button>
+                                </div>
+                                <div class="col-md-8">
+                                    <mat-radio-button class="example-radio-button" [value]="3">
+                                        Busqueda Descripcion
+                                    </mat-radio-button>
+                                </div>
+                            </mat-radio-group>
+
+                        </div>
 
 
                         <input type="text" formControlName="product" class="form-control"
@@ -44,9 +56,9 @@
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="card">
-                                    <div class="card-header card-header-rose">
-                                        <h4 class="card-title">Agregar Producto</h4>
-                                        <p class="card-category">Complete la siguiente información</p>
+                                    <div class="card-header bg-primary">
+                                        <h4 class="card-title text-white">Agregar Producto</h4>
+                                        <p class="card-category text-black">Complete la siguiente información</p>
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
@@ -101,7 +113,7 @@
                                             </div>
                                         </div>
                                         <button mat-raised-button (click)="crearProducto()"
-                                            class="btn btn-rose pull-right">Crear
+                                            class="btn bg-primary pull-right">Crear
                                             Producto</button>
                                         <div class="clearfix"></div>
 
@@ -118,9 +130,9 @@
 
                             <div class="col-md-8">
                                 <div class="card">
-                                    <div class="card-header card-header-rose">
-                                        <h4 class="card-title">Editar Producto</h4>
-                                        <p class="card-category">Complete la siguiente información</p>
+                                    <div class="card-header bg-primary">
+                                        <h4 class="card-title text-white">Editar Producto</h4>
+                                        <p class="card-category text-black">Complete la siguiente información</p>
                                     </div>
                                     <div class="card-body">
 
@@ -181,7 +193,7 @@
                                             </div>
                                         </div>
                                         <button mat-raised-button (click)="editarProducto()"
-                                            class="btn btn-rose pull-right">Editar
+                                            class="btn bg-primary pull-right">Editar
                                             Producto</button>
                                         <div class="clearfix"></div>
 
@@ -199,9 +211,9 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card">
-                                    <div class="card-header card-header-rose">
-                                        <h4 class="card-title mt-0"> PRODUCTOS </h4>
-                                        <p class="card-category">Productos registrados en el sistema</p>
+                                    <div class="card-header bg-primary">
+                                        <h4 class="card-title mt-0 text-white"> PRODUCTOS </h4>
+                                        <p class="card-category text-black">Productos registrados en el sistema</p>
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
@@ -245,25 +257,28 @@
                     </div>
                     <div class="col-md-12" *ngIf="panelFiltroRanking">
                         <div class="card">
-                            <div class="card-header card-header-rose">
-                                <h4 class="card-title">Filtar Ranking de Productos</h4>
-                                <p class="card-category">Ingrese la siguiente información</p>
+                            <div class="card-header bg-primary">
+                                <h4 class="card-title text-white">Filtar Ranking de Productos</h4>
+                                <p class="card-category text-black">Ingrese la siguiente información</p>
                             </div>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <mat-form-field class="example-full-width">
-                                            <input matInput placeholder="Fecha de Inicio" formControlName="pFechaInicio" type="date" required>
+                                            <input matInput placeholder="Fecha de Inicio" formControlName="pFechaInicio"
+                                                type="date" required>
                                         </mat-form-field>
                                     </div>
                                     <div class="col-md-6">
                                         <mat-form-field class="example-full-width">
-                                            <input matInput placeholder="Fecha de Fin" formControlName="pFechaFin" type="date" required>
+                                            <input matInput placeholder="Fecha de Fin" formControlName="pFechaFin"
+                                                type="date" required>
                                         </mat-form-field>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <button class="btn btn-danger pull-left" (click)="buscarRanking()">Buscar Ranking</button>
+                                    <button class="btn bg-primary pull-left" (click)="buscarRanking()">Buscar
+                                        Ranking</button>
                                 </div>
                             </div>
                         </div>

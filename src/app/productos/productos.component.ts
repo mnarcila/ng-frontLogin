@@ -141,12 +141,12 @@ export class ProductosComponent implements OnInit {
 
   }
   renderCrearDiv(): void {
-    if(this.validarPermisos(2)){
+    if (this.validarPermisos(2)) {
       this.renderCrear = true;
       this.renderConsulta = false;
       this.renderEditar = false;
       this.panelFiltroRanking = false;
-    }else{
+    } else {
       this.mostrarNotificacion('Acceso denegado', 'No tiene permiso para esta función', 'danger');
     }
   }
@@ -207,7 +207,7 @@ export class ProductosComponent implements OnInit {
 
   /**evento de boton cuando se selecciona el editar */
   editar(productoz: ProductosInner): void {
-    if(this.validarPermisos(2)){
+    if (this.validarPermisos(2)) {
       //console.log("prd: " + productoz.idcategoria);
       this.angForm.controls.eidproducto.setValue(productoz.idProducto);
       this.angForm.controls.enameProduct.setValue(productoz.nombre);
@@ -219,7 +219,7 @@ export class ProductosComponent implements OnInit {
       this.renderCrear = false;
       this.renderConsulta = false;
       this.renderEditar = true;
-    }else{
+    } else {
       this.mostrarNotificacion('Acceso denegado', 'No tiene permiso para esta función', 'danger');
     }
   }
@@ -248,7 +248,7 @@ export class ProductosComponent implements OnInit {
    * consulta generica de evento boton
    */
   onClick(): void {
-    if(this.validarPermisos(1) || this.validarPermisos(2)){
+    if (this.validarPermisos(1) || this.validarPermisos(2)) {
       this.renderConsulta = false;
       this.renderCrear = false;
       this.renderEditar = false;
@@ -306,7 +306,7 @@ export class ProductosComponent implements OnInit {
       } else {
         this.mostrarNotificacion('consulta', 'Ingrese un concepto de busqueda', 'warning');
       }
-    }else{
+    } else {
       this.mostrarNotificacion('Acceso denegado', 'No tiene permiso para esta función', 'danger');
     }
   }
@@ -410,21 +410,26 @@ export class ProductosComponent implements OnInit {
     });
   }
 
-  mostrarBusquedaRanking(){
-    if(this.validarPermisos(1) || this.validarPermisos(2) ){ 
+  mostrarBusquedaRanking() {
+    if (this.validarPermisos(1) || this.validarPermisos(2)) {
       this.panelFiltroRanking = true;
-    }else{
+      this.renderConsulta = false;
+      this.renderCrear = false;
+
+      this.renderEditar = false;
+
+    } else {
       this.mostrarNotificacion('Acceso denegado', 'No tiene permiso para esta función', 'danger');
     }
   }
 
-  buscarRanking(){
+  buscarRanking() {
     this.tablaProductos = [];
     let f1 = formatDate(this.angForm.controls.pFechaInicio.value, 'ddMMyyyy', 'en');
     let f2 = formatDate(this.angForm.controls.pFechaFin.value, 'ddMMyyyy', 'en');
     //let fecInicio = this.angForm.controls.pFechaInicio.value;
     //let fecFin = this.angForm.controls.pFechaFin.value;
-    this.productoApi.consultarProductoMasVendido('1', '1', f1,f2).subscribe(
+    this.productoApi.consultarProductoMasVendido('1', '1', f1, f2).subscribe(
       value => setTimeout(() => {
         const prd = value;
         this.procesarResponse(value);
@@ -443,7 +448,7 @@ export class ProductosComponent implements OnInit {
       value => setTimeout(() => {
         var roles = value.datosBasicos;
         this.listaRoles = roles;
-        console.log("permisos "+ this.listaRoles);
+        console.log("permisos " + this.listaRoles);
       }, 200),
       error => {
       },
@@ -452,17 +457,17 @@ export class ProductosComponent implements OnInit {
     //return false;
   }
 
-  validarPermisos(id:number ):boolean {
+  validarPermisos(id: number): boolean {
     let per: number;
-        for (let index = 0; index < this.listaRoles.length; index++) {
-          per = this.listaRoles[index].idrol;
-          console.log("permisos " + per);
-          if(per == id){
-            console.log('son iguales ');
-            return true;
-          }
-        }
-        return false;
+    for (let index = 0; index < this.listaRoles.length; index++) {
+      per = this.listaRoles[index].idrol;
+      console.log("permisos " + per);
+      if (per == id) {
+        console.log('son iguales ');
+        return true;
+      }
+    }
+    return false;
   }
 
 }
@@ -482,4 +487,3 @@ export class DialogOverviewExampleDialog {
   }
 
 }
-  
