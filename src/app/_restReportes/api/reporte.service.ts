@@ -27,6 +27,7 @@ import { ProductosRsType } from '../model/productosRsType';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
+import { DetallesCliente } from '../model/detallesCliente';
 
 
 @Injectable()
@@ -462,6 +463,66 @@ export class ReporteService {
         ];
 
         return this.httpClient.get<ProductosRsType>(`${this.basePath}/reporte/productosVendidos`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Buscar clientes que hayan comprado un producto
+     * 
+     * @param headerRq Cabecera estandar
+     * @param serviceID Service Id Kallsonys
+     * @param idProducto Id del producto a consultar
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public clientesxProducto(headerRq: string, serviceID: string, idProducto: number, observe?: 'body', reportProgress?: boolean): Observable<DetallesCliente>;
+    public clientesxProducto(headerRq: string, serviceID: string, idProducto: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<DetallesCliente>>;
+    public clientesxProducto(headerRq: string, serviceID: string, idProducto: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<DetallesCliente>>;
+    public clientesxProducto(headerRq: string, serviceID: string, idProducto: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (headerRq === null || headerRq === undefined) {
+            throw new Error('Required parameter headerRq was null or undefined when calling clientesxProducto.');
+        }
+
+        if (serviceID === null || serviceID === undefined) {
+            throw new Error('Required parameter serviceID was null or undefined when calling clientesxProducto.');
+        }
+
+        if (idProducto === null || idProducto === undefined) {
+            throw new Error('Required parameter idProducto was null or undefined when calling clientesxProducto.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (headerRq !== undefined && headerRq !== null) {
+            queryParameters = queryParameters.set('headerRq', <any>headerRq);
+        }
+        if (serviceID !== undefined && serviceID !== null) {
+            queryParameters = queryParameters.set('serviceID', <any>serviceID);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.get<DetallesCliente>(`${this.basePath}/reporte/clientesXProductos/${encodeURIComponent(String(idProducto))}`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
