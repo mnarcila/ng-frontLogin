@@ -26,6 +26,25 @@
             <button mat-raised-button class="btn btn-primary bg-primary" (click)="mostrarPanelClientesFacturados()">
               Clientes Facturados
             </button>
+            <button mat-raised-button class="btn btn-primary bg-primary" (click)="mostrarPanelClientesProductos()">
+              Clientes X Productos
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card" *ngIf="PanelFiltroCliente">
+        <div class="card-header bg-primary">
+          <h4 class="card-title text-white p3 ">FILTRO</h4>
+          <p class="card-category text-white p3">Diligencie la siguiente información</p>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Código de Producto" formControlName="idProducto" type="input" required>
+            </mat-form-field>
+          </div>
+          <div class="col-md-4">
+            <button class="btn btn-primary bg-primary" (click)="buscarClienteProducto()">Buscar Clientes</button>
           </div>
         </div>
       </div>
@@ -59,7 +78,8 @@
             <button class="btn btn-primary bg-primary" (click)="buscarClientesFacturados()">Clientes Facturados</button>
           </div>
           <div class="col-md-4" *ngIf="panelOrdCerradasDinero">
-            <button class="btn btn-primary bg-primary" (click)="buscarOrdCerradasDinero()">Ordenes Cerradas Dinero</button>
+            <button class="btn btn-primary bg-primary" (click)="buscarOrdCerradasDinero()">Ordenes Cerradas
+              Dinero</button>
           </div>
         </div>
       </div>
@@ -67,7 +87,7 @@
         <div *ngIf="panelTablaOrdenesCerradas" class="card">
           <div class="card-header bg-primary">
             <h4 class="card-title text-white p3 ">Ordenes Cerradas</h4>
-            <p class="card-category">Lista de ordenes cerradas</p>
+            <p class="card-category text-white p3">Lista de ordenes cerradas</p>
           </div>
           <strong *ngIf="tablaOrdenesCerradas.length == 0">Sin datos..</strong>
           <div *ngIf="tablaOrdenesCerradas.length > 0" class="card-body">
@@ -95,7 +115,7 @@
       <div *ngIf="panelTablaMasVendidos" class="card">
         <div class="card-header bg-primary">
           <h4 class="card-title text-white p3 ">Productos Mas vendidos</h4>
-          <p class="card-category">Lista de productos mas vendidos</p>
+          <p class="card-category text-white p3">Lista de productos mas vendidos</p>
         </div>
         <strong *ngIf="tablaProductosMasVendidos.length == 0">Sin datos..</strong>
         <div *ngIf="tablaProductosMasVendidos.length > 0" class="card-body">
@@ -124,7 +144,7 @@
       <div *ngIf="panelTablaCategorias" class="card">
         <div class="card-header bg-primary">
           <h4 class="card-title text-white p3 ">Categorias mas Vendidas</h4>
-          <p class="card-category">Lista Categorias mas vendidas</p>
+          <p class="card-category text-white p3">Lista Categorias mas vendidas</p>
         </div>
         <strong *ngIf="tablaCategorias.length == 0">Sin datos..</strong>
         <div *ngIf="tablaCategorias.length > 0" class="card-body">
@@ -153,7 +173,7 @@
       <div *ngIf="panelOrdenesAbiertas" class="card">
         <div class="card-header bg-primary">
           <h4 class="card-title text-white p3 ">Ordenes Abiertas</h4>
-          <p class="card-category">Lista de ordenes abiertas</p>
+          <p class="card-category text-white p3">Lista de ordenes abiertas</p>
         </div>
         <strong *ngIf="tablaOrdAbiertas.length == 0">Sin datos..</strong>
         <div *ngIf="tablaOrdAbiertas.length > 0" class="card-body">
@@ -177,38 +197,38 @@
           </div>
         </div>
       </div>
-      
+
       <div *ngIf="panelOrdDinero" class="card">
-          <div class="card-header bg-primary">
-                    <h4 class="card-title text-white p3 ">Ordenes Cerradas con mas Dinero</h4>
-                    <p class="card-category">Lista de ordenes con dinero</p>
-                  </div>
-                <strong *ngIf="tablaOrdCerDinero.length == 0">Sin datos..</strong>
-                <div *ngIf="tablaOrdCerDinero.length > 0" class="card-body">
-                  <div class="table-responsive">
-                    <table class="table">
-                      <thead class=" text-primary">
-                        <th>ID Orden</th>
-                        <th>Valor Total</th>
-                        <th>Mes</th>
-                        <th>Año</th>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let ord of tablaOrdCerDinero">
-                          <td>{{ord.idorden}}</td>
-                          <td>{{ord.valortotal}}</td>
-                          <td>{{ord.mes}}</td>
-                          <td>{{ord.anio}}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>      
+        <div class="card-header bg-primary">
+          <h4 class="card-title text-white p3 ">Ordenes Cerradas con mas Dinero</h4>
+          <p class="card-category text-white p3">Lista de ordenes con dinero</p>
+        </div>
+        <strong *ngIf="tablaOrdCerDinero.length == 0">Sin datos..</strong>
+        <div *ngIf="tablaOrdCerDinero.length > 0" class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>ID Orden</th>
+                <th>Valor Total</th>
+                <th>Mes</th>
+                <th>Año</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let ord of tablaOrdCerDinero">
+                  <td>{{ord.idorden}}</td>
+                  <td>{{ord.valortotal}}</td>
+                  <td>{{ord.mes}}</td>
+                  <td>{{ord.anio}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
       <div *ngIf="panelTablaClienteFac" class="card">
         <div class="card-header bg-primary">
           <h4 class="card-title text-white p3 ">Clientes factura</h4>
-          <p class="card-category">Lista de Clientes Facturados</p>
+          <p class="card-category text-white p3">Lista de Clientes Facturados</p>
         </div>
         <strong *ngIf="tablaClientesFac.length == 0">Sin datos..</strong>
         <div *ngIf="tablaClientesFac.length > 0" class="card-body">
@@ -228,6 +248,45 @@
                   <td>{{ord.valortotal}}</td>
                   <td>{{ord.mes}}</td>
                   <td>{{ord.anio}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="PanelTablaClienteProductos" class="card">
+        <div class="card-header bg-primary">
+          <h4 class="card-title text-white p3 ">Clientes Cliente</h4>
+          <p class="card-category text-white p3">Lista de clientes que compraron un producto</p>
+        </div>
+        <strong *ngIf="tablaClienteProductos.length == 0">Sin datos..</strong>
+        <div *ngIf="tablaClienteProductos.length > 0" class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>Usuario</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Telèfono</th>
+                <th>e-mail</th>
+                <th>estado</th>
+                <th>categorìa</th>
+                <th>Tipo Identificaciòn</th>
+                <th>Nùmero identificaciòn</th>
+                <th>Nombre Producto</th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let ord of tablaClienteProductos">
+                  <td>{{ord.usuario}}</td>
+                  <td>{{ord.nombre}}</td>
+                  <td>{{ord.apellido}}</td>
+                  <td>{{ord.telefono}}</td>
+                  <td>{{ord.email}}</td>
+                  <td>{{ord.estado}}</td>
+                  <td>{{ord.idcategoria}}</td>
+                  <td>{{ord.tipoidentificacion}}</td>
+                  <td>{{ord.numeroidentificacion}}</td>
+                  <td>{{ord.nombreproducto}}</td>
                 </tr>
               </tbody>
             </table>

@@ -23,4 +23,5 @@ export interface Cliente {
     categoria?: string;
     tipoidentificacion?: string;
     numeroidentificacion?: string;
+    nombreproducto?: string;
 }

@@ -33,8 +33,8 @@ import { DetallesCliente } from '../model/detallesCliente';
 @Injectable()
 export class ReporteService {
 
-    protected basePath = 'http://localhost:9010/OMS/Reportes/v1';
-    //protected basePath = 'http://10.39.1.149:9010/OMS/Reportes/v1';
+    //protected basePath = 'http://localhost:9010/OMS/Reportes/v1';
+    protected basePath = 'http://10.39.1.149:9010/OMS/Reportes/v1';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -473,7 +473,7 @@ export class ReporteService {
         );
     }
 
-    /**
+     /**
      * Buscar clientes que hayan comprado un producto
      * 
      * @param headerRq Cabecera estandar
@@ -506,6 +506,9 @@ export class ReporteService {
         if (serviceID !== undefined && serviceID !== null) {
             queryParameters = queryParameters.set('serviceID', <any>serviceID);
         }
+        if (idProducto !== undefined && idProducto !== null) {
+            queryParameters = queryParameters.set('idProducto', <any>idProducto);
+        }
 
         let headers = this.defaultHeaders;
 
@@ -522,7 +525,7 @@ export class ReporteService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.get<DetallesCliente>(`${this.basePath}/reporte/clientesXProductos/${encodeURIComponent(String(idProducto))}`,
+        return this.httpClient.get<DetallesCliente>(`${this.basePath}/reporte/clientesXProductos`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

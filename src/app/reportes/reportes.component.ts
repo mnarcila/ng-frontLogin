@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReporteService, OrdenRsType, ProductoRsType, CategoriaRsType, Orden2RsType, Orden3RsType, ClienteRsType } from 'app/_restReportes';
 import { formatDate, DatePipe } from "@angular/common";
+import { Cliente } from 'app/_restReportes/model/cliente';
+import { ClienteService } from 'app/_restClientes';
 
 declare var $: any;
 
@@ -34,7 +36,12 @@ export class ReportesComponent implements OnInit {
   panelTablaClienteFac: boolean = false;
   tablaClientesFac: ClienteRsType[];
   panelOrdCerradasDinero = false;
-
+  PanelFiltroCliente: boolean = false;
+  tablaClienteProductos: Cliente[];
+  PanelTablaClienteProductos: boolean = false;
+  tablaCLiente: Cliente;
+  panelTablaCliente: boolean = false;
+  
   constructor(
     public dialog: MatDialog,
     private auth: AuthService,
@@ -42,6 +49,7 @@ export class ReportesComponent implements OnInit {
     private formBuilder: FormBuilder,
     private reportesapi: ReporteService,
     private datePipe: DatePipe,
+    private clienteApi: ClienteService,
   ) { }
 
   ngOnInit() {
@@ -59,6 +67,7 @@ export class ReportesComponent implements OnInit {
     this.angForm = this.formBuilder.group({
       fechaInicioOC: ['', Validators.required],
       fechaFinOC: ['', Validators.required],
+      idProducto: ['',Validators.required],
     });
   }
 
@@ -91,6 +100,7 @@ export class ReportesComponent implements OnInit {
     this.panelCategoriasMasVendidos = false;
     this.panelClientesFacturados = false;
     this.panelOrdCerradasDinero = false;
+    this.PanelFiltroCliente = false;
 
     this.panelTablaOrdenesCerradas = false;
     this.panelTablaMasVendidos = false;
@@ -98,6 +108,7 @@ export class ReportesComponent implements OnInit {
     this.panelOrdenesAbiertas = false;
     this.panelOrdDinero = false;
     this.panelTablaClienteFac = false;
+    this.PanelTablaClienteProductos = false;
   }
 
   mostrarPanelMasVendidos() {
@@ -107,6 +118,7 @@ export class ReportesComponent implements OnInit {
     this.panelCategoriasMasVendidos = false;
     this.panelClientesFacturados = false;
     this.panelOrdCerradasDinero = false;
+    this.PanelFiltroCliente = false;
 
     this.panelTablaOrdenesCerradas = false;
     this.panelTablaMasVendidos = false;
@@ -114,6 +126,7 @@ export class ReportesComponent implements OnInit {
     this.panelOrdenesAbiertas = false;
     this.panelOrdDinero = false;
     this.panelTablaClienteFac = false;
+    this.PanelTablaClienteProductos = false;
   }
 
   mostrarPanelCategorias() {
@@ -122,6 +135,7 @@ export class ReportesComponent implements OnInit {
     this.panelCategoriasMasVendidos = true;
     this.panelClientesFacturados = false;
     this.panelOrdCerradasDinero = false;
+    this.PanelFiltroCliente = false;
 
     this.panelTablaOrdenesCerradas = false;
     this.panelTablaMasVendidos = false;
@@ -129,6 +143,7 @@ export class ReportesComponent implements OnInit {
     this.panelOrdenesAbiertas = false;
     this.panelOrdDinero = false;
     this.panelTablaClienteFac = false;
+    this.PanelTablaClienteProductos = false;
   }
 
   mostrarPanelClientesFacturados() {
@@ -138,6 +153,7 @@ export class ReportesComponent implements OnInit {
     this.panelCategoriasMasVendidos = false;
     this.panelClientesFacturados = true;
     this.panelOrdCerradasDinero = false;
+    this.PanelFiltroCliente = false;
 
     this.panelTablaOrdenesCerradas = false;
     this.panelTablaMasVendidos = false;
@@ -145,6 +161,8 @@ export class ReportesComponent implements OnInit {
     this.panelOrdenesAbiertas = false;
     this.panelOrdDinero = false;
     this.panelTablaClienteFac = false;
+    this.PanelTablaClienteProductos = false;
+    
   }
 
   mostrarPanelOrdCerrDinero() {
@@ -162,6 +180,27 @@ export class ReportesComponent implements OnInit {
     this.panelOrdenesAbiertas = false;
     this.panelOrdDinero = false;
     this.panelTablaClienteFac = false;
+    this.PanelFiltroCliente = false;
+    this.PanelTablaClienteProductos = false;
+  }
+
+  mostrarPanelClientesProductos(){
+    this.panelFiltro = false;
+
+    this.panelOrdenesCerradas = false;
+    this.panelMasVendidos = false;
+    this.panelCategoriasMasVendidos = false;
+    this.panelClientesFacturados = false;
+    this.panelOrdCerradasDinero = false;
+    this.PanelFiltroCliente = true;
+    this.PanelTablaClienteProductos = false;
+
+    this.panelTablaOrdenesCerradas = false;
+    this.panelTablaMasVendidos = false;
+    this.panelTablaCategorias = false;
+    this.panelOrdenesAbiertas = false;
+    this.panelOrdDinero = false;
+    this.panelTablaClienteFac = false;
   }
 
   mostrarPanelOrdAbiertas() {
@@ -171,6 +210,7 @@ export class ReportesComponent implements OnInit {
     this.panelCategoriasMasVendidos = false;
     this.panelClientesFacturados = false;
     this.panelOrdCerradasDinero = false;
+    this.PanelFiltroCliente = false;
 
     this.panelTablaOrdenesCerradas = false;
     this.panelTablaMasVendidos = false;
@@ -178,6 +218,7 @@ export class ReportesComponent implements OnInit {
     this.panelOrdenesAbiertas = true;
     this.panelOrdDinero = false;
     this.panelTablaClienteFac = false;
+    this.PanelTablaClienteProductos = false;
 
     this.tablaOrdAbiertas = [];
     this.reportesapi.ordenesAbiertas('1', '1').subscribe(
@@ -202,6 +243,7 @@ export class ReportesComponent implements OnInit {
     this.panelCategoriasMasVendidos = false;
     this.panelClientesFacturados = false;
     this.panelOrdCerradasDinero = false;
+    this.PanelFiltroCliente = false;
 
     if (this.angForm.controls.fechaInicioOC.value != null || this.angForm.controls.fechaFinOC.value != null ||
       this.angForm.controls.fechaInicioOC.value != '' || this.angForm.controls.fechaFinOC.value != '') {
@@ -214,6 +256,7 @@ export class ReportesComponent implements OnInit {
       this.panelOrdenesAbiertas = false;
       this.panelOrdDinero = true;
       this.panelTablaClienteFac = false;
+      this.PanelTablaClienteProductos = false;
 
       this.tablaOrdCerDinero = [];
       this.reportesapi.ordenesCerradas('1', '1', fechaInicio, fechaFin).subscribe(
@@ -334,6 +377,56 @@ export class ReportesComponent implements OnInit {
     
   }
 
+  buscarClienteProducto(){
+    this.tablaClienteProductos = [];
+
+    this.panelFiltro = false;
+    this.panelOrdenesCerradas = false;
+    this.panelMasVendidos = false;
+    this.panelCategoriasMasVendidos = false;
+    this.panelClientesFacturados = false;
+    this.panelOrdCerradasDinero = false;
+    this.PanelFiltroCliente = false;
+
+    this.panelTablaOrdenesCerradas = false;
+    this.panelTablaMasVendidos = false;
+    this.panelTablaCategorias = false;
+    this.panelOrdenesAbiertas = false;
+    this.panelOrdDinero = false;
+    this.panelTablaClienteFac = false;
+
+    if(this.angForm.controls.idProducto.value != null || this.angForm.controls.idProducto.value != ''){
+        this.reportesapi.clientesxProducto('1', '1', this.angForm.controls.idProducto.value).subscribe(
+          value2 => setTimeout(() => {
+            this.tablaClienteProductos = value2.clientes;
+            this.PanelTablaClienteProductos = true;
+          }, 200),
+          error => {
+            this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
+            console.error(JSON.stringify(error))
+          },
+          () => console.log('done')
+        );
+    }else{
+      this.mostrarNotificacion('Consulta Reporte', 'Ingrese los datos por favor', 'danger');
+    }
+  }
+
+  verCliente(idcliente:number){
+    this.clienteApi.consultarClientePorId('1', '1', idcliente).subscribe(
+      value => setTimeout(() => {
+        //console.log(value);
+        this.tablaCLiente = value.cliente;
+        this.panelTablaCliente = true;
+      }, 200),
+      error => {
+        this.mostrarNotificacion('consultarPorId ', 'se presento un error, por favor notifique al administrador', 'danger');
+        console.error(JSON.stringify(error))
+      },
+      () => console.log('done')
+    );
+  }
+
   // recibe un string de fecha en formato dd/mm/yyyy y retorna el formato dd-mm-yyyy
   formatFecha(fecha: string): string {
     //console.log(fecha);
@@ -344,4 +437,5 @@ export class ReportesComponent implements OnInit {
     console.log(result);
     return result;
   }
+
 }

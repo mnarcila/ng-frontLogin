@@ -18,5 +18,5 @@ import { StatusType } from './statusType';
  */
 export interface DetallesCliente { 
     status?: StatusType;
-    clientes?: Cliente;
+    clientes?: Cliente[];
 }
