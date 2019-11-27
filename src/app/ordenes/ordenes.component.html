@@ -66,6 +66,8 @@
                     <h4 class="card-title text-white">Ordenes</h4>
                     <p class="card-category text-black"> Últimas Ordenes Activas</p>
                 </div>
+
+
                 <strong *ngIf="listOrdenes.length == 0">Sin datos..</strong>
                 <div *ngIf="listOrdenes.length > 0" class="card-body">
                     <div class="table-responsive">
@@ -126,25 +128,22 @@
                     <div class="row">
                         <div class="col-md-4">
                             <mat-form-field class="example-full-width">
-                                <input matInput placeholder="Número TC" formControlName="tcNum" type="text"
-                                    >
+                                <input matInput placeholder="Número TC" formControlName="tcNum" type="text">
                             </mat-form-field>
                         </div>
                         <div class="col-md-4">
                             <mat-form-field class="example-full-width">
-                                <input matInput placeholder="Fecha Vencimiento" formControlName="tcFec" type="text"
-                                    >
+                                <input matInput placeholder="Fecha Vencimiento" formControlName="tcFec" type="text">
                             </mat-form-field>
                         </div>
                         <div class="col-md-4">
                             <mat-form-field class="example-full-width">
-                                <input matInput placeholder="CVC" formControlName="tcCvc" type="text"  >
+                                <input matInput placeholder="CVC" formControlName="tcCvc" type="text">
                             </mat-form-field>
                         </div>
                         <div class="col-md-4">
                             <mat-form-field class="example-full-width">
-                                <input matInput placeholder="Cuotas" formControlName="cuotas" type="text"
-                                    >
+                                <input matInput placeholder="Cuotas" formControlName="cuotas" type="text">
                             </mat-form-field>
                         </div>
                         <button mat-raised-button (click)="enviarEnvio()" class="btn bg-primary pull-right"> Generar
@@ -234,6 +233,22 @@
                     <h4 class="card-title ">Detalle de Orden</h4>
                     <p class="card-category"> Detalle de productos de una orden</p>
                 </div>
+                
+                <div>
+                    <table>
+
+                        <tr>
+                            <td> Estado:
+                            </td>
+                            <td> {{estadoOrden}}</td>
+                        </tr>
+                        <tr>
+                            <td> Estado Despacho:</td>
+                            <td> {{estadoDespacho}}</td>
+                        </tr>
+                    </table>
+                </div>
+
                 <div class="card-body">
                     <strong *ngIf="listaDetalle.length == 0">Sin datos..</strong>
                     <div *ngIf="listaDetalle.length > 0" class="table-responsive">
@@ -474,4 +489,4 @@
         </div>
     </form>
 </div>
-<ngx-spinner></ngx-spinner> 
+<ngx-spinner></ngx-spinner>

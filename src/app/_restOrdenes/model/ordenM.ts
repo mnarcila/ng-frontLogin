@@ -19,6 +19,8 @@ export interface OrdenM {
     idCliente?: number;
     idDireccion?: number;
     valorTotal?: number;
+    idproveedor?: number;
+    iddespachador?:number;
     cantidadProductos?: number;
     fechaSolicitud?: string;
     fechaAprobacion?: string;

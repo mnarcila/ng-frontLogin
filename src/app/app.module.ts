@@ -57,6 +57,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import {DatePipe} from '@angular/common';
 import { tarjetaService } from './_tarjetaCredito/tarjeta.service';
 import { envioPagoService } from './_restEnvioPago/envioPago.Service';
+import { serviceEstadoProv } from './_estadoProv/serviceEstadoProv';
 
 @NgModule({
   imports: [
@@ -102,6 +103,7 @@ import { envioPagoService } from './_restEnvioPago/envioPago.Service';
     ReportesComponent,
   ],
   providers: [
+    serviceEstadoProv,
     envioPagoService,
     tarjetaService,
     AuthService,
