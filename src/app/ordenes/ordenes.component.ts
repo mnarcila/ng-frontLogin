@@ -11,6 +11,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { envioPagoService } from 'app/_restEnvioPago/envioPago.Service';
 import { tarjetaService } from 'app/_tarjetaCredito/tarjeta.service';
 import { environment } from 'environments/environment.prod';
+import { serviceEstadoProv } from 'app/_estadoProv/serviceEstadoProv';
 
 
 declare var $: any;
@@ -49,8 +50,12 @@ export class OrdenesComponent implements OnInit {
   tablaProductos: Producto[] = [];
   pIdProducto: number;
   listaRoles: Roles[];
+  estadoOrden: string;
+  nuevoEstadOrden: number;
+  estadoDespacho: string;
 
   constructor(
+    private estadoProvApi: serviceEstadoProv,
     private envioPagoApi: envioPagoService,
     private tarjetaApi: tarjetaService,
     private ordenesApi: OrdenService,
@@ -313,12 +318,185 @@ export class OrdenesComponent implements OnInit {
       this.tablaOrdenes = false;
     }
   }
+  traducirEstadoDHL(estado: string): string {
+    var estadoDHL
+    switch (estado) {
+      case "Pending": {
+        estadoDHL = "Pendiente"
+        this.nuevoEstadOrden = 4;
+        break;
+      }
+      case "Collected": {
+        estadoDHL = "En bodega"
+        this.nuevoEstadOrden = 4;
+        break;
+      }
+      case "In Transit": {
+        estadoDHL = "En transito"
+        this.nuevoEstadOrden = 4;
+        break;
+      }
+      case "Arrived Hub": {
+        estadoDHL = "En Bodega"
+        this.nuevoEstadOrden = 4;
+        break;
+      }
+      case "Out For Delivery": {
+        estadoDHL = "Enviado"
+        this.nuevoEstadOrden = 4;
+        break;
+      }
+      case "Delivered": {
+        estadoDHL = "Entregado"
+        this.nuevoEstadOrden = 5;
+        break;
+      }
+      case "Cancelled": {
+        estadoDHL = "Cancelado"
+        this.nuevoEstadOrden = 6;
+        break;
+      }
+      default: {
+        estadoDHL = "Pendiente"
+        this.nuevoEstadOrden = 4;
+        break;
+      }
+    }
+    return estadoDHL;
+  }
+  traducirEstadoServientrega(estado: string): string {
+    var estadoServientrega
+    switch (estado) {
+      case "NOTIFICADO": {
+        estadoServientrega = 'Pendiente'
+        this.nuevoEstadOrden = 4;
+        break;
+      }
+      case "EN TRAYECTO": {
+        this.nuevoEstadOrden = 4;
+        estadoServientrega = "En transito"
+        break;
+      }
+      case "NO SE PUDO ENTREGAR": {
+        this.nuevoEstadOrden = 4;
+        estadoServientrega = "En transito"
+        break;
+      }
+      case "ENTREGADO": {
+        this.nuevoEstadOrden = 5;
+        estadoServientrega = "Entregado"
+        break;
+      }
+      case "CANCELADO": {
+        this.nuevoEstadOrden = 6;
+        estadoServientrega = "Cancelado"
+        break;
+      }
+      default: {
+        this.nuevoEstadOrden = 4;
+        estadoServientrega = 'Pendiente'
+        break;
+      }
+    }
+    return estadoServientrega;
+  }
+  consultarEstadoDetalleOrden(idOrden: number, orden: OrdenM): Promise<Number> {
+    let promise = new Promise<Number>((resolve, reject) => {
+      if (orden.iddespachador == 2) {
+        this.estadoProvApi.consultarDHL(idOrden).subscribe(exito => {
+          this.estadoDespacho = this.traducirEstadoDHL(exito.checkShipmentStatusResult);
+        }, error => {
+          this.estadoDespacho = 'N.A'
+          console.log(error);
+        });
+      } else if (orden.iddespachador == 3) {
+        this.estadoProvApi.consultarServientrega(idOrden).subscribe(exito => {
+          this.estadoDespacho = this.traducirEstadoServientrega(exito.Response);
+        }, error => {
+          this.estadoDespacho = 'N.A'
+          this.nuevoEstadOrden = 5;
+          console.log(error);
+        });
+      } else if (orden.iddespachador == 6) {
+        //DEPRISA
+        this.estadoDespacho = 'ENVIADO DEPRISA'
+        this.nuevoEstadOrden = 5;
+      }
+      else {
+        this.estadoDespacho = 'Sin despachador'
+        this.nuevoEstadOrden = 5;
+      }
+      //consultar despachadores
+      //actualizar estado de la orden 
 
+      resolve(1);
+    });
+    return promise;
+  }
+  traducirEstado(idEstado: number): string {
+    var val = '';
+    console.log("trad: " + idEstado)
+    this.estados.forEach(est => {
+      if (est.value == idEstado) {
+        val = est.viewValue;
+        return val;
+      }
+    });
+    return val;
+  }
+  estados: Estados[] = [
+    { value: 1, viewValue: 'Registrada' },
+    { value: 2, viewValue: 'Por Validar' },
+    { value: 3, viewValue: 'Aprobada' },
+    { value: 4, viewValue: 'Procesada' },
+    { value: 5, viewValue: 'Entregada' },
+    { value: 6, viewValue: 'Cancelada' },
+    { value: 7, viewValue: 'Rechazada' }
+  ];
+  actualizarEstadoOrden(idOrden: number, orden: OrdenM) {
+
+    orden.estado = this.nuevoEstadOrden;
+    this.estadoOrden = this.traducirEstado(orden.estado);
+    this.ordenesApi.actualizarOrdenPorId('1', '1', idOrden, orden).subscribe(
+      value => {
+        if (value.status.statusCode == 200) {
+          this.consultarDetalleOrden(idOrden);
+        } else {
+          console.log('Error actualizando estado')
+        }
+      }, error => {
+        console.log('Error cargando estado' + error)
+      }
+    );
+  }
+
+  consultarDetalleOrden(idOrden) {
+    this.listaDetalle = [];
+    //consultar estado real de la orden 
+    this.detalleApi.conultarDetalleOrdenPorIdOrden('1', '1', idOrden).subscribe(
+      value => setTimeout(() => {
+        this.listaDetalle.push(...value.datosBasicos.detalles);
+
+      }, 200),
+      error => console.error(JSON.stringify(error)),
+      () => console.log('done')
+    );
+  }
   verDetalle(orden: OrdenM): void {
     console.log("entre al detalle");
     this.panelDetOrden = true;
     this.panelActualizar = false;
     this.listaDetalle = [];
+
+    //consultar  informacion de  estados
+    if (orden.iddespachador != null) {
+      this.consultarEstadoDetalleOrden(orden.idOrden, orden).then(
+        () => {
+          this.actualizarEstadoOrden(orden.idOrden, orden);
+        }
+      );
+    }
+    // consulta normal 
     this.detalleApi.conultarDetalleOrdenPorIdOrden('1', '1', orden.idOrden).subscribe(
       value => setTimeout(() => {
         const prd = value;
