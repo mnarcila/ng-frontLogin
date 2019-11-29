@@ -7,8 +7,14 @@ import { ReporteService, OrdenRsType, ProductoRsType, CategoriaRsType, Orden2RsT
 import { formatDate, DatePipe } from "@angular/common";
 import { Cliente } from 'app/_restReportes/model/cliente';
 import { ClienteService } from 'app/_restClientes';
+import { ProductoService, ProductosInner } from 'app/_restProducto';
+import { CategoriaService } from 'app/_restCategoria';
 
 declare var $: any;
+export interface Categorias {
+  value: number;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-reportes',
@@ -16,7 +22,8 @@ declare var $: any;
   styleUrls: ['./reportes.component.scss']
 })
 export class ReportesComponent implements OnInit {
-
+  
+  renderDetalleProducto: boolean = false;
   angForm: FormGroup;
   panelFiltro: boolean = false;
   panelOrdenesCerradas: boolean = false;
@@ -41,8 +48,10 @@ export class ReportesComponent implements OnInit {
   PanelTablaClienteProductos: boolean = false;
   tablaCLiente: Cliente;
   panelTablaCliente: boolean = false;
-  
+
   constructor(
+    private categoriaApi: CategoriaService,
+    private productoApi: ProductoService,
     public dialog: MatDialog,
     private auth: AuthService,
     private router: Router,
@@ -56,6 +65,7 @@ export class ReportesComponent implements OnInit {
     if (this.auth.isLoggedIn == false) {
       this.sendLogin();
     }
+    this.cargarCategoria()
     this.createForm();
   }
 
@@ -67,7 +77,7 @@ export class ReportesComponent implements OnInit {
     this.angForm = this.formBuilder.group({
       fechaInicioOC: ['', Validators.required],
       fechaFinOC: ['', Validators.required],
-      idProducto: ['',Validators.required],
+      idProducto: ['', Validators.required],
     });
   }
 
@@ -93,8 +103,9 @@ export class ReportesComponent implements OnInit {
   }
 
   mostrarPanelOrdenesCerradas() {
+    this.renderDetalleProducto = false; 
     this.panelFiltro = true;
-
+    this.renderDetalleProducto = false; 
     this.panelOrdenesCerradas = true;
     this.panelMasVendidos = false;
     this.panelCategoriasMasVendidos = false;
@@ -112,6 +123,8 @@ export class ReportesComponent implements OnInit {
   }
 
   mostrarPanelMasVendidos() {
+    
+    this.renderDetalleProducto = false; 
     this.panelFiltro = true;
     this.panelOrdenesCerradas = false;
     this.panelMasVendidos = true;
@@ -130,6 +143,7 @@ export class ReportesComponent implements OnInit {
   }
 
   mostrarPanelCategorias() {
+    this.renderDetalleProducto = false; 
     this.panelFiltro = true;
     this.panelOrdenesCerradas = false;
     this.panelMasVendidos = false;
@@ -148,6 +162,7 @@ export class ReportesComponent implements OnInit {
   }
 
   mostrarPanelClientesFacturados() {
+    this.renderDetalleProducto = false; 
     this.panelFiltro = true;
     this.panelOrdenesCerradas = false;
     this.panelMasVendidos = false;
@@ -163,10 +178,11 @@ export class ReportesComponent implements OnInit {
     this.panelOrdDinero = false;
     this.panelTablaClienteFac = false;
     this.PanelTablaClienteProductos = false;
-    
+
   }
 
   mostrarPanelOrdCerrDinero() {
+    this.renderDetalleProducto = false; 
     this.panelFiltro = true;
 
     this.panelOrdenesCerradas = false;
@@ -185,7 +201,8 @@ export class ReportesComponent implements OnInit {
     this.PanelTablaClienteProductos = false;
   }
 
-  mostrarPanelClientesProductos(){
+  mostrarPanelClientesProductos() {
+    this.renderDetalleProducto = false; 
     this.panelFiltro = false;
 
     this.panelOrdenesCerradas = false;
@@ -205,6 +222,7 @@ export class ReportesComponent implements OnInit {
   }
 
   mostrarPanelOrdAbiertas() {
+    this.renderDetalleProducto = false; 
     this.panelFiltro = false;
     this.panelOrdenesCerradas = false;
     this.panelMasVendidos = false;
@@ -235,6 +253,29 @@ export class ReportesComponent implements OnInit {
     );
     this.panelOrdenesAbiertas = true;
   }
+ 
+
+  cargarCategoria() {
+    this.categoriasMap = new Map<number, String>();
+    this.categoriaApi.consultarCategoria('1', '1').subscribe(
+      value => setTimeout(() => {
+        this.categoriasArray = [];
+        let cat: Categorias = {} as any;
+        for (let i = 0; i < value.categoria.length; i++) {
+          cat.value = value.categoria[i].idCategoria;
+          cat.viewValue = value.categoria[i].nombreCategoria;
+          this.categoriasArray.push(cat);
+          this.categoriasMap.set(value.categoria[i].idCategoria, value.categoria[i].nombreCategoria);
+        }
+      }, 200),
+      error => {
+        this.mostrarNotificacion('consultaCategoria', 'Se genero un error interno', 'danger');
+        console.error(JSON.stringify(error));
+      },
+      () => console.log('done')
+    );
+  }
+
 
   buscarOrdCerradasDinero() {
 
@@ -302,7 +343,7 @@ export class ReportesComponent implements OnInit {
       } else {
         this.mostrarNotificacion('Consulta Reporte', 'Existen datos vacios en el formulario', 'danger');
       }
-    }else{
+    } else {
       this.mostrarNotificacion('Consulta Reporte', 'Ingrese los datos por favor', 'danger');
     }
 
@@ -311,74 +352,101 @@ export class ReportesComponent implements OnInit {
   buscarProductosMasVendidos() {
     if (this.angForm.controls.fechaInicioOC.value != null || this.angForm.controls.fechaFinOC.value != null ||
       this.angForm.controls.fechaInicioOC.value != '' || this.angForm.controls.fechaFinOC.value != '') {
-        this.panelTablaMasVendidos = true;
-        let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
-        //console.log(fechaInicio);
-        let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
-        this.tablaProductosMasVendidos = [];
-        this.reportesapi.productosVendidos('1', '1', fechaInicio, fechaFin).subscribe(
-          value2 => setTimeout(() => {
-            this.tablaProductosMasVendidos = value2.producto;
-          }, 200),
-          error => {
-            this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
-            console.error(JSON.stringify(error))
-          },
-          () => console.log('done')
-        );
-    }else{
+      this.panelTablaMasVendidos = true;
+      let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
+      //console.log(fechaInicio);
+      let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
+      this.tablaProductosMasVendidos = [];
+      this.reportesapi.productosVendidos('1', '1', fechaInicio, fechaFin).subscribe(
+        value2 => setTimeout(() => {
+          this.tablaProductosMasVendidos = value2.producto;
+        }, 200),
+        error => {
+          this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
+          console.error(JSON.stringify(error))
+        },
+        () => console.log('done')
+      );
+    } else {
       this.mostrarNotificacion('Consulta Reporte', 'Ingrese los datos por favor', 'danger');
     }
-    
+
   }
 
   buscarCategorias() {
-    if(this.angForm.controls.fechaInicioOC.value != null || this.angForm.controls.fechaFinOC.value != null ||
-      this.angForm.controls.fechaInicioOC.value != '' || this.angForm.controls.fechaFinOC.value != ''){
-        this.panelTablaCategorias = true;
-        let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
-        let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
-        this.tablaCategorias = [];
-        this.reportesapi.categoriasVendidas('1', '1', fechaInicio, fechaFin).subscribe(
-          value2 => setTimeout(() => {
-            this.tablaCategorias = value2.categoria;
-          }, 200),
-          error => {
-            this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
-            console.error(JSON.stringify(error))
-          },
-          () => console.log('done')
-        );
-    }else{
+    if (this.angForm.controls.fechaInicioOC.value != null || this.angForm.controls.fechaFinOC.value != null ||
+      this.angForm.controls.fechaInicioOC.value != '' || this.angForm.controls.fechaFinOC.value != '') {
+      this.panelTablaCategorias = true;
+      let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
+      let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
+      this.tablaCategorias = [];
+      this.reportesapi.categoriasVendidas('1', '1', fechaInicio, fechaFin).subscribe(
+        value2 => setTimeout(() => {
+          this.tablaCategorias = value2.categoria;
+        }, 200),
+        error => {
+          this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
+          console.error(JSON.stringify(error))
+        },
+        () => console.log('done')
+      );
+    } else {
       this.mostrarNotificacion('Consulta Reporte', 'Ingrese los datos por favor', 'danger');
     }
-    
+
   }
 
+
+  categoriasMap: Map<number, String>;
+  categoriasArray: Categorias[] = [
+  ];
+  consultarCategoria(idCategoria: number): String {
+
+    return this.categoriasMap.get(idCategoria);
+  }
+  tablaProductos: ProductosInner[] = [];
+  verProducto(productoId: number): void {
+    this.tablaProductos = []
+    this.productoApi.conultarProductoPorId('1', '1', productoId).subscribe(
+      pValue => setTimeout(() => {
+        this.renderDetalleProducto = true;
+        if (pValue != null && pValue.productos[0] != null) {
+
+          this.tablaProductos.push(...pValue.productos);
+        }
+      }, 200),
+      error => {
+        this.mostrarNotificacion('consulta', 'Se genero un error interno', 'danger');
+        console.error(JSON.stringify(error));
+      },
+      () => console.log('done')
+    );
+
+  }
   buscarClientesFacturados() {
-    if(this.angForm.controls.fechaInicioOC.value != null || this.angForm.controls.fechaFinOC.value != null ||
-      this.angForm.controls.fechaInicioOC.value != '' || this.angForm.controls.fechaFinOC.value != ''){
-        this.panelTablaClienteFac = true;
-        let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
-        let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
-        this.tablaClientesFac = [];
-        this.reportesapi.clientesFacturados('1', '1', fechaInicio, fechaFin).subscribe(
-          value2 => setTimeout(() => {
-            this.tablaClientesFac = value2.cliente;
-          }, 200),
-          error => {
-            this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
-            console.error(JSON.stringify(error))
-          },
-          () => console.log('done')
-        );
-    }else{
+    if (this.angForm.controls.fechaInicioOC.value != null || this.angForm.controls.fechaFinOC.value != null ||
+      this.angForm.controls.fechaInicioOC.value != '' || this.angForm.controls.fechaFinOC.value != '') {
+      this.panelTablaClienteFac = true;
+      let fechaInicio = this.formatFecha(this.angForm.controls.fechaInicioOC.value);
+      let fechaFin = this.formatFecha(this.angForm.controls.fechaFinOC.value);
+      this.tablaClientesFac = [];
+      this.reportesapi.clientesFacturados('1', '1', fechaInicio, fechaFin).subscribe(
+        value2 => setTimeout(() => {
+          this.tablaClientesFac = value2.cliente;
+        }, 200),
+        error => {
+          this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
+          console.error(JSON.stringify(error))
+        },
+        () => console.log('done')
+      );
+    } else {
       this.mostrarNotificacion('Consulta Reporte', 'Ingrese los datos por favor', 'danger');
     }
-    
+
   }
 
-  buscarClienteProducto(){
+  buscarClienteProducto() {
     this.tablaClienteProductos = [];
 
     this.panelFiltro = false;
@@ -396,24 +464,24 @@ export class ReportesComponent implements OnInit {
     this.panelOrdDinero = false;
     this.panelTablaClienteFac = false;
 
-    if(this.angForm.controls.idProducto.value != null || this.angForm.controls.idProducto.value != ''){
-        this.reportesapi.clientesxProducto('1', '1', this.angForm.controls.idProducto.value).subscribe(
-          value2 => setTimeout(() => {
-            this.tablaClienteProductos = value2.clientes;
-            this.PanelTablaClienteProductos = true;
-          }, 200),
-          error => {
-            this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
-            console.error(JSON.stringify(error))
-          },
-          () => console.log('done')
-        );
-    }else{
+    if (this.angForm.controls.idProducto.value != null || this.angForm.controls.idProducto.value != '') {
+      this.reportesapi.clientesxProducto('1', '1', this.angForm.controls.idProducto.value).subscribe(
+        value2 => setTimeout(() => {
+          this.tablaClienteProductos = value2.clientes;
+          this.PanelTablaClienteProductos = true;
+        }, 200),
+        error => {
+          this.mostrarNotificacion('Consulta Reporte', 'se presento un error, por favor notifique al administrador', 'danger');
+          console.error(JSON.stringify(error))
+        },
+        () => console.log('done')
+      );
+    } else {
       this.mostrarNotificacion('Consulta Reporte', 'Ingrese los datos por favor', 'danger');
     }
   }
 
-  verCliente(idcliente:number){
+  verCliente(idcliente: number) {
     this.clienteApi.consultarClientePorId('1', '1', idcliente).subscribe(
       value => setTimeout(() => {
         //console.log(value);

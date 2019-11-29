@@ -123,14 +123,24 @@
             <table class="table">
               <thead class=" text-primary">
                 <th>ID Producto</th>
-                <th>Prodcuto</th>
+                <th>ID Producto</th>
+                <th>Producto</th>
                 <th>Cantidad</th>
                 <th>Mes</th>
                 <th>Año</th>
               </thead>
               <tbody>
                 <tr *ngFor="let ord of tablaProductosMasVendidos">
-                  <td>{{ord.idproducto}}</td>
+
+                  <td><i class="material-icons" matTooltip="Ver Producto" style="cursor: pointer;"
+                      (click)="$event.stopPropagation();verProducto(ord.idproducto)">details</i>
+                  </td>
+
+                  <td>
+                    <!-- <a [routerLink]="['/home/productos', ord.idproducto]"> -->
+                      {{ord.idproducto}}
+                    <!-- </a> -->
+                  </td>
                   <td>{{ord.producto}}</td>
                   <td>{{ord.cantidad}}</td>
                   <td>{{ord.mes}}</td>
@@ -141,6 +151,37 @@
           </div>
         </div>
       </div>
+
+      <div *ngIf="renderDetalleProducto" class="card">
+        <div class="card-header bg-primary">
+          <h4 class="card-title text-white p3 ">Productos</h4>
+          <p class="card-category text-white p3">Detalle producto</p>
+        </div>
+        <div class="table-responsive">
+          <strong *ngIf="tablaProductos.length == 0">Sin datos..</strong>
+          <table *ngIf="tablaProductos.length > 0" class="table table-hover">
+            <thead class="">
+              <th>ID Producto</th>
+              <th>Nombre</th>
+              <th>Descripción</th>
+              <th>Valor base</th>
+              <th>Categoria</th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let productoz of tablaProductos">
+                <td>{{ productoz.idProducto }}</td>
+                <td>{{ productoz.nombre }}</td>
+                <td>{{ productoz.descripcion }}</td>
+                <td>{{ productoz.valorBase }}</td>
+                <td>{{ consultarCategoria(productoz.idCategoria) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+
       <div *ngIf="panelTablaCategorias" class="card">
         <div class="card-header bg-primary">
           <h4 class="card-title text-white p3 ">Categorias mas Vendidas</h4>
