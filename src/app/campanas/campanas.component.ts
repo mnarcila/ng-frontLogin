@@ -47,7 +47,7 @@ export class CampanasComponent implements OnInit {
   uploadedFiles: Array<File>;
   idProdducto;
   imagenModal: string = "";
-  folderImagen: string = "http://10.39.1.149:8080";
+  folderImagen: string = "http://10.39.1.151:8080";
   panelActualizaCampanas = false;
   campana: Campana = {};
   listaRoles: Roles[];

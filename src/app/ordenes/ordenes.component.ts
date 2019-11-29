@@ -142,6 +142,7 @@ export class OrdenesComponent implements OnInit {
         this.panelBuscarDireccion = false;
         this.PanelCrearDetalle = false;
         this.panelBuscarProducto = false;
+        this.renderPreEnvio = false;
       }
     } else {
       this.mostrarNotificacion('Acceso Denegado', 'No tiene permiso para esta función', 'danger');
@@ -484,6 +485,7 @@ export class OrdenesComponent implements OnInit {
   }
   verDetalle(orden: OrdenM): void {
     console.log("entre al detalle");
+    this.renderPreEnvio = false;
     this.panelDetOrden = true;
     this.panelActualizar = false;
     this.listaDetalle = [];
