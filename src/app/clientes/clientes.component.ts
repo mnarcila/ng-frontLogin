@@ -5,6 +5,7 @@ import { ClienteRsType, Cliente, ClienteService, ClientesRsType, Direccion } fro
 import { Router, ActivatedRoute } from '@angular/router';
 import { Listas, tipoIdentificacion, ListaPaises } from '../Paramentricos/Listas';
 import { RolesService, Roles } from 'app/_restRoles';
+import { sha256 } from 'js-sha256';
 
 export interface Estados {
   value: string;
@@ -161,7 +162,7 @@ export class ClientesComponent implements OnInit {
     cliente.nombre = this.angForm.controls.einombre.value;
     cliente.apellido = this.angForm.controls.eiapellido.value;
     cliente.usuario = this.angForm.controls.eiusuario.value;
-    cliente.password = this.angForm.controls.eipassword.value;
+    cliente.password = sha256(this.angForm.controls.eipassword.value);
     cliente.telefono = this.angForm.controls.eitelefono.value;
     cliente.email = this.angForm.controls.eiemail.value;
     cliente.idCategoria = this.angForm.controls.ecateProduct.value;
@@ -276,7 +277,7 @@ export class ClientesComponent implements OnInit {
     cliente.nombre = this.angForm.controls.inombre.value;
     cliente.apellido = this.angForm.controls.iapellido.value;
     cliente.usuario = this.angForm.controls.iusuario.value;
-    cliente.password = this.angForm.controls.ipassword.value;
+    cliente.password = sha256(this.angForm.controls.ipassword.value);
     cliente.telefono = this.angForm.controls.itelefono.value;
     cliente.email = this.angForm.controls.iemail.value;
     cliente.idCategoria = this.angForm.controls.cateProduct.value;

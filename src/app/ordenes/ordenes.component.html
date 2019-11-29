@@ -102,15 +102,16 @@
                                     <td>{{ord.nomproveedor}}</td>
                                     <td>{{ord.nomdespachador}}</td>
                                     <td><i class="material-icons" style="cursor: pointer;"
-                                            (click)="$event.stopPropagation();verDetalle(ord)">done</i>
+                                            (click)="$event.stopPropagation();verDetalle(ord)">done</i></td>
                                     <td><i class="material-icons" style="cursor: pointer;"
-                                            (click)="$event.stopPropagation();editarOrden(ord)">edit</i>
-
+                                            (click)="$event.stopPropagation();editarOrden(ord)">edit</i></td>
+                                    <div *ngIf="ord.estado == 1">
                                     <td>
                                         <i class="material-icons" style="cursor: pointer;"
                                             (click)="$event.stopPropagation();editarPreEnvio(ord)">check_circle</i>
 
                                     </td>
+                                    </div>
                                 </tr>
                             </tbody>
                         </table>

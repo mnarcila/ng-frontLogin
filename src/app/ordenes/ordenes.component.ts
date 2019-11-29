@@ -720,7 +720,7 @@ export class OrdenesComponent implements OnInit {
       flag = false;
     } if (this.angForm.controls.dtIdOrden.value == null || this.angForm.controls.dtIdOrden.value == '') {
       flag = false;
-    } if (this.angForm.controls.pIdProducto.value == null || this.angForm.controls.pIdProducto.value == '') {
+    } if (this.pIdProducto == null ) {
       flag = false;
     } if (this.angForm.controls.dtProveedor.value == null || this.angForm.controls.dtProveedor.value == '') {
       flag = false;

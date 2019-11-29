@@ -13,6 +13,7 @@ import { RolesService, Roles } from 'app/_restRoles';
 export interface DialogData {
   imagen: string;
   nombre: string;
+  archivo: string;
 }
 export interface Estados {
   value: string;
@@ -47,7 +48,7 @@ export class ProductosComponent implements OnInit {
 
   imagenModal: string = "";
   // folderImagen: string = "c:/uploads";
-  folderImagen: string = "http://10.39.1.149:8080";
+  folderImagen: string = "http://10.39.1.151:8080";
   renderCrear: boolean = false;
   renderConsulta: boolean = false;
   renderEditar: boolean = false;
