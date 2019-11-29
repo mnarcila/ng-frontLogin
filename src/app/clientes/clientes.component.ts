@@ -245,6 +245,7 @@ export class ClientesComponent implements OnInit {
           this.clienteApi.consultarClientePorIdentificacion('1', '1', 'CC', itemBusqueda).subscribe(
             value => setTimeout(() => {
               console.log(value);
+              this.idCliente =value.cliente.idCliente;
               this.procesarResponseRsType(value);
               if (value.cliente != null && value.cliente != undefined) {
                 this.renderConsulta = true;
