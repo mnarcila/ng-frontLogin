@@ -62,6 +62,7 @@ export class ProductosComponent implements OnInit {
   tablaProductos: ProductosInner[] = [];
   panelFiltroRanking = false;
   listaRoles: Roles[];
+  rutaimage: string;
 
   constructor(
 
@@ -121,7 +122,11 @@ export class ProductosComponent implements OnInit {
     producto.valorBase = this.angForm.controls.evalorProduct.value;
     producto.idCategoria = this.angForm.controls.ecateProduct.value;
     producto.estado = this.angForm.controls.eestadoProduct.value;
-    var nombArchivo = this.upload(producto.idProducto + "." + this.obtenerExtension(this.uploadedFiles[0].name));
+    if(this.uploadedFiles != null){
+      var nombArchivo = this.upload(producto.idProducto + "." + this.obtenerExtension(this.uploadedFiles[0].name));
+    }else{
+      var nombArchivo = this.rutaimage;
+    }
     producto.rutaImagen = nombArchivo;
     console.log(producto);
     this.productoApi.actualizarProductoPorId('1', '1', producto.idProducto, producto).subscribe(
@@ -216,6 +221,7 @@ export class ProductosComponent implements OnInit {
       this.angForm.controls.evalorProduct.setValue(productoz.valorBase);
       this.angForm.controls.ecateProduct.setValue(productoz.idcategoria);
       this.angForm.controls.eestadoProduct.setValue(productoz.estado);
+      this.rutaimage = productoz.rutaImagen;
 
       this.renderCrear = false;
       this.renderConsulta = false;
