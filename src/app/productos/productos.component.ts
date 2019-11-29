@@ -13,6 +13,7 @@ import { RolesService, Roles } from 'app/_restRoles';
 export interface DialogData {
   imagen: string;
   nombre: string;
+  archivo: string;
 }
 export interface Estados {
   value: string;
