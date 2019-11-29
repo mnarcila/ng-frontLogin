@@ -112,7 +112,7 @@ export class ReportesComponent implements OnInit {
   }
 
   mostrarPanelMasVendidos() {
-
+    this.panelFiltro = true;
     this.panelOrdenesCerradas = false;
     this.panelMasVendidos = true;
     this.panelCategoriasMasVendidos = false;
@@ -130,6 +130,7 @@ export class ReportesComponent implements OnInit {
   }
 
   mostrarPanelCategorias() {
+    this.panelFiltro = true;
     this.panelOrdenesCerradas = false;
     this.panelMasVendidos = false;
     this.panelCategoriasMasVendidos = true;

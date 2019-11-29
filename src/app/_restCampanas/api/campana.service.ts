@@ -27,7 +27,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class CampanaService {
 
-    protected basePath = 'http://10.39.1.122:5002';
+    protected basePath = 'http://10.39.1.156:8210/esb-skynet';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 

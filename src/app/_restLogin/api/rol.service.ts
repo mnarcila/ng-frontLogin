@@ -28,7 +28,7 @@ import { Configuration }                                     from '../configurat
 export class RolService {
     // http://10.39.1.149:8280
     // http://localhost/OMS/Empleados/v1
-    protected basePath = 'http://10.39.1.149:8280/OMS/Empleados/v1';
+    protected basePath = 'http://10.39.1.156:8210/esb-skynet';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
